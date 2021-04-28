@@ -4,7 +4,7 @@ import login from "./../views/white/login"
 
 const routes = [
     {
-        path: "/",
+        path: "/#",
         name: "login",
         component: login,
     },
