@@ -6,13 +6,15 @@
             </div>
         </div>
     </div>
-    <div class="nav" :style="{background:'url('+backImg+') no-repeat' }">
-        <div class="nav-container">
-            <ul class="nav-ul">
-                <li v-for="item in routes" :key="item.name" :style="{marginLeft: item.margin}">
-                    <span style="">{{item.name}}</span>
-                </li>
-            </ul>
+    <div class="nav" >
+        <div class="nav-back" style="width:100%;height:100%;" :style="{background:'url('+backImg+') no-repeat' }">
+            <div class="nav-container">
+                <ul class="nav-ul">
+                    <li v-for="item in routes" :key="item.name" :style="{marginLeft: item.margin}">
+                        <span style="">{{item.name}}</span>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </template>
@@ -29,19 +31,32 @@
     }
 }
 
+@keyframes mf2{
+    100% {
+        opacity: 0;
+        margin-left: -400px;
+        transform: scale3d(1,1,1);
+    }
+}
+
+.nav-back{
+    width:100%;
+    height:100%;
+    background-size: 200px 100% !important;
+}
+
 .nav-in{
-    display: block !important;
     animation: mf .5s ease 1;
 }
 
 .nav-out{
-    animation: mf .5s ease 1;
+    animation: mf2 .5s ease 1;
 }
 
 .menu{
     width: 100px;
     height: 142px;
-    z-index:10000;
+    z-index: 200000;
     position: absolute;
     transform: translateY(-50%);
     top: 50%;
@@ -54,8 +69,8 @@
     background-size: 100% 100% !important;
 }
 .menu-btn{
-    background-size: 45% 45% !important;
-    background-position: 14px 36px !important;
+    background-size: 40% 40% !important;
+    background-position: 18px 40px !important;
     width: 100%;
     height: 100%;
 }
@@ -68,10 +83,11 @@
     display: none;
     transform: translateY(-50%);
     width: 195px;
+    z-index: 100000;
     top: 50%;
     height: 350px;
     position: absolute;
-    background-size: 200px 100% !important;
+    
 }
 .nav-ul{
     width:100%;
@@ -106,17 +122,51 @@ export default {
         
     },
     methods:{
+         showMe(){
+            let gif = require("@/assets/loading.gif");
+            let img = document.createElement("img");
+            img.setAttribute("src", gif);
+            img.setAttribute("class", "loading");
+            let div = document.createElement("div");
+            //div.appendChild(img);
+            div.setAttribute("class","mask");
+            document.getElementById("app").appendChild(div);
+        },
+        hide(){
+            let app = document.getElementById("app");
+            let list = document.getElementsByClassName("mask");
+            for(let i = 0; i< list.length; i++){
+                app.removeChild(list[i]);
+            }
+        },
         switchState(){
             let nav = document.getElementsByClassName("nav")[0];
             if(this.state == 0){
+                this.showMe();
                 nav.classList.remove("nav-out")
                 nav.classList.add("nav-in")
                 this.state = 1;
-                
+                nav.style = "display:block;"
+
+                let dom = document.getElementsByClassName("mask")[0];
+                dom.addEventListener("click", ()=>{
+                    this.hide();
+                    nav.classList.remove("nav-in")
+                    nav.classList.add("nav-out")
+                    this.state = 0;
+                    setTimeout(()=>{
+                        nav.style = "display:none;"
+                    },400)    
+                })
             }else{
+                this.hide();
                 nav.classList.remove("nav-in")
                 nav.classList.add("nav-out")
                 this.state = 0;
+                setTimeout(()=>{
+                    nav.style = "display:none;"
+                },400)
+                
             }
         }
     },
