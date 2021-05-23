@@ -104,7 +104,7 @@
 export default {
     name:"login",
     created(){
-        console.log(this.$http)
+        
     },
     data(){
         return {
