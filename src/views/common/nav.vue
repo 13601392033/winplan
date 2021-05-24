@@ -1,5 +1,5 @@
 <template>
-    <div class="menu" @click="switchState()">
+    <div style="display:none" class="menu" @click="switchState()">
         <div class="menu-btn" :style="{background:'url('+menu1+') no-repeat'}">
             <div class="menu-ico" :style="{background:'url('+menu2+') no-repeat'}">
     
@@ -130,10 +130,10 @@ export default {
             let div = document.createElement("div");
             //div.appendChild(img);
             div.setAttribute("class","mask");
-            document.getElementById("app").appendChild(div);
+            document.getElementsByClassName("home")[0].appendChild(div);
         },
         hide(){
-            let app = document.getElementById("app");
+            let app = document.getElementsByClassName("home")[0];
             let list = document.getElementsByClassName("mask");
             for(let i = 0; i< list.length; i++){
                 app.removeChild(list[i]);

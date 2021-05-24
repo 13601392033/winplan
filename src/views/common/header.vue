@@ -12,11 +12,12 @@ export default {
 
 <style scoped>
     .header{
-        margin-top:4px;
+        margin-top:15px;
     }
     .header-title{
-        font-family: fantasy;
-        font-size: 23px;
-        letter-spacing: 1px;
+        color: #fff;
+        font-family: monospace;
+        font-size: 30px;
+        letter-spacing: 3px;
     }
 </style>
