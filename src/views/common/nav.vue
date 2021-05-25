@@ -1,5 +1,5 @@
 <template>
-    <div style="display:none" class="menu" @click="switchState()">
+    <div class="menu" @click="switchState()">
         <div class="menu-btn" :style="{background:'url('+menu1+') no-repeat'}">
             <div class="menu-ico" :style="{background:'url('+menu2+') no-repeat'}">
     

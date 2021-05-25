@@ -2,6 +2,7 @@
     <div class="home" :style="{background:'url('+ back +') no-repeat'}">
         <Nav></Nav>
         <Header></Header>
+        <Popup ref="popup"></Popup>
         <div class="home-module">
             <div class="task-header clear">
                 <div class="task-left clear">
@@ -62,9 +63,12 @@
         display: inline-block;
     }
     .task-item{
-        height: 30px;
+        height: 34px;
         position: relative;
-        line-height: 30px;
+        line-height: 34px;
+    }
+    .task-list{
+        margin-top: 22px;
     }
     .task-left{
         float:left;
@@ -87,11 +91,13 @@
 <script>
 import Nav from "@/views/common/nav.vue"
 import Header from "@/views/common/header.vue"
+import Popup from "@/views/common/popup.vue"
 export default {
     name:"home",
     components:{
         Nav,
-        Header
+        Header,
+        Popup
     },
     created(){
 
@@ -135,7 +141,7 @@ export default {
             }else if(v.state == 2){
                 this.taskList[index].state = 1;
             }
-            
+            this.$refs.popup.open()
         }
     }
 }
