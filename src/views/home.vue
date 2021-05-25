@@ -1,5 +1,5 @@
 <template>
-    <div class="home" :style="{background:'url('+ back +') no-repeat'}">
+    <div class="home" >
         <Nav></Nav>
         <Header></Header>
         <Popup ref="popup"></Popup>
@@ -131,7 +131,7 @@ export default {
                     remark:"dasdasdasdqw"
                 }
             ],
-            back: require("@/assets/b9.jpg"),
+           
         }
     },
     methods:{
@@ -153,7 +153,8 @@ export default {
         overflow: auto;
         width:100%;
         height:100%;
-        background: #F0F0F0;
+        background-image: linear-gradient(#e66465, #9198e5);
+
         background-size:100% 100% !important;
     }
     .home-module{
