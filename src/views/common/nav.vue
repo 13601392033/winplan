@@ -1,7 +1,7 @@
 <template>
-    <div class="menu" @click="switchState()">
+    <div class="menu" >
         <div class="menu-btn" :style="{background:'url('+menu1+') no-repeat'}">
-            <div class="menu-ico" :style="{background:'url('+menu2+') no-repeat'}">
+            <div @click="switchState()" class="menu-ico" :style="{background:'url('+menu2+') no-repeat'}">
     
             </div>
         </div>
@@ -54,7 +54,7 @@
 }
 
 .menu{
-    width: 100px;
+    width: 80px;
     height: 142px;
     z-index: 200000;
     position: absolute;
@@ -117,7 +117,7 @@
 <script>
 import {routes} from "@/router/index.js"
 export default {
-    name:"nav",
+    name:"nava",
     created(){
         
     },
@@ -176,7 +176,7 @@ export default {
             routes:routes,
             backImg:require("@/assets/menu_spand.png"),
             menu1:require("@/assets/menu1.png"),
-            menu2:require("@/assets/menu2.png"),
+            menu2:require("@/assets/1.png"),
         }
     },
     mounted(){
@@ -184,7 +184,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-
-</style>

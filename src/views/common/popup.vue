@@ -31,6 +31,7 @@ export default {
         }
     },
     created(){
+        
     },
     methods:{
         startDraw(){
@@ -41,15 +42,22 @@ export default {
         endDraw(e){
             this.isMove = false;
             let y = e.changedTouches[0].clientY;
-            if(y > (this.documentHeihgt/2)){
+            if(y > (this.documentHeihgt/3)){
                 this.dom.style.height = "0"
             }
         },
         open(){
-            this.documentHeihgt = window.screen.height; 
+            this.documentHeihgt = window.screen.availHeight; 
             this.dom = document.getElementsByClassName("popup")[0]
             this.dom.style.height = "90%"
-            
+            this.dom.style.top = "10%"
+
+            // document.addEventListener("click", (e)=>{
+            //     console.log(e.target)
+            //     // let y = e.clientY;
+            //     // let top = window.screen.availHeight - document.getElementsByClassName("popup")[0].offsetHeight;
+            //     // console.log(y,top)
+            // })
         },
         draw(e){
             debounce(()=>{
@@ -83,7 +91,7 @@ export default {
         background: white;
         top:10%;
         z-index: 500000;
-        transition:all .35s;
+        transition:all .25s;
         border-top-left-radius: 6px;
         border-top-right-radius: 6px;
         left: 0;

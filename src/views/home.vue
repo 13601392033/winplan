@@ -1,7 +1,7 @@
 <template>
     <div class="home" >
-        <Nav></Nav>
-        <Header></Header>
+        <Nava></Nava>
+        <Headera></Headera>
         <Popup ref="popup"></Popup>
         <div class="home-module">
             <div class="task-header clear">
@@ -37,6 +37,23 @@
 </template>
 
 <style scoped>
+.home{
+        position: fixed;
+        overflow: auto;
+        width:100%;
+        height:100%;
+        background-image: linear-gradient(#e66465, #9198e5);
+
+        background-size:100% 100% !important;
+    }
+    .home-module{
+        width:94%;
+        margin: 28px auto 0;
+        border-radius: 10px;
+        background-color:rgba(255,255,255,.9);
+        height:250px;
+        border:1px solid #FFFFF0;
+    }
     .check{
         width: 15%;
         position: relative;
@@ -89,14 +106,14 @@
 </style>
 
 <script>
-import Nav from "@/views/common/nav.vue"
-import Header from "@/views/common/header.vue"
+import Nava from "@/views/common/nav.vue"
+import Headera from "@/views/common/header.vue"
 import Popup from "@/views/common/popup.vue"
 export default {
     name:"home",
     components:{
-        Nav,
-        Header,
+        Nava,
+        Headera,
         Popup
     },
     created(){
@@ -146,23 +163,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-    .home{
-        position: fixed;
-        overflow: auto;
-        width:100%;
-        height:100%;
-        background-image: linear-gradient(#e66465, #9198e5);
-
-        background-size:100% 100% !important;
-    }
-    .home-module{
-        width:94%;
-        margin: 28px auto 0;
-        border-radius: 10px;
-        background-color:rgba(255,255,255,.9);
-        height:250px;
-        border:1px solid #FFFFF0;
-    }
-</style>
