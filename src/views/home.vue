@@ -24,6 +24,10 @@
             </ul>
         </div>
 
+        <div class="record-module">
+
+        </div>
+
         <div class="habit-module">
             
         </div>
@@ -37,13 +41,15 @@
 </template>
 
 <style scoped>
-.home{
+    .record-module{
+        
+    }
+    .home{
         position: fixed;
         overflow: auto;
         width:100%;
         height:100%;
-        background-image: linear-gradient(#e66465, #9198e5);
-
+        background-image: linear-gradient(to bottom right,#C7C7C7,#336699,#6CA6CD);
         background-size:100% 100% !important;
     }
     .home-module{
