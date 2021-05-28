@@ -25,7 +25,15 @@
         </div>
 
         <div class="record-module">
-
+            <div class="task-header clear">
+                <div class="task-left clear">
+                    <i style="color: #0066ff;" class="el-icon-edit-outline"></i>
+                    <span class="task-title">记录</span>
+                </div>
+                <div class="task-right clear">
+                    <i style="line-height:23px;" class="el-icon-arrow-right"></i>
+                </div>
+            </div>
         </div>
 
         <div class="habit-module">
@@ -42,7 +50,12 @@
 
 <style scoped>
     .record-module{
-        
+        width:94%;
+        margin: 28px auto 0;
+        border-radius: 10px;
+        background-color:rgba(255,255,255,.9);
+        height:250px;
+        border:1px solid #FFFFF0;
     }
     .home{
         position: fixed;
