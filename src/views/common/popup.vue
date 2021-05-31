@@ -2,24 +2,25 @@
     <div class="popup" style="color:red;">
         <div class="mf" @click="close"></div>
         <div class="popup-header" >
-            <div @touchstart="startDraw()" @touchmove="draw" @touchend="endDraw" class="popup-drop" :style="{background:'url('+b8+') no-repeat'}">
+            <div @touchstart="startDraw" @touchmove="draw" @touchend="endDraw" class="popup-drop" :style="{background:'url('+b8+') no-repeat'}">
 
             </div>
         </div>
-        <div class="popup-body"></div>
+        <div class="popup-body">
+        {{value}}</div>
     </div>
 </template>
 
 <script>
-function debounce(fn,delay){
-    let timer = null
-    return function() {
-        if(timer){
-            clearTimeout(timer) 
-        }
-        timer = setTimeout(fn,delay) 
-    }
-}
+// function debounce(fn,delay){
+//     let timer = null
+//     return function() {
+//         if(timer){
+//             clearTimeout(timer)
+//         }
+//         timer = setTimeout(fn,delay)
+//     }
+// }
 let height = undefined
 export default {
     name:"popup",
@@ -29,6 +30,7 @@ export default {
             isMove:undefined,
             documentHeihgt:undefined,
             reduce : undefined,
+            value:undefined,
             dom:undefined,
         }
     },
@@ -36,10 +38,38 @@ export default {
         
     },
     methods:{
+        open(){
+            this.documentHeihgt = window.screen.height;
+            this.dom = document.getElementsByClassName("popup")[0]
+            this.dom.style.display = "block"
+            setTimeout(() => {
+                this.dom.style.top = "10%"
+            }, 0);
+            
+        },
         startDraw(){
             this.isMove = "start";
-            height = document.getElementsByClassName("popup")[0].clientHeight;
+            //height = document.getElementsByClassName("popup")[0].clientHeight;
+            height = Math.floor(this.documentHeihgt * 0.9)
             this.reduce = this.documentHeihgt - height;
+        },
+        draw(e){
+            console.log(e)
+            let pageY = e.targetTouches[0].pageY;
+            if(this.reduce > pageY){
+                return 
+            }
+            this.dom.style.top = pageY + "px"
+            this.isMove = "ing";
+            // debounce(()=>{
+            //     let y = e.changedTouches[0].clientY;
+            //     if(this.reduce > y){
+            //         this.value = "reduce=" + this.reduce + ";clientY=" + y
+            //         return 
+            //     }
+            //     this.dom.style.top = y+"px"
+            //     this.isMove = "ing";
+            // },0)()
         },
         endDraw(e){
             let y = e.changedTouches[0].clientY;
@@ -49,31 +79,13 @@ export default {
             this.isMove = "end";
         },
         close(){
-            this.dom.style.top = "100%"    
+            this.dom.style.top = "100%"
                 setTimeout(() => {
-                    this.dom.style.display = "none"    
-                    this.dom.style.height = "90%"   
+                    this.dom.style.display = "none"
+                    this.dom.style.height = "90%"
             }, 250);
         },
-        open(){
-            this.documentHeihgt = window.screen.availHeight; 
-            this.dom = document.getElementsByClassName("popup")[0]
-            this.dom.style.display = "block"
-            setTimeout(() => {
-                this.dom.style.top = "10%"    
-            }, 0);
-            
-        },
-        draw(e){
-            debounce(()=>{
-                let y = e.changedTouches[0].clientY;
-                if(this.reduce > y){
-                    return 
-                }
-                this.dom.style.top = y+"px"
-                this.isMove = "ing";
-            },0)()
-        },
+        
         
     }
 }
@@ -88,6 +100,9 @@ export default {
         background: #ddd;
         z-index: -1;
         opacity: .3;
+    }
+    .popup-body{
+        height:100%;
     }
     .popup-header{
         width:100%;
@@ -106,7 +121,7 @@ export default {
         background: white;
         top:100%;
         z-index: 500000;
-        transition:all .25s;
+        transition:all .15s;
         border-top-left-radius: 6px;
         border-top-right-radius: 6px;
         left: 0;

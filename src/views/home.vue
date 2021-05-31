@@ -14,12 +14,12 @@
                 </div>
             </div>
             <ul class="task-list">
-                <li v-for="(item,i) in taskList" :key="item" class="task-item">
+                <li v-for="(item,i) in taskList" :key="i" class="task-item">
                     <div @click="changeState(item,i)" class="check">
                         <div v-if="item.state == 1" class="single-check"></div>
                         <svg v-else-if="item.state == 2" style="font-size:24px;color:#0066ff;width: 1em;height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="11388"><path d="M416.832 798.08C400.64 798.08 384.512 791.872 372.16 779.52L119.424 525.76C94.784 500.992 94.784 460.8 119.424 436.032 144.128 411.264 184.128 411.264 208.768 436.032L416.832 644.928 814.4 245.76C839.04 220.928 879.04 220.928 903.744 245.76 928.384 270.528 928.384 310.656 903.744 335.424L461.504 779.52C449.152 791.872 432.96 798.08 416.832 798.08Z" p-id="11389"></path></svg>
                     </div>
-                    <div class="item-content">{{item.title}}</div>
+                    <div class="item-content ell">{{item.title}}</div>
                 </li>
             </ul>
         </div>
@@ -34,6 +34,11 @@
                     <i style="line-height:23px;" class="el-icon-arrow-right"></i>
                 </div>
             </div>
+            <ul class="record-list">
+                <li v-for="(item,i) in taskList" :key="i" class="record-item">
+                    <div class="item-content ell">{{item.title}}</div>
+                </li>
+            </ul>
         </div>
 
         <div class="habit-module">
@@ -56,6 +61,14 @@
         background-color:rgba(255,255,255,.9);
         height:250px;
         border:1px solid #FFFFF0;
+    }
+    .record-item{
+        height: 34px;
+        position: relative;
+        line-height: 34px;
+    }
+    .record-list{
+        margin-top:22px;
     }
     .home{
         position: fixed;

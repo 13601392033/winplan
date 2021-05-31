@@ -14,6 +14,12 @@ ul, li{
     top:0;
 }
 
+.ell{
+    overflow: hidden;    
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
+
 .popup-mask{
     position: fixed;
     width:100%;
