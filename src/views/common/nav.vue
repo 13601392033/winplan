@@ -57,7 +57,7 @@
     width: 80px;
     height: 142px;
     z-index: 200000;
-    position: absolute;
+    position: fixed;
     transform: translateY(-50%);
     top: 50%;
     left:-48px;
@@ -86,7 +86,7 @@
     z-index: 100000;
     top: 50%;
     height: 350px;
-    position: absolute;
+    position: fixed;
     
 }
 .nav-ul{
@@ -96,6 +96,9 @@
     transform: translateY(-50%);
     height: 50%;
     overflow: auto;
+}
+.nav-ul::-webkit-scrollbar {
+  display: none; /* Chrome Safari */
 }
 .nav-ul li{
     text-align: left;

@@ -35,8 +35,11 @@
                 </div>
             </div>
             <ul class="record-list">
-                <li v-for="(item,i) in taskList" :key="i" class="record-item">
-                    <div class="item-content ell">{{item.title}}</div>
+                <li v-for="(item,i) in recordList" :key="i" class="record-item">
+                    <div class="record-contain">
+                        <div class="record-content ell">{{item.title}}</div>
+                        <div class="detail ell">mfmfmfmmff</div>
+                    </div>
                 </li>
             </ul>
         </div>
@@ -54,21 +57,46 @@
 </template>
 
 <style scoped>
+    .detail{
+        float: left;
+        width: 100%;
+        font-size: 14px;
+        line-height: 1;
+        text-align: left;
+        bottom: 0;
+        text-indent: 9%;
+        position: absolute;
+    }
     .record-module{
         width:94%;
         margin: 28px auto 0;
         border-radius: 10px;
         background-color:rgba(255,255,255,.9);
-        height:250px;
+        margin-bottom: 10px;
         border:1px solid #FFFFF0;
     }
+    .record-contain{
+        border-bottom: 1px solid #ddd;
+        position: relative;
+        height: 100%;
+        width: 100%;
+    }
     .record-item{
-        height: 34px;
+        height: 47px;
         position: relative;
         line-height: 34px;
     }
+    .record-content{
+        width: 100%;
+        text-indent: 9%;
+        font-weight: bold;
+        float: left;
+        font-size: 18px;
+        text-align: left;
+    }
     .record-list{
         margin-top:22px;
+        margin-bottom: 10px;
     }
     .home{
         position: fixed;
@@ -154,6 +182,34 @@ export default {
     data(){
         return {
             taskList:[
+                {
+                    title:"hello",
+                    state:1,
+                    remark:"dasdasdasdqw"
+                },
+                {
+                    title:"hello",
+                    state:1,
+                    remark:"dasdasdasdqw"
+                },
+                {
+                    title:"hello",
+                    state:2,
+                    remark:"dasdasdasdqw"
+                },
+                {
+                    title:"hello",
+                    state:1,
+                    remark:"dasdasdasdqw"
+                },
+                {
+                    title:"hello",
+                    state:2,
+                    remark:"dasdasdasdqw"
+                }
+            ],
+
+            recordList:[
                 {
                     title:"hello",
                     state:1,

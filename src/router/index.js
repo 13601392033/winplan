@@ -7,13 +7,31 @@ const routes = [
     {
         path: "/#",
         name: "login",
-        margin:"77px",
+        margin:"51px",
         component: login,
     },
     {
         path: "/login",
         name: "login",
-        margin:"93px",
+        margin:"68px",
+        component: login,
+    },
+    {
+        path: "/login",
+        name: "login",
+        margin:"68px",
+        component: login,
+    },
+    {
+        path: "/login",
+        name: "login",
+        margin:"68px",
+        component: login,
+    },
+    {
+        path: "/login",
+        name: "login",
+        margin:"68px",
         component: login,
     },
     {
