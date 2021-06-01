@@ -90,7 +90,7 @@
     
 }
 .nav-ul{
-    width:100%;
+    width:91%;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);

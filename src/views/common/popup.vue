@@ -7,7 +7,8 @@
             </div>
         </div>
         <div class="popup-body">
-        {{value}}</div>
+            <slot name="body"></slot>
+        </div>
     </div>
 </template>
 
@@ -26,7 +27,7 @@ export default {
     name:"popup",
     data(){
         return {
-            b8:require("@/assets/a3.jpg"),
+            b8:require("@/assets/z2.jpg"),
             isMove:undefined,
             documentHeihgt:undefined,
             reduce : undefined,
@@ -86,7 +87,6 @@ export default {
             }, 250);
         },
         
-        
     }
 }
 </script>
@@ -102,15 +102,16 @@ export default {
         opacity: .3;
     }
     .popup-body{
+        color:#080808;
         height:100%;
     }
     .popup-header{
         width:100%;
-        height:200px;
+        height:100px;
     }
     .popup-drop{
         width:100%;
-        height:120px;
+        height:100%;
         background-size:100% 100% !important;
     }
     .popup{
