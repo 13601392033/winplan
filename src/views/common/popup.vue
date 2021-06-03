@@ -55,22 +55,12 @@ export default {
             this.reduce = this.documentHeihgt - height;
         },
         draw(e){
-            console.log(e)
             let pageY = e.targetTouches[0].pageY;
             if(this.reduce > pageY){
                 return 
             }
             this.dom.style.top = pageY + "px"
             this.isMove = "ing";
-            // debounce(()=>{
-            //     let y = e.changedTouches[0].clientY;
-            //     if(this.reduce > y){
-            //         this.value = "reduce=" + this.reduce + ";clientY=" + y
-            //         return 
-            //     }
-            //     this.dom.style.top = y+"px"
-            //     this.isMove = "ing";
-            // },0)()
         },
         endDraw(e){
             let y = e.changedTouches[0].clientY;
