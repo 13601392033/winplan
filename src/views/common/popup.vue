@@ -111,7 +111,7 @@ export default {
         height: 90%;
         background: white;
         top:100%;
-        z-index: 500000;
+        z-index: 1001;
         transition:all .15s;
         border-top-left-radius: 6px;
         border-top-right-radius: 6px;

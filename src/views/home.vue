@@ -8,9 +8,11 @@
                     <div class="title-left fl">
                         <i class="el-icon-pie-chart"></i>
                     </div>
-                    <div class="title-right fl">
+                    
+                    <div class="title-right fl" :style="{width: modal.type == -1 || modal.type == undefined ? 80 +'%' : 66 + '%'}">
                         <input v-model="popupTitle" type="text"/>
                     </div>
+                    <div v-show="showType" class="type" @click="mf" ><i class="el-icon-moon-night icon-record-type" style="right: 0;" :class="[recordIcon(modal.type)]"></i></div>
                 </div>
                 <div class="body-content">
                     <textarea v-model="popupContent" placeholder="写点什么…"></textarea>
@@ -21,14 +23,17 @@
                 </div>
             </template>
         </Popup>
+
+        <!--任务-->
         <div class="home-module">
             <div class="task-header clear">
                 <div class="task-left clear">
                     <i style="color: #0066ff;" class="el-icon-edit-outline"></i>
                     <span class="task-title">任务</span>
+                    <i @click="openPopup" class="el-icon-circle-plus add-position"></i>
                 </div>
                 <div class="task-right clear">
-                    <i style="line-height:23px;" class="el-icon-arrow-right"></i>
+                    <i style="line-height:23px;color:#4682B4" class="el-icon-arrow-right"></i>
                 </div>
             </div>
             <ul class="task-list">
@@ -42,27 +47,36 @@
             </ul>
         </div>
 
+        <!--记录-->
         <div class="record-module">
             <div class="task-header clear">
                 <div class="task-left clear">
-                    <i style="color: #0066ff;" class="el-icon-edit-outline"></i>
+                    <i style="color: #EE0000;" class="el-icon-edit-outline"></i>
                     <span class="task-title">记录</span>
-                    <i @click="openPopup" class="el-icon-circle-plus add-position"></i>
+                    <i @click="openPopup" style="color:#ff4c41" class="el-icon-circle-plus add-position"></i>
                 </div>
                 <div class="task-right clear">
-                    <i style="line-height:23px;" class="el-icon-arrow-right"></i>
+                    <i style="line-height:23px;color:#EE0000" class="el-icon-arrow-right"></i>
                 </div>
             </div>
             <ul class="record-list">
-                <li v-for="(item,i) in recordList" :key="i" class="record-item">
+                <li v-for="(item,i) in recordList" :key="i" class="record-item" @click="openPopup(item)">
                     <div class="record-contain">
+                        <i class="el-icon-moon-night icon-record-type" :class="[recordIcon(item.type)]"></i>
                         <div class="record-content ell">{{item.title}}</div>
-                        <div class="detail ell">mfmfmfmmff</div>
+                        <div class="detail ell">{{item.remark}}</div>
                     </div>
                 </li>
             </ul>
         </div>
-
+        <van-popup v-model:show="show" position="bottom" :style="{ height: '60%' }">
+            <van-picker
+                title="标题"
+                :columns="columns"
+                @confirm="onConfirm"
+                @change="onChange"
+            />
+        </van-popup>
         <div class="habit-module">
             
         </div>
@@ -76,9 +90,23 @@
 </template>
 
 <style scoped>
+    .type{
+        height:40px;
+        color:#fff;
+        background: #1A73E8;
+        position: absolute;
+        right: 0;
+        width: 14%;
+    }
     .icon{
         font-size: 30px;
         margin-left:15px;
+    }
+    .icon-record-type{
+        left: 4%;
+        top: 50%;
+        transform: translateY(-50%);
+        position: absolute;
     }
     .body-content textarea{
         width: 100%;
@@ -132,7 +160,7 @@
         line-height: 1;
         text-align: left;
         bottom: 0;
-        text-indent: 9%;
+        text-indent: 15%;
         position: absolute;
     }
     .record-module{
@@ -156,7 +184,7 @@
     }
     .record-content{
         width: 100%;
-        text-indent: 9%;
+        text-indent: 15%;
         font-weight: bold;
         float: left;
         font-size: 18px;
@@ -237,18 +265,40 @@
 import Nava from "@/views/common/nav.vue"
 import Headera from "@/views/common/header.vue"
 import Popup from "@/views/common/popup.vue"
+import { Popup as vantPopup} from 'vant';
+import { Picker } from 'vant';
 export default {
     name:"home",
     components:{
         Nava,
         Headera,
-        Popup
+        Popup,
+        "van-popup":vantPopup,
+        "van-picker": Picker,
     },
     created(){
 
     },
+    setup() {
+        const columns = ['生活', '工作', '学习', '感悟', 'mf'];
+
+        const onConfirm = (value, ) => {
+            console.log(value)
+        };
+        const onChange = (value, ) => {
+            console.log(value)
+        };
+
+        return {
+            columns,
+            onChange,
+            onConfirm,
+        };
+    },
     data(){
         return {
+            showType:false,
+            show:false,
             taskList:[
                 {
                     title:"hello",
@@ -281,34 +331,51 @@ export default {
             recordList:[
                 {
                     title:"hello",
-                    state:1,
-                    remark:"dasdasdasdqw"
+                    type:1,
+                    remark:"one"
                 },
                 {
                     title:"hello",
-                    state:1,
-                    remark:"dasdasdasdqw"
+                    type:1,
+                    remark:"two"
                 },
                 {
                     title:"hello",
-                    state:2,
-                    remark:"dasdasdasdqw"
+                    type:2,
+                    remark:"three"
                 },
                 {
                     title:"hello",
-                    state:1,
-                    remark:"dasdasdasdqw"
+                    type:1,
+                    remark:"four"
                 },
                 {
                     title:"hello",
-                    state:2,
-                    remark:"dasdasdasdqw"
+                    type:2,
+                    remark:"five"
                 }
             ],
-           
+            modal:{
+               type:-1, 
+            }
+        }
+    },
+    computed:{
+        recordIcon(){
+            return (type)=>{
+                switch (type){
+                    case 1:
+                        return "el-icon-reading"
+                    case 2:
+                        return "el-icon-moon-night"
+                }
+            }
         }
     },
     methods:{
+        mf(){
+            this.show = true
+        },
         changeState(v, index){
             if(v.state == 1){
                 this.taskList[index].state = 2;
@@ -317,7 +384,15 @@ export default {
             }
         },
         openPopup(item){
+            this.modal.type = item.type;
+            console.log(this.modal.type)
+            if(item.type){
+                this.showType = true;
+            }else{
+                this.showType = false;
+            }
             this.popupTitle = item.title;
+            this.popupContent = item.remark
             this.$refs.popup.open()
         }
     }

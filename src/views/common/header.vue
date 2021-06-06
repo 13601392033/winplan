@@ -13,7 +13,7 @@ export default {
 
 <style scoped>
     .attitude{
-        font-family: cursive;
+        font-family: KaiTi;
         font-size: 20px;
         color: #F0FFFF;
         margin-top: 7px;
