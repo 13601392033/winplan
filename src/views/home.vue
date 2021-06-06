@@ -69,27 +69,60 @@
                 </li>
             </ul>
         </div>
+        
+        <div class="habit-module">
+            <div class="task-header clear">
+                <div class="task-left clear">
+                    <i style="color: #0066ff;" class="el-icon-circle-check"></i>
+                    <span class="task-title">习惯</span>
+                </div>
+                <div class="task-right clear">
+                    <i style="line-height:23px;color:#0066ff" class="el-icon-arrow-right"></i>
+                </div>
+            </div>
+            <div class="habit-container">
+                <ul class="habit-list">
+                    <li class="habit-item">1</li>
+                    <li class="habit-item">1</li>
+                    <li class="habit-item">1</li>
+                    <li class="habit-item">1</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="diary-module">
+            
+        </div>
+
         <van-popup v-model:show="show" position="bottom" :style="{ height: '60%' }">
             <van-picker
                 title="标题"
                 :columns="columns"
                 @confirm="onConfirm"
                 @change="onChange"
+                :swipe-duration="300"
             />
         </van-popup>
-        <div class="habit-module">
-            
-        </div>
-
-        <div class="diary-module">
-            
-        </div>
     </div>
     
     <router-view></router-view>
 </template>
 
 <style scoped>
+    .habit-item{
+        float:left;
+        width: 33%;
+        height: 40px;
+        line-height: 40px;
+    }
+    .habit-list{
+        overflow: hidden;
+    }
+    .habit-container{
+        width:100%;
+        height:100px;
+
+    }
     .type{
         height:40px;
         color:#fff;
@@ -150,8 +183,7 @@
         bottom: 0px;
         width: 100%;
         padding: 10px 0;
-        height:30px;
-        
+        height:30px;   
     }
     .detail{
         float: left;
@@ -162,6 +194,14 @@
         bottom: 0;
         text-indent: 15%;
         position: absolute;
+    }
+    .habit-module{
+        width: 94%;
+        margin: 28px auto 0;
+        border-radius: 10px;
+        background-color: rgba(255,255,255,.9);
+        margin-bottom: 10px;
+        border: 1px solid #FFFFF0;
     }
     .record-module{
         width:94%;
