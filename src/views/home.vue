@@ -15,7 +15,7 @@
                     <div v-show="showType" class="type" @click="mf" ><i class="el-icon-moon-night icon-record-type" style="right: 0;" :class="[recordIcon(modal.type)]"></i></div>
                 </div>
                 <div class="body-content">
-                    <textarea v-model="popupContent" placeholder="写点什么…"></textarea>
+                    <textarea class="textarea" v-model="popupContent"></textarea>
                 </div>
                 <div class="body-footer">
                     <i style="color:#FFC125" class="el-icon-success icon"></i>
@@ -121,7 +121,6 @@
     .habit-container{
         width:100%;
         height:100px;
-
     }
     .type{
         height:40px;
@@ -141,9 +140,9 @@
         transform: translateY(-50%);
         position: absolute;
     }
-    .body-content textarea{
+    .body-content .textarea{
         width: 100%;
-        height: 100%;
+        height: 63%;
         margin-top: 10px;
         border: none;
         padding-top:10px;
@@ -176,6 +175,7 @@
     .body-content{
         width:100%;
         height:100%;
+        background: #fff;
     }
     .body-footer{
         position: fixed;
@@ -307,6 +307,7 @@ import Headera from "@/views/common/header.vue"
 import Popup from "@/views/common/popup.vue"
 import { Popup as vantPopup} from 'vant';
 import { Picker } from 'vant';
+
 export default {
     name:"home",
     components:{
@@ -341,9 +342,14 @@ export default {
             show:false,
             taskList:[
                 {
-                    title:"hello",
+                    title:"周记",
                     state:1,
-                    remark:"dasdasdasdqw"
+                    remark:`2021/6/7 补上周周记
+       上周坚持下来了绑腿、健身、鼻翼矫正，效果日益见长
+        每天中午和下午，尤其是下午这会总会特别烦躁，毫无斗志与心情，已经持续很久了，尤其是在周末，更是严重，需要格外注意，试着让自己放轻松。
+        关于不在胡思乱想，这一点做得很不好，一有点时间思绪就开始乱飘。
+        做事快，这一点做得还可以。
+        项目进展，有些慢了，需要赶上去，这周需要将静态页面全部出来，下周开始后台服务框架、数据库的搭建，接口的研发。`
                 },
                 {
                     title:"dd",
