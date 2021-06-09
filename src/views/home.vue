@@ -82,10 +82,11 @@
             </div>
             <div class="habit-container">
                 <ul class="habit-list">
-                    <li class="habit-item">1</li>
-                    <li class="habit-item">1</li>
-                    <li class="habit-item">1</li>
-                    <li class="habit-item">1</li>
+                    <li v-for="(item, index) in habitList " @click="changeHabitState(index)" :key="index" class="habit-item">
+                        <div :class="{done: item.state == 1}" :style="habitBack(item)"><i class="fa" :class="habitClass(item)"></i></div>
+                        <span class="ell">mf{{item.state}}</span>
+                    </li>
+                  
                 </ul>
             </div>
         </div>
@@ -109,18 +110,44 @@
 </template>
 
 <style scoped>
+    .habit-item .fa{
+        position: absolute;
+        font-size:20px;
+        top:50%;
+        left:50%;
+        transform: translate(-50%, -50%);
+    }
+    .habit-item span{
+        width:100%;
+        display: inline-block;
+        text-align: center;
+    }
+    .habit-item div{
+        width: 50px;
+        height: 50px;
+        position: relative;
+        margin: 0 auto;
+        border:1px solid #5F6368;
+        border-radius: 50%;
+    }
+    .habit-item .done{
+        border:none;
+        box-shadow: 1px 1px 7px #888888;
+    }
     .habit-item{
         float:left;
         width: 33%;
-        height: 40px;
+        height: 80px;
         line-height: 40px;
+        margin-bottom: 20px;
     }
     .habit-list{
         overflow: hidden;
     }
     .habit-container{
         width:100%;
-        height:100px;
+        min-height:100px;
+        margin-top:22px;
     }
     .type{
         height:40px;
@@ -401,12 +428,67 @@ export default {
                     remark:"five"
                 }
             ],
+            habitList:[
+                {
+                    icon:"fa-quora",
+                    title:"hellofa-quora",
+                    background:"#3399cc",
+                    state:1,//1 为已完成 0 为未完成
+                },
+                {
+                    icon:"fa-quora",
+                    title:"hellofa-quora",
+                    background:"#3399cc",
+                    state:0,//1 为已完成 0 为未完成
+                },
+                {
+                    icon:"fa-quora",
+                    title:"hellofa-quora",
+                    background:"#3399cc",
+                    state:0,//1 为已完成 0 为未完成
+                },
+                {
+                    icon:"fa-quora",
+                    title:"hellofa-quora",
+                    background:"#3399cc",
+                    state:1,//1 为已完成 0 为未完成
+                },
+                {
+                    icon:"fa-quora",
+                    title:"hellofa-quora",
+                    background:"#3399cc",
+                    state:1,//1 为已完成 0 为未完成
+                },
+                {
+                    icon:"fa-quora",
+                    title:"hellofa-quora",
+                    background:"#3399cc",
+                    state:0,//1 为已完成 0 为未完成
+                },
+
+            ],
             modal:{
                type:-1, 
             }
         }
     },
     computed:{
+        habitBack(){
+            return (item)=>{
+                console.log(item)
+                return {
+                    background : item.state == 1 ? item.background : ""
+                }
+            }
+            
+        },
+        habitClass(){
+            return (item)=>{
+                let cla = new Map();
+                cla.set(item.icon, true);
+                return this.strMapToObj(cla)
+            }
+        },
         recordIcon(){
             return (type)=>{
                 switch (type){
@@ -419,6 +501,21 @@ export default {
         }
     },
     methods:{
+        changeHabitState(i){
+            let state = this.habitList[i].state;
+            if(state == 1){
+                this.habitList[i].state = 0
+            }else if(state == 0){
+                this.habitList[i].state = 1
+            }
+        },
+        strMapToObj(strMap) {
+            let obj = Object.create(null);
+            for (let [k,v] of strMap) {
+                obj[k] = v;
+            }
+            return obj;
+        },
         mf(){
             this.show = true
         },
