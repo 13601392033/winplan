@@ -70,6 +70,7 @@
             </ul>
         </div>
         
+        <!--习惯-->
         <div class="habit-module">
             <div class="task-header clear">
                 <div class="task-left clear">
@@ -91,8 +92,30 @@
             </div>
         </div>
 
+        <!--日记-->
         <div class="diary-module">
-            
+            <div class="task-header clear">
+                <div @click="snail++" class="task-left clear">
+                    <i style="color: #EE0000;" class="el-icon-edit-outline"></i>
+                    <span class="task-title">日记</span>
+                </div>
+                <div class="task-right clear">
+                    <i style="line-height:23px;color:#EE0000" class="el-icon-arrow-right"></i>
+                </div>
+            </div>
+
+            <div class='diary-container'>
+                <div class="diary-left fl">
+                    <span class="day">10</span>
+                    <br/>
+                    <span class="mon">6月</span>
+                    <div class="diary-line"></div>
+                </div>
+                <div class="diary-right fl">
+                    <i class="el-icon-edit"></i>
+                    <span style="margin-left:10px;">记下你的此时此刻~</span>
+                </div>
+            </div>
         </div>
 
         <van-popup v-model:show="show" position="bottom" :style="{ height: '60%' }">
@@ -110,6 +133,36 @@
 </template>
 
 <style scoped>
+    .diary-right{
+        margin-left: 46px;
+        color:#AAAAAA;
+        height: 100%;
+        line-height: 93px;
+    }
+    .diary-line{
+        position: absolute;
+        width: 1px;
+        height: 100%;
+        background: #C7C7C7;
+        top: 0;
+        left: 46px;
+    }
+    .mon{
+        color:#AAAAAA;
+    }
+    .day{
+        font-weight: bold;
+        font-size: 23px;
+    }
+    .diary-container{
+        width:100%;
+        height:100px;
+    }
+    .diary-left{
+        position: relative;
+        margin-top:25px;
+        margin-left:26px;
+    }
     .habit-item .fa{
         position: absolute;
         font-size:20px;
@@ -221,6 +274,14 @@
         bottom: 0;
         text-indent: 15%;
         position: absolute;
+    }
+    .diary-module{
+        width: 94%;
+        margin: 28px auto 0;
+        border-radius: 10px;
+        background-color: rgba(255,255,255,.9);
+        margin-bottom: 10px;
+        border: 1px solid #FFFFF0;
     }
     .habit-module{
         width: 94%;
@@ -334,7 +395,7 @@ import Headera from "@/views/common/header.vue"
 import Popup from "@/views/common/popup.vue"
 import { Popup as vantPopup} from 'vant';
 import { Picker } from 'vant';
-
+import {ref, watchEffect} from "vue"
 export default {
     name:"home",
     components:{
@@ -349,7 +410,32 @@ export default {
     },
     setup() {
         const columns = ['生活', '工作', '学习', '感悟', 'mf'];
-
+        const snail = ref(1);
+        watchEffect((onInvalidate)=>{
+            let mf = {};
+            setTimeout(() => {
+                Promise.race([  
+                    new Promise((resolve ,reject)=>{
+                        console.log(resolve)
+                        mf.cancle = function (){
+                            reject(new Error("cancle"));
+                        }
+                    })  
+                ])    
+            }, 2000);
+            
+            console.log(snail.value)
+            onInvalidate(()=>{
+                if(mf.cancle){
+                    mf.cancle();
+                }
+                
+                console.log("onInvalidate")
+            })
+        });
+        // setInterval(()=>{
+        //     mf.value++
+        // },2000)
         const onConfirm = (value, ) => {
             console.log(value)
         };
@@ -359,6 +445,7 @@ export default {
 
         return {
             columns,
+            snail:snail,
             onChange,
             onConfirm,
         };
@@ -467,6 +554,10 @@ export default {
                 },
 
             ],
+            lastDiary:{
+                    title:"日记~1",
+                    date:"2021-6-10"
+                },
             modal:{
                type:-1, 
             }
@@ -475,7 +566,6 @@ export default {
     computed:{
         habitBack(){
             return (item)=>{
-                console.log(item)
                 return {
                     background : item.state == 1 ? item.background : ""
                 }
@@ -528,7 +618,6 @@ export default {
         },
         openPopup(item){
             this.modal.type = item.type;
-            console.log(this.modal.type)
             if(item.type){
                 this.showType = true;
             }else{
