@@ -395,7 +395,7 @@ import Headera from "@/views/common/header.vue"
 import Popup from "@/views/common/popup.vue"
 import { Popup as vantPopup} from 'vant';
 import { Picker } from 'vant';
-import {ref, watchEffect} from "vue"
+import { ref, watchEffect} from "vue"
 export default {
     name:"home",
     components:{
@@ -411,35 +411,33 @@ export default {
     setup() {
         const columns = ['生活', '工作', '学习', '感悟', 'mf'];
         const snail = ref(1);
-        watchEffect((onInvalidate)=>{
-            let mf = {};
-            setTimeout(() => {
-                Promise.race([  
-                    new Promise((resolve ,reject)=>{
-                        console.log(resolve)
-                        mf.cancle = function (){
-                            reject(new Error("cancle"));
-                        }
-                    })  
-                ])    
-            }, 2000);
+        let mf = {};
+        function getPromiseWithAbort(p){
+            let obj = {};
+            let p1 = new Promise(function(resolve, reject){
+                obj.abort = reject;
+            });
+            obj.promise = Promise.race([p, p1]);
+            return obj;
+        }
+        // watchEffect((onInvalidate)=>{
             
-            console.log(snail.value)
-            onInvalidate(()=>{
-                if(mf.cancle){
-                    mf.cancle();
-                }
-                
-                console.log("onInvalidate")
-            })
-        });
-        // setInterval(()=>{
-        //     mf.value++
-        // },2000)
-        const onConfirm = (value, ) => {
+        //     mf = getPromiseWithAbort(new Promise((resolve)=>{
+        //         setTimeout(()=>{
+        //             console.log("succ")
+        //             resolve(3000)
+        //         }, 2000)
+        //     }));
+        //     console.log(snail.value)
+        //      onInvalidate(()=>{
+        //         mf.cancle();
+        //     })  
+        // });
+
+        const onConfirm = (value) => {
             console.log(value)
         };
-        const onChange = (value, ) => {
+        const onChange = (value) => {
             console.log(value)
         };
 
