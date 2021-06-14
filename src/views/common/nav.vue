@@ -46,11 +46,11 @@
 }
 
 .nav-in{
-    animation: mf .5s ease 1;
+    animation: mf .35s ease 1;
 }
 
 .nav-out{
-    animation: mf2 .5s ease 1;
+    animation: mf2 .35s ease 1;
 }
 
 .menu{
@@ -133,10 +133,10 @@ export default {
             let div = document.createElement("div");
             //div.appendChild(img);
             div.setAttribute("class","mask");
-            document.getElementsByClassName("home")[0].appendChild(div);
+            document.getElementById("app").appendChild(div);
         },
         hide(){
-            let app = document.getElementsByClassName("home")[0];
+            let app = document.getElementById("app");
             let list = document.getElementsByClassName("mask");
             for(let i = 0; i< list.length; i++){
                 app.removeChild(list[i]);
@@ -153,29 +153,31 @@ export default {
 
                 let dom = document.getElementsByClassName("mask")[0];
                 dom.addEventListener("click", ()=>{
+                    this.state = 2;
                     this.hide();
                     nav.classList.remove("nav-in")
                     nav.classList.add("nav-out")
-                    this.state = 0;
                     setTimeout(()=>{
+                        this.state = 0;
                         nav.style = "display:none;"
-                    },400)    
+                    },300)    
                 })
-            }else{
+            }else if(this.state == 1){
                 this.hide();
                 nav.classList.remove("nav-in")
                 nav.classList.add("nav-out")
-                this.state = 0;
+                this.state = 2;
                 setTimeout(()=>{
+                    this.state = 0;
                     nav.style = "display:none;"
-                },400)
+                },300)
                 
             }
         }
     },
     data(){
         return {
-            state:0,//0为菜单 未打开 1 为已打开
+            state:0,//0为菜单未打开 1 为已打开 2为过度状态
             routes:routes,
             backImg:require("@/assets/menu_spand.png"),
             menu1:require("@/assets/menu1.png"),

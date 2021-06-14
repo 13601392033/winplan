@@ -1,7 +1,9 @@
 <template>
     <div class="home" >
-        <Nava></Nava>
-        <Headera></Headera>
+        <Headera>
+            <span class="header-title">mf plan</span>
+            <div class="attitude">保持姿态，迎接最美的蜕变</div>
+        </Headera>
         <Popup ref="popup">
             <template v-slot:body>
                 <div class="body-title">
@@ -33,7 +35,9 @@
                     <i @click="openPopup" class="el-icon-circle-plus add-position"></i>
                 </div>
                 <div class="task-right clear">
-                    <i style="line-height:23px;color:#4682B4" class="el-icon-arrow-right"></i>
+                    <router-link to="/main/task">
+                        <i  style="line-height:23px;color:#4682B4" class="el-icon-arrow-right"></i>
+                    </router-link>
                 </div>
             </div>
             <ul class="task-list">
@@ -56,7 +60,9 @@
                     <i @click="openPopup" style="color:#ff4c41" class="el-icon-circle-plus add-position"></i>
                 </div>
                 <div class="task-right clear">
-                    <i style="line-height:23px;color:#EE0000" class="el-icon-arrow-right"></i>
+                    <router-link to="/main/record">
+                        <i style="line-height:23px;color:#EE0000" class="el-icon-arrow-right"></i>
+                    </router-link>
                 </div>
             </div>
             <ul class="record-list">
@@ -106,9 +112,9 @@
 
             <div class='diary-container'>
                 <div class="diary-left fl">
-                    <span class="day">10</span>
+                    <span class="day">{{new Date().getDate()}}</span>
                     <br/>
-                    <span class="mon">6月</span>
+                    <span class="mon">{{new Date().getMonth() + 1}}月</span>
                     <div class="diary-line"></div>
                 </div>
                 <div class="diary-right fl">
@@ -122,12 +128,11 @@
             <van-picker
                 title="标题"
                 :columns="columns"
-                @confirm="onConfirm"
-                @change="onChange"
                 :swipe-duration="300"
             />
         </van-popup>
     </div>
+
     
     <router-view></router-view>
 </template>
@@ -210,7 +215,8 @@
         right: 0;
         width: 14%;
     }
-    .icon{
+
+    .body-footer .icon{
         font-size: 30px;
         margin-left:15px;
     }
@@ -323,10 +329,11 @@
         margin-bottom: 10px;
     }
     .home{
-        position: fixed;
+
         overflow: auto;
         width:100%;
         height:100%;
+        position:fixed;
         background-image: linear-gradient(to bottom right,#C7C7C7,#336699,#6CA6CD);
         background-size:100% 100% !important;
     }
@@ -390,18 +397,15 @@
 </style>
 
 <script>
-import Nava from "@/views/common/nav.vue"
-import Headera from "@/views/common/header.vue"
 import Popup from "@/views/common/popup.vue"
 import { Popup as vantPopup} from 'vant';
+import Headera from "@/views/common/header.vue"
 import { Picker } from 'vant';
 import { ref, watchEffect} from "vue"
 export default {
     name:"home",
     components:{
-        Nava,
-        Headera,
-        Popup,
+        Popup,Headera,
         "van-popup":vantPopup,
         "van-picker": Picker,
     },
@@ -410,42 +414,34 @@ export default {
     },
     setup() {
         const columns = ['生活', '工作', '学习', '感悟', 'mf'];
-        const snail = ref(1);
-        let mf = {};
-        function getPromiseWithAbort(p){
-            let obj = {};
-            let p1 = new Promise(function(resolve, reject){
-                obj.abort = reject;
-            });
-            obj.promise = Promise.race([p, p1]);
-            return obj;
-        }
+        // const snail = ref(1);
+        // let mf = {};
+        // function getPromiseWithAbort(p){
+        //     let obj = {};
+        //     let p1 = new Promise(function(resolve, reject){
+        //         obj.abort = reject;
+        //     });
+        //     obj.promise = Promise.race([p, p1]);
+        //     return obj;
+        // }
         // watchEffect((onInvalidate)=>{
             
         //     mf = getPromiseWithAbort(new Promise((resolve)=>{
         //         setTimeout(()=>{
-        //             console.log("succ")
         //             resolve(3000)
         //         }, 2000)
         //     }));
+        //     mf.promise.then(res=>{
+        //         console.log(res)
+        //     })
         //     console.log(snail.value)
-        //      onInvalidate(()=>{
-        //         mf.cancle();
+        //     onInvalidate(()=>{
+        //         mf.abort();
         //     })  
         // });
 
-        const onConfirm = (value) => {
-            console.log(value)
-        };
-        const onChange = (value) => {
-            console.log(value)
-        };
-
         return {
             columns,
-            snail:snail,
-            onChange,
-            onConfirm,
         };
     },
     data(){

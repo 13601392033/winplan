@@ -29,21 +29,23 @@ const routes = [
         component: login,
     },
     {
-        path: "/login",
-        name: "login",
-        margin:"68px",
-        component: login,
-    },
-    {
-        path: "/home",
-        name: "home",
+        path: "/main",
+        name: "main",
         margin:"90px",
-        component: home,
+        component: ()=>import("@/views/main.vue"),
         children:[
             {
-                path:"a",
-                component:a
-            }
+                path:"home",
+                component:()=>import("@/views/home.vue")
+            },
+            {
+                path: "task",
+                component: ()=>import("@/views/task.vue"),
+            },
+            {
+                path: "record",
+                component: ()=>import("@/views/record.vue"),
+            },
         ]
     },
 ]
