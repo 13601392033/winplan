@@ -84,7 +84,9 @@
                     <span class="task-title">习惯</span>
                 </div>
                 <div class="task-right clear">
-                    <i style="line-height:23px;color:#0066ff" class="el-icon-arrow-right"></i>
+                    <router-link to="/main/habit">
+                        <i style="line-height:23px;color:#0066ff" class="el-icon-arrow-right"></i>
+                    </router-link>
                 </div>
             </div>
             <div class="habit-container">
@@ -133,7 +135,6 @@
         </van-popup>
     </div>
 
-    
     <router-view></router-view>
 </template>
 

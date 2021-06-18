@@ -1,6 +1,6 @@
 <template>
     <div class="task">
-        <Headera style="color:#000;border-bottom:1px solid #5F6368">
+        <Headera style="color:#000;border-bottom:1px solid #fff;margin-bottom: 23px;">
             <span class="header-title">任务</span>
             <span class="left-icon">
                 <router-link to="/main/home">
@@ -131,7 +131,7 @@
     width: 14%;
 }
 .body-content .textarea{
-    width: 100%;
+    width: 96%;
     height: 63%;
     margin-top: 10px;
     border: none;
@@ -231,6 +231,10 @@
 .item-content{
     text-align: left;
 }
+.item-list{
+    height: 270px;
+    overflow: auto;
+}
 .item-list-li{
     position: relative;
     height:55px;
@@ -259,7 +263,7 @@
     padding-bottom: 20px;
     width: 100%;
     height: 300px;
-    overflow: auto;
+    overflow: hidden;
     background: #fff;
     margin-bottom:35px;
     
@@ -267,7 +271,9 @@
 
 .task{
     background: rgb(122, 115, 116);
+    background-image: linear-gradient(to bottom right,#C7C7C7,#336699,#6CA6CD);
     position: fixed;
+    overflow-x:hidden;
     overflow: auto;
     width: 100%;
     height: 100%;
@@ -285,7 +291,6 @@ import Headera from "@/views/common/header.vue"
 import Popup from "@/views/common/popup.vue"
 import { Popup as vantPopup} from 'vant';
 import { Picker } from 'vant';
-import { reactive } from 'vue'
 export default {
     name:"task",
     components:{
@@ -314,6 +319,25 @@ export default {
             popupContent:"",
             taskOneList:[
                 {
+                    title:"完成xxx事情",
+                    detail:"a period of time when sb/sth has to wait because of a problem that makes sth slow or late",
+                    state:1,
+                    isDelay:true,
+                    type:"",
+                },
+                {
+                    title:"完成xxx事情",
+                    detail:"a period of time when sb/sth has to wait because of a problem that makes sth slow or late",
+                    state:1,
+                    isDelay:true,
+                    type:"",
+                },{
+                    title:"完成xxx事情",
+                    detail:"a period of time when sb/sth has to wait because of a problem that makes sth slow or late",
+                    state:1,
+                    isDelay:true,
+                    type:"",
+                },{
                     title:"完成xxx事情",
                     detail:"a period of time when sb/sth has to wait because of a problem that makes sth slow or late",
                     state:1,

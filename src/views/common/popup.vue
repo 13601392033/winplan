@@ -35,9 +35,6 @@ export default {
             dom:undefined,
         }
     },
-    created(){
-        
-    },
     methods:{
         open(){
             this.documentHeihgt = window.screen.height;
@@ -112,7 +109,7 @@ export default {
         background: white;
         top:100%;
         z-index: 1001;
-        transition:all .15s;
+        transition:top .15s;
         border-top-left-radius: 6px;
         border-top-right-radius: 6px;
         left: 0;

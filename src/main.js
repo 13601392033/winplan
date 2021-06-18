@@ -5,7 +5,7 @@ import App from './App.vue'
 import router from "./router"
 import ElementPlus from 'ElementPlus'
 import axios from "./utils/axios"
-
+import "@/assets/menu_spand.png"
 
 
 const app = createApp(App).use(router).use(ElementPlus);

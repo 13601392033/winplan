@@ -95,6 +95,7 @@
     top: 50%;
     transform: translateY(-50%);
     height: 50%;
+    scrollbar-width: none;
     overflow: auto;
 }
 .nav-ul::-webkit-scrollbar {
