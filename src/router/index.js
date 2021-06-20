@@ -1,7 +1,6 @@
 import {createRouter, createWebHashHistory} from "vue-router"
 import home from "@/views/home"
 import login from "@/views/white/login"
-import a from "@/views/a.vue"
 
 const routes = [
     {

@@ -402,7 +402,7 @@ import Popup from "@/views/common/popup.vue"
 import { Popup as vantPopup} from 'vant';
 import Headera from "@/views/common/header.vue"
 import { Picker } from 'vant';
-import { ref, watchEffect} from "vue"
+import { reactive, ref, watchEffect} from "vue"
 export default {
     name:"home",
     components:{
@@ -414,7 +414,7 @@ export default {
 
     },
     setup() {
-        const columns = ['生活', '工作', '学习', '感悟', 'mf'];
+        const columns = reactive(['生活', '工作', '学习', '感悟', 'mf']);
         // const snail = ref(1);
         // let mf = {};
         // function getPromiseWithAbort(p){

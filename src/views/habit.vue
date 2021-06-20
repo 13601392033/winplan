@@ -8,41 +8,409 @@
                 </router-link>
             </span>
         </Headera>
-
+        <Popup ref="popup" :height="'60px'" :isBack="false" :popupBodyBack="'#fff'">
+            <template v-slot:header>
+                <div class="popup-header">
+                    <span class="ph-left">取消</span>
+                    <span class="ph-title">添加习惯</span>
+                    <span class="ph-right">保存</span>
+                </div>
+            </template>
+            <template v-slot:body style="background:#fff">
+                <div class="ph-body">
+                    <div class="ph-body-item">
+                        <input type="text" class="title-input" placeholder="习惯名称" />
+                    </div>
+                    <div class="ph-body-item">
+                        <div class="item-back">
+                            <span class="name-label">选择图标和背景色</span>
+                            <span class="item-back-icon">
+                                <span @click="changeChoice(0)" class="back-demo" :class="{opa : sureChoice != 0}">文</span>
+                                <span @click="changeChoice(1)" class="back-demo" :class="{opa : sureChoice != 1}"><i class="stat-icon el-icon-time"></i></span>
+                            </span>
+                        </div>
+                    </div>
+                     <div class="ph-body-item" style="height:110px;">
+                        <div class="item-excitation">写点什么激励自己吧~</div>
+                        <input type="text" class="item-excitation-input" placeholder="永远年轻，永远热泪盈眶" />
+                    </div>
+                </div>
+            </template>
+        </Popup>
         <div class="habit-container">
             <div class="habit-statistics">
-                <div class="stat-item" style="margin-left: .5%;">
-                    <i class="stat-icon el-icon-time"></i>进行中
+                <div class="stat-item" style="margin-left: .5%;color:#409EFF">
+                    <i class="stat-icon el-icon-time"></i>
+                    <span class="stat-label">进行中</span>
+                    <div class="habit-num">{{ing}}</div>
                 </div>
-                <div class="stat-item">
+                <div class="stat-item" style="color:#909399">
                     <i class="stat-icon el-icon-circle-check"></i>
-                    已完成
+                    <span class="stat-label">已完成</span>
+                    <div class="habit-num">{{succ}}</div>
                 </div>
-                <div class="stat-item">
+                <div class="stat-item" style="color:#F56C6C">
                     <i class="stat-icon el-icon-video-pause"></i>
-                    已暂停
+                    <span class="stat-label">已暂停</span>
+                    <div class="habit-num">{{stop}}</div>
                 </div>
             </div>
             <ul class="habit-list">
                 <li class="list-item" v-for="(item,index) in habitList" :key="index">
-                    {{item}}
+                    <span class="item-ele item-icon-back">
+                        <span class="radius">
+                            <i v-if="item.type == 1" class="icon" :class="iconClass(item)"></i>
+                            <span v-if="item.type == 0" class="icon">{{item.text}}</span>
+                        </span>
+                    </span>
+                    <span class="item-ele item-content">{{item.name}}</span>
+                    <span class="item-ele item-days">
+                        <span class="item-all-days">{{item.allDays}}天</span>
+                        <span class="item-days-label">累计打卡</span>
+                    </span>
                 </li>
             </ul>
+            
         </div>
+        <i @click="openPopup" class="el-icon-plus add-position"></i>
+
+        <!--oh my god-->
+        <van-popup v-model:show="stateChoice" position="bottom" :style="{ height: '80%' }">
+            <div class="back-popup">
+                <div class="bp-header">
+                    <span style="flex:0 0 60px">取消</span>
+                    <span class="bp-header-title">{{bpTitle}}</span>
+                    <span style="flex:0 0 60px">确定</span>
+                </div>
+                <div class="bp-content">
+
+                    <div class="bp-icon-list" v-show="curChoice == 1">
+                        <div class="bp-icon-list-header">
+                            <span class="bp-choice-label">选择一个喜欢的图标~</span>
+                            <span :style="{background:backColor}" class="bp-choice-icon">
+                                <i class="el-icon-time" :style="{color:color}"></i>
+                            </span>
+                        </div>
+                        <ul class="bp-icon-list-content">
+                            <li class="icon-list-item" v-for="(item, index) in 100" :key="index">
+                                <div class="icon-item-wrapper">
+                                    <i class="el-icon-time"></i>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="bp-text-container" v-show="curChoice == 0">
+                        <div class="bp-text-header">
+                            <span class="bp-text-logo">文字图标</span>
+                            <span :style="{background:backColor, color: color}" class="bp-input-text">
+                                {{firstText}}
+                            </span>
+                        </div>
+                        <input maxlength="1" type="text" v-model="firstText" class="bp-text-input" placeholder="输入首个文字" />
+                    </div>
+
+                    <div class="bp-back-list">
+                        <div class="bp-back-list-header">
+                            <div class="bp-choice-label">选择一个喜欢的背景色</div>
+                        </div>
+                        <ul class="bp-back-list-content">
+                            <li @click="changeBack(item, index)"  class="bp-back-item" v-for="(item, index) in predefineColors" :key="index">
+                                <div class="back-item-wrapper" :class="{curBack: index == isCurBack}" :style="{background: item}">
+
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="bp-back-list" >
+                        <div class="bp-back-list-header">
+                            <div class="bp-choice-label">选择一个喜欢的图标(文字)颜色</div>
+                        </div>
+                        <ul class="bp-back-list-content">
+                            <li @click="changeColor(item, index)"  class="bp-back-item" v-for="(item, index) in predefineColors" :key="index">
+                                <div class="back-item-wrapper" :class="{curBack: index == isCurColor}" :style="{background: item}">
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </van-popup>
     </div>
 </template>
 
 <style scoped>
+
+.item-excitation-input{
+    width:90%;
+    text-indent: 1em;
+    height:44px;
+    border:1px solid #ddd;
+    outline: none;
+    border-radius: 10px;
+}
+.item-excitation{
+    text-align: left;
+    margin-left: 15px;
+    height: 60px;
+    line-height: 60px;
+}
+.bp-text-header{
+    display: flex;
+}
+.bp-text-logo{
+    flex: 1 0 100px;
+    text-align: left;
+    margin-left: 15px;
+}
+.bp-text-input{
+    height: 50px;
+    font-size: 18px;
+    border-bottom: 1px solid #ddd;
+    text-indent: 15px;
+    width: 95%;
+    outline: none;
+    border:none;
+}
+.curBack{
+    box-shadow: -1px 2px 9px #1a73e8;
+}
+.bp-back-list-content{
+    margin-top:20px;
+    display: flex;
+    flex-wrap: wrap;
+    height: 160px;
+    overflow: auto;
+}
+.bp-back-item{
+    width:70px;
+    height:40px;
+    display: flex;
+    justify-content: center;
+}
+.back-item-wrapper{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+}
+
+.bp-back-list{
+    margin-top:20px;
+}
+.icon-list-item{
+    width:20%;
+    height:40px;
+    display: flex;
+    justify-content: center;
+    padding:10px 0;
+}
+.bp-icon-list-content{
+    margin-top: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    height:170px;
+    overflow: auto;
+}
+.icon-item-wrapper{
+    width:43px;
+    height:43px;
+    background: rgba(235,235,235,.5);
+    border-radius:50%;
+    position: relative;
+}
+.icon-list-item i{
+    position: absolute;
+    color: #000;
+    font-size: 26px;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+}
+.bp-content{
+    margin-top: 20px;
+}
+.bp-choice-label{
+    margin-left:15px;
+    flex:1;
+    text-align: left;
+}
+.bp-icon-list-header{
+    display: flex;
+    align-items: center;
+}
+.bp-input-text{
+    text-align: right;
+    margin-right: 15px;
+    font-size: 30px;
+    text-align: center;
+    line-height: 50px;
+    width: 50px;
+    height: 50px;
+    background: #1A73E8;
+    border-radius: 50%;
+}
+.bp-choice-icon{
+    text-align: right;
+    margin-right: 15px;
+    font-size: 30px;
+    width: 50px;
+    height: 50px;
+    background: #1A73E8;
+    border-radius: 50%;
+    position: relative;
+}
+.bp-choice-icon i{
+    color: #fff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.bp-header{
+    display: flex;
+    height: 50px;
+    line-height: 50px;
+}
+.bp-header-title{
+    flex:1;
+    font-size: 18px;
+}
+.item-back-icon{
+    display: flex;
+    flex: 1;
+    flex-direction: row-reverse;
+    margin-right: 10px;
+}
+.opa{
+    opacity: .3;
+}
+.back-demo{
+    background: #1A73E8;
+    color:#fff;
+    margin-left:10px;
+    width:40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height:40px;
+    border-radius:50%;
+}
+.name-label{
+    font-size: 18px;
+    flex: 0 0 170px;
+    text-align: left;
+    text-indent: 16px;
+}
+.item-back{
+    display: flex;
+    align-items: center;
+    height:100%;
+}
+.title-input{
+    width:100%;
+    height:60px;
+    outline: none;
+    border: none;
+    text-indent: 16px;
+    font-size: 20px;
+}
+.ph-body-item{
+    position: relative;
+    width:100%;
+    height:60px;
+}
+.ph-body{
+    background: #fff;
+}
+.popup-header{
+    height:60px;
+    line-height:60px;
+    display: flex;
+}
+.ph-left{
+    flex:0 0 70px;
+}
+.ph-right{
+    flex:0 0 70px;
+    color: #1A73E8;
+    letter-spacing: 2px;
+}
+.ph-title{
+    flex: 1;
+    font-size: 28px;
+    font-weight: 600;
+    font-family: cursive;
+}
+.add-position{
+    font-size: 60px;
+    bottom: 75px;
+    color: #fff;
+    right: 23px;
+    border-radius: 50%;
+    background: #409EFF;
+    font-size: 40px;
+    padding: 6px;
+    font-weight: bold;
+}
+
+.item-icon-back .icon{
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    left: 50%;
+    font-size: 27px;
+}
+
+.item-days-label{
+    color:#909399;
+}
+
+.item-days{
+    line-height: 24px;
+    margin-right:10px;
+}
+.item-all-days{
+    display: block;
+    margin-top: 8px;
+    font-size: 24px;
+}
+.item-icon-back{
+    position: relative;
+    align-items: center;
+    flex:0 0 100px;
+    display: flex;
+    justify-content: center;
+}
+.item-icon-back .radius{
+    width: 50px;
+    height: 50px;
+    background: #ddd;
+    border-radius: 50%;
+}
+.item-content{
+    flex:1;
+    text-align: left;
+}
+.stat-label{
+    font-size: 16px;
+}
+.habit-num{
+    font-size:24px;
+}
 .stat-icon{
-    font-size:20px;
+    font-size:18px;
 }
 .list-item{
     border-radius: 6px;
     width: 94%;
     margin-left: 3%;
+    display: flex;
+    align-items:center;
     margin-bottom: 20px;
-    height: 60px;
-    line-height: 60px;
+    height: 70px;
+    line-height: 70px;
     background: #fff;
 }
 .stat-item{
@@ -52,10 +420,11 @@
 }
 .habit-statistics{
     overflow: hidden;
+    padding: 20px 0;
 }
 .habit-list{
     position: fixed;
-    top: 131px;
+    top: 161px;
     left: 0;
     right: 0;
     bottom: 0;
@@ -79,11 +448,14 @@
 <script>
 import Headera from "@/views/common/header.vue"
 import { onMounted } from '@vue/runtime-core'
-
+import Popup from "@/views/common/popup.vue"
+import { Popup as vantPopup} from 'vant';
 export default {
     name : "habit",
     components:{
-        Headera
+        Headera,
+        Popup,
+        "van-popup":vantPopup,
     },
     setup(){
         onMounted(()=>{
@@ -92,7 +464,140 @@ export default {
     },
     data(){
         return {
-            habitList:[1,2,21,312,3,123,123,1,1,1,1,1,1,1,1,1,1,1,3,1,1,1,1,1,1,1,1,]
+            bpTitle:"",
+            isCurBack:undefined,
+            firstText:undefined,
+            isCurColor:undefined,
+            iconList:[
+
+            ],
+            sureChoice: 1,
+            curChoice: 1,// 0为文本 1为图标
+            backColor: 'rgba(255, 69, 0, 0.68)',
+            color:'#fff',
+            predefineColors: [
+            '#ff4500',
+            '#ff8c00',
+            '#ffd700',
+            '#90ee90',
+            '#00ced1',
+            '#1e90ff',
+            '#c71585',
+            'rgba(255, 69, 0, 0.68)',
+            'rgb(255, 120, 0)',
+            '#c7158577',
+            '#ff4c41',
+            '#336699',
+            '#ffffcc',
+            '#000'
+            ],
+            ing:30,
+            succ:24,
+            stateChoice:false,
+            stop:0,
+            habitList:[
+                {
+                    type:"1", // 0为文字 1为图标
+                    icon:"el-icon-time",
+                    backColor:"",
+                    name:"坚持自我",
+                    allDays:20,
+                },
+                {
+                    type:"0", // 0为文字 1为图标
+                    backColor:"",
+                    text:"M",
+                    name:"坚持自我",
+                    allDays:20,
+                },
+                {
+                    type:"0", // 0为文字 1为图标
+                    backColor:"",
+                    text:"M",
+                    name:"坚持自我",
+                    allDays:20,
+                },
+                {
+                    type:"0", // 0为文字 1为图标
+                    backColor:"",
+                    text:"M",
+                    name:"坚持自我",
+                    allDays:20,
+                },
+                {
+                    type:"0", // 0为文字 1为图标
+                    backColor:"",
+                    text:"M",
+                    name:"坚持自我",
+                    allDays:20,
+                },
+                {
+                    type:"0", // 0为文字 1为图标
+                    backColor:"",
+                    text:"M",
+                    name:"坚持自我",
+                    allDays:20,
+                },
+                {
+                    type:"0", // 0为文字 1为图标
+                    backColor:"",
+                    text:"M",
+                    name:"坚持自我",
+                    allDays:20,
+                },
+                {
+                    type:"0", // 0为文字 1为图标
+                    backColor:"",
+                    text:"M",
+                    name:"坚持自我",
+                    allDays:20,
+                },
+            ]
+        }
+    },
+    methods:{
+        showBp(){
+            
+        },
+        changeColor(v, i){
+            this.color = v
+            this.isCurColor = i;
+        },
+        changeBack(v, i){
+            this.backColor = v
+            this.isCurBack = i;
+        },
+        changeChoice(v){
+            if(v == 1){
+                this.bpTitle = "挑选图标和颜色";
+            }else{
+                this.bpTitle = "输入文字和挑选颜色";
+            }
+            this.curChoice = v;
+            this.stateChoice = true;
+        },
+        openPopup(){
+            this.$refs.popup.open();
+        },
+        strMapToObj(strMap) {
+            let obj = Object.create(null);
+            for (let [k,v] of strMap) {
+                obj[k] = v;
+            }
+            return obj;
+        },
+    },
+    computed:{
+        iconClass(){
+            return (item)=>{
+                if(item.type == 1){
+                    let map = new Map();
+                    map.set(item.icon, true);
+                    return this.strMapToObj(map)
+                }else{
+                    return {}
+                }
+            }
         }
     }
 }

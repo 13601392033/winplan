@@ -1,30 +1,33 @@
 <template>
-    <div class="popup" style="color:red;">
+    <div class="popup" >
         <div class="mf" @click="close"></div>
-        <div class="popup-header" >
-            <div @touchstart="startDraw" @touchmove="draw" @touchend="endDraw" class="popup-drop" :style="{background:'url('+b8+') no-repeat'}">
-
+        <div :style="{height:height}" class="popup-header" @touchstart="startDraw" @touchmove="draw" @touchend="endDraw">
+            <div v-if="isBack" class="popup-drop" :style="{background:'url('+b8+') no-repeat'}">
             </div>
+            <slot v-else name="header"></slot>
         </div>
-        <div class="popup-body">
+        <div class="popup-body" :style="{background:popupBodyBack}">
             <slot name="body"></slot>
         </div>
     </div>
 </template>
 
 <script>
-// function debounce(fn,delay){
-//     let timer = null
-//     return function() {
-//         if(timer){
-//             clearTimeout(timer)
-//         }
-//         timer = setTimeout(fn,delay)
-//     }
-// }
+
 let height = undefined
 export default {
     name:"popup",
+    props:{
+        isBack:{
+            default:true,
+        },
+        height:{
+            default:"100px",
+        },
+        popupBodyBack:{
+            default:null
+        }
+    },
     data(){
         return {
             b8:require("@/assets/z2.jpg"),
@@ -47,7 +50,6 @@ export default {
         },
         startDraw(){
             this.isMove = "start";
-            //height = document.getElementsByClassName("popup")[0].clientHeight;
             height = Math.floor(this.documentHeihgt * 0.9)
             this.reduce = this.documentHeihgt - height;
         },
@@ -68,9 +70,9 @@ export default {
         },
         close(){
             this.dom.style.top = "100%"
-                setTimeout(() => {
-                    this.dom.style.display = "none"
-                    this.dom.style.height = "90%"
+            setTimeout(() => {
+                this.dom.style.display = "none"
+                this.dom.style.height = "90%"
             }, 250);
         },
         
