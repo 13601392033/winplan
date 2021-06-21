@@ -28,6 +28,9 @@ export default {
             default:null
         }
     },
+    emits:[
+        "onClose"
+    ],
     data(){
         return {
             b8:require("@/assets/z2.jpg"),
@@ -73,7 +76,9 @@ export default {
             setTimeout(() => {
                 this.dom.style.display = "none"
                 this.dom.style.height = "90%"
+                this.$emit("onClose")    
             }, 250);
+            
         },
         
     }

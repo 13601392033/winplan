@@ -8,7 +8,7 @@
                 </router-link>
             </span>
         </Headera>
-        <Popup ref="popup" :height="'60px'" :isBack="false" :popupBodyBack="'#fff'">
+        <Popup @on-close="onClosePopup" ref="popup" :height="'60px'" :isBack="false" :popupBodyBack="'#fff'">
             <template v-slot:header>
                 <div class="popup-header">
                     <span class="ph-left">取消</span>
@@ -25,8 +25,10 @@
                         <div class="item-back">
                             <span class="name-label">选择图标和背景色</span>
                             <span class="item-back-icon">
-                                <span @click="changeChoice(0)" class="back-demo" :class="{opa : sureChoice != 0}">文</span>
-                                <span @click="changeChoice(1)" class="back-demo" :class="{opa : sureChoice != 1}"><i class="stat-icon el-icon-time"></i></span>
+                                <span @click="changeChoice(0)" class="back-demo" :class="{opa : sureChoice != 0}" :style="{background:backColor, color : color}">{{firstText}}</span>
+                                <span :style="{background:backColor, color : color}" @click="changeChoice(1)" class="back-demo" :class="{opa : sureChoice != 1}">
+                                    <i class="stat-icon" :class="iconChoiceComputed"></i>
+                                </span>
                             </span>
                         </div>
                     </div>
@@ -78,17 +80,17 @@
         <van-popup v-model:show="stateChoice" position="bottom" :style="{ height: '80%' }">
             <div class="back-popup">
                 <div class="bp-header">
-                    <span style="flex:0 0 60px">取消</span>
+                    <span @click="stateChoice=false" style="flex:0 0 60px">取消</span>
                     <span class="bp-header-title">{{bpTitle}}</span>
-                    <span style="flex:0 0 60px">确定</span>
+                    <span @click="sureChoiceMethod" style="flex:0 0 60px">确定</span>
                 </div>
                 <div class="bp-content">
 
                     <div class="bp-icon-list" v-show="curChoice == 1">
                         <div class="bp-icon-list-header">
                             <span class="bp-choice-label">选择一个喜欢的图标~</span>
-                            <span :style="{background:backColor}" class="bp-choice-icon">
-                                <i class="el-icon-time" :style="{color:color}"></i>
+                            <span :style="{background:tempBackColor}" class="bp-choice-icon">
+                                <i :class="{iconChoice:true}" class="el-icon-time" :style="{color:tempColor}"></i>
                             </span>
                         </div>
                         <ul class="bp-icon-list-content">
@@ -103,11 +105,11 @@
                     <div class="bp-text-container" v-show="curChoice == 0">
                         <div class="bp-text-header">
                             <span class="bp-text-logo">文字图标</span>
-                            <span :style="{background:backColor, color: color}" class="bp-input-text">
-                                {{firstText}}
+                            <span :style="{background:tempBackColor, color: tempColor}" class="bp-input-text">
+                                {{tempFirstText}}
                             </span>
                         </div>
-                        <input maxlength="1" type="text" v-model="firstText" class="bp-text-input" placeholder="输入首个文字" />
+                        <input maxlength="1" type="text" v-model="tempFirstText" class="bp-text-input" placeholder="输入首个文字" />
                     </div>
 
                     <div class="bp-back-list">
@@ -343,6 +345,8 @@
     font-weight: 600;
     font-family: cursive;
 }
+
+/**习惯组件css样式start**/
 .add-position{
     font-size: 60px;
     bottom: 75px;
@@ -418,6 +422,8 @@
     float:left;
     width:33%;
 }
+
+
 .habit-statistics{
     overflow: hidden;
     padding: 20px 0;
@@ -458,21 +464,24 @@ export default {
         "van-popup":vantPopup,
     },
     setup(){
-        onMounted(()=>{
-            console.log("das")
-        })
+        
     },
     data(){
         return {
-            bpTitle:"",
-            isCurBack:undefined,
-            firstText:undefined,
+            firstText:'文',
+            iconChoice:"el-icon-time", // 选择icon
+            bpTitle:"", // 第二层弹出框标题
+            isCurBack:undefined, 
             isCurColor:undefined,
+            tempFirstText:undefined,
             iconList:[
 
             ],
-            sureChoice: 1,
+            stateChoice:false,
+            sureChoice: 1, //当前确定的logo类型
             curChoice: 1,// 0为文本 1为图标
+            tempBackColor:'rgba(255, 69, 0, 0.68)',
+            tempColor:"#fff",
             backColor: 'rgba(255, 69, 0, 0.68)',
             color:'#fff',
             predefineColors: [
@@ -491,9 +500,9 @@ export default {
             '#ffffcc',
             '#000'
             ],
+            //习惯组件所需
             ing:30,
             succ:24,
-            stateChoice:false,
             stop:0,
             habitList:[
                 {
@@ -556,15 +565,21 @@ export default {
         }
     },
     methods:{
-        showBp(){
-            
+        sureChoiceMethod(){
+            this.sureChoice = this.curChoice;
+            this.backColor = this.tempBackColor;
+            this.color = this.tempColor;
+            this.stateChoice = false;
+            if(this.sureChoice == 0){
+                this.firstText = this.tempFirstText
+            }
         },
         changeColor(v, i){
-            this.color = v
+            this.tempColor = v
             this.isCurColor = i;
         },
         changeBack(v, i){
-            this.backColor = v
+            this.tempBackColor = v
             this.isCurBack = i;
         },
         changeChoice(v){
@@ -577,7 +592,11 @@ export default {
             this.stateChoice = true;
         },
         openPopup(){
+            document.getElementsByClassName("menu")[0].style.display = "none";
             this.$refs.popup.open();
+        },
+        onClosePopup(){
+            document.getElementsByClassName("menu")[0].style.display = "block"
         },
         strMapToObj(strMap) {
             let obj = Object.create(null);
@@ -588,6 +607,11 @@ export default {
         },
     },
     computed:{
+        iconChoiceComputed(){
+            let map = new Map()
+            map.set(this.iconChoice, true)
+            return this.strMapToObj(map)
+        },
         iconClass(){
             return (item)=>{
                 if(item.type == 1){
