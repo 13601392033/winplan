@@ -192,8 +192,8 @@
 .svg-check{
     font-size:24px;
     color:#0066ff;
-    width: 1em;
-    height: 1em;
+    width: 20px;
+    height: 20px;
     vertical-align: middle;
     fill: currentColor;
     overflow: hidden;
@@ -214,8 +214,8 @@
     transform: translate(-50%,-50%);
     position: absolute;
     left: 50%;
-    width:20px;
-    height:20px;
+    width:16px;
+    height:16px;
     border-radius: 50%;
     border:1px solid #0066ff;
     display: inline-block;
@@ -252,7 +252,7 @@
     color:#FAFAFA;
 }
 .task-container{
-    margin: 0 10px;
+    margin: 0 35px;
     margin-top: 10px;
 }
 .task-container .task-item{
@@ -322,26 +322,26 @@ export default {
                     title:"完成xxx事情",
                     detail:"a period of time when sb/sth has to wait because of a problem that makes sth slow or late",
                     state:1,
-                    isDelay:true,
+                    isDelay:false,
                     type:"",
                 },
                 {
                     title:"完成xxx事情",
                     detail:"a period of time when sb/sth has to wait because of a problem that makes sth slow or late",
                     state:1,
-                    isDelay:true,
+                    isDelay:false,
                     type:"",
                 },{
                     title:"完成xxx事情",
                     detail:"a period of time when sb/sth has to wait because of a problem that makes sth slow or late",
                     state:1,
-                    isDelay:true,
+                    isDelay:false,
                     type:"",
                 },{
                     title:"完成xxx事情",
                     detail:"a period of time when sb/sth has to wait because of a problem that makes sth slow or late",
                     state:1,
-                    isDelay:true,
+                    isDelay:false,
                     type:"",
                 },
                 {

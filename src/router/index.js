@@ -49,6 +49,10 @@ const routes = [
                 path: "habit",
                 component: ()=>import("@/views/habit.vue"),
             },
+            {
+                path: "habitDetail",
+                component: ()=>import("@/views/habitDetail.vue"),
+            },
         ]
     },
 ]

@@ -58,7 +58,7 @@
                 </div>
             </div>
             <ul class="habit-list">
-                <li class="list-item" v-for="(item,index) in habitList" :key="index">
+                <li @click="jumpDetail(item)" class="list-item" v-for="(item,index) in habitList" :key="index">
                     <span class="item-ele item-icon-back">
                         <span class="radius">
                             <i v-if="item.type == 1" class="icon" :class="iconClass(item)"></i>
@@ -93,13 +93,15 @@
                                 <i :class="{iconChoice:true}" class="el-icon-time" :style="{color:tempColor}"></i>
                             </span>
                         </div>
-                        <ul class="bp-icon-list-content">
-                            <li class="icon-list-item" v-for="(item, index) in 100" :key="index">
-                                <div class="icon-item-wrapper">
-                                    <i class="el-icon-time"></i>
-                                </div>
-                            </li>
-                        </ul>
+                        <div>
+                            <ul class="bp-icon-list-content displayBar">
+                                <li class="icon-list-item" v-for="(item, index) in 100" :key="index">
+                                    <div class="icon-item-wrapper">
+                                        <i class="el-icon-time"></i>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
 
                     <div class="bp-text-container" v-show="curChoice == 0">
@@ -116,7 +118,7 @@
                         <div class="bp-back-list-header">
                             <div class="bp-choice-label">选择一个喜欢的背景色</div>
                         </div>
-                        <ul class="bp-back-list-content">
+                        <ul class="bp-back-list-content displayBar">
                             <li @click="changeBack(item, index)"  class="bp-back-item" v-for="(item, index) in predefineColors" :key="index">
                                 <div class="back-item-wrapper" :class="{curBack: index == isCurBack}" :style="{background: item}">
 
@@ -129,7 +131,7 @@
                         <div class="bp-back-list-header">
                             <div class="bp-choice-label">选择一个喜欢的图标(文字)颜色</div>
                         </div>
-                        <ul class="bp-back-list-content">
+                        <ul class="bp-back-list-content displayBar">
                             <li @click="changeColor(item, index)"  class="bp-back-item" v-for="(item, index) in predefineColors" :key="index">
                                 <div class="back-item-wrapper" :class="{curBack: index == isCurColor}" :style="{background: item}">
                                 </div>
@@ -183,7 +185,8 @@
     margin-top:20px;
     display: flex;
     flex-wrap: wrap;
-    height: 160px;
+    flex-direction: column;
+    height: 80px;
     overflow: auto;
 }
 .bp-back-item{
@@ -193,8 +196,8 @@
     justify-content: center;
 }
 .back-item-wrapper{
-    width:40px;
-    height:40px;
+    width:33px;
+    height:33px;
     border-radius:50%;
 }
 
@@ -206,15 +209,17 @@
     height:40px;
     display: flex;
     justify-content: center;
-    padding:10px 0;
+    padding:10px 0px;
 }
 .bp-icon-list-content{
     margin-top: 15px;
     display: flex;
     flex-wrap: wrap;
-    height:170px;
+    flex-direction: column;
+    height:126px;
     overflow: auto;
 }
+.displayBar::-webkit-scrollbar {display:none}
 .icon-item-wrapper{
     width:43px;
     height:43px;
@@ -257,8 +262,8 @@
     text-align: right;
     margin-right: 15px;
     font-size: 30px;
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 45px;
     background: #1A73E8;
     border-radius: 50%;
     position: relative;
@@ -453,7 +458,6 @@
 
 <script>
 import Headera from "@/views/common/header.vue"
-import { onMounted } from '@vue/runtime-core'
 import Popup from "@/views/common/popup.vue"
 import { Popup as vantPopup} from 'vant';
 export default {
@@ -473,7 +477,7 @@ export default {
             bpTitle:"", // 第二层弹出框标题
             isCurBack:undefined, 
             isCurColor:undefined,
-            tempFirstText:undefined,
+            tempFirstText:"文",
             iconList:[
 
             ],
@@ -565,6 +569,9 @@ export default {
         }
     },
     methods:{
+        jumpDetail(v){
+            this.$router.push("habitDetail");
+        },
         sureChoiceMethod(){
             this.sureChoice = this.curChoice;
             this.backColor = this.tempBackColor;
