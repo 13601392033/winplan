@@ -108,7 +108,9 @@
                     <span class="task-title">日记</span>
                 </div>
                 <div class="task-right clear">
-                    <i style="line-height:23px;color:#EE0000" class="el-icon-arrow-right"></i>
+                    <router-link to="/main/diary">
+                        <i style="line-height:23px;color:#EE0000" class="el-icon-arrow-right"></i>
+                    </router-link>
                 </div>
             </div>
 
@@ -281,7 +283,7 @@
         font-size: 14px;
         line-height: 1;
         text-align: left;
-        bottom: 0;
+        bottom: 2px;
         text-indent: 15%;
         position: absolute;
     }
@@ -303,6 +305,7 @@
     }
     .record-module{
         width:94%;
+        height:300px;
         margin: 28px auto 0;
         border-radius: 10px;
         background-color:rgba(255,255,255,.9);
@@ -313,7 +316,8 @@
         border-bottom: 1px solid #ddd;
         position: relative;
         height: 100%;
-        width: 100%;
+        width: 94%;
+        margin:0 auto;
     }
     .record-item{
         height: 47px;
@@ -329,6 +333,8 @@
         text-align: left;
     }
     .record-list{
+        height:244px;
+        overflow: auto;
         margin-top:22px;
         margin-bottom: 10px;
     }
@@ -346,7 +352,7 @@
         margin: 28px auto 0;
         border-radius: 10px;
         background-color:rgba(255,255,255,.9);
-        height:250px;
+        height:300px;
         border:1px solid #FFFFF0;
     }
     .check{
@@ -381,6 +387,8 @@
     }
     .task-list{
         margin-top: 22px;
+        height: 197px;
+        overflow: auto;
     }
     .task-left{
         float:left;
@@ -482,7 +490,7 @@ export default {
                     title:"daa",
                     state:2,
                     remark:"dasdasdasdqw"
-                }
+                },
             ],
             popupTitle:"",
             popupContent:"",

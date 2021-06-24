@@ -11,7 +11,7 @@
             <div class="nav-container">
                 <ul class="nav-ul">
                     <li v-for="item in routes" :key="item.name" :style="{marginLeft: item.margin}">
-                        <span style="">{{item.name}}</span>
+                        <span @click="jump(item)" style="">{{item.title}}</span>
                     </li>
                 </ul>
             </div>
@@ -126,7 +126,19 @@ export default {
         
     },
     methods:{
-         showMe(){
+        jump(item){
+            let nav = document.getElementsByClassName("nav")[0];
+            this.hide();
+                nav.classList.remove("nav-in")
+                nav.classList.add("nav-out")
+                this.state = 2;
+                setTimeout(()=>{
+                    this.state = 0;
+                    nav.style = "display:none;"
+                },300)
+            this.$router.push({name: item.name});
+        },
+        showMe(){
             let gif = require("@/assets/loading.gif");
             let img = document.createElement("img");
             img.setAttribute("src", gif);

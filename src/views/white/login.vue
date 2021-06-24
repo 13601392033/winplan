@@ -18,7 +18,7 @@
                 <input  placeholder="请输入账号" class="input" type="password" autocomplete="off"/>
             </div>
             <div class="line"></div>
-            <div class="login-btn">
+            <div class="login-btn" @click="loginIn">
                 登录
             </div>
         </div>
@@ -109,6 +109,11 @@ export default {
     data(){
         return {
             back1: require("@/assets/login.jpg"),
+        }
+    },
+    methods:{
+        loginIn(){
+            this.$router.push({name:'home'});
         }
     }
 }

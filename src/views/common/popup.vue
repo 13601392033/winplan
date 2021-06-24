@@ -49,7 +49,7 @@ export default {
             setTimeout(() => {
                 this.dom.style.top = "10%"
             }, 0);
-            
+            document.getElementsByClassName("menu")[0].style.display = "none";
         },
         startDraw(){
             this.isMove = "start";
@@ -76,6 +76,7 @@ export default {
             setTimeout(() => {
                 this.dom.style.display = "none"
                 this.dom.style.height = "90%"
+                document.getElementsByClassName("menu")[0].style.display = "block";
                 this.$emit("onClose")    
             }, 250);
             
@@ -91,9 +92,8 @@ export default {
         width: 100%;
         height: 100%;
         top: 0;
-        background: #ddd;
+        background: rgba(0,0,0,.6);
         z-index: -1;
-        opacity: .3;
     }
     .popup-body{
         color:#080808;

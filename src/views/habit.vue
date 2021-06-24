@@ -333,6 +333,7 @@
 }
 .popup-header{
     height:60px;
+    background: #fff;
     line-height:60px;
     display: flex;
 }
@@ -359,6 +360,7 @@
     right: 23px;
     border-radius: 50%;
     background: #409EFF;
+    background: #FA8072;
     font-size: 40px;
     padding: 6px;
     font-weight: bold;
@@ -515,6 +517,7 @@ export default {
                     backColor:"",
                     name:"坚持自我",
                     allDays:20,
+                    text:"文",
                 },
                 {
                     type:"0", // 0为文字 1为图标
