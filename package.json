@@ -20,6 +20,7 @@
     "babel-eslint": "^10.1.0",
     "babel-plugin-import": "^1.13.3",
     "compression-webpack-plugin": "^5.0.0",
+    "crypto": "^1.0.1",
     "element-plus": "^1.0.2-beta.41",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.0.0",
@@ -41,8 +42,8 @@
       "parser": "babel-eslint"
     },
     "rules": {
-        "no-unused-vars":0,
-        "no-irregular-whitespace":"off"
+      "no-unused-vars": 0,
+      "no-irregular-whitespace": "off"
     }
   },
   "browserslist": [

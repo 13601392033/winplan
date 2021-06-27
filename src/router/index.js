@@ -1,14 +1,7 @@
 import {createRouter, createWebHashHistory} from "vue-router"
-import home from "@/views/home"
 import login from "@/views/white/login"
 
 const routes = [
-    {
-        path: "/#",
-        name: "login",
-        margin:"51px",
-        component: login,
-    },
     {
         path: "/login",
         name: "login",
@@ -112,4 +105,18 @@ const router = createRouter({
     mode:"history",
     routes
 })
+let whiteList = ["login"];
+router.beforeEach((to, from, next)=>{
+    if(whiteList.find(name=>name==to.name)){ //白名单放行
+        next();
+    }else{
+        let token = localStorage.getItem("token");
+        if(token){
+            next();
+        }else{
+            next({name:"login"})
+        }
+    }
+})
+
 export default router

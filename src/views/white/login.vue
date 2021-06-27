@@ -1,21 +1,21 @@
 <template>
     <div class="wrapper" :style="{background: 'url('  + back1 + ') no-repeat'}">
-        <div class="special">
+        <!-- <div class="special">
             <span></span>
             <span></span>
             <span></span>
             <span></span>
-        </div>
+        </div> -->
         <div class="login-title">
             <h3>win plan</h3>
         </div>
         <div class="login-form">
             <div class="form-item">
-                <input placeholder="请输入账号" class="input" type="text" autocomplete="off"/>
+                <input placeholder="请输入账号" v-model="userName" class="input" type="text" autocomplete="off"/>
             </div>
             <div class="line"></div>
             <div class="form-item">
-                <input  placeholder="请输入账号" class="input" type="password" autocomplete="off"/>
+                <input  placeholder="请输入密码" v-model="password" class="input" type="password" autocomplete="off"/>
             </div>
             <div class="line"></div>
             <div class="login-btn" @click="loginIn">
@@ -101,19 +101,43 @@
 </style>
 
 <script>
+import crypto from "crypto";
+import { defineComponent, h } from 'vue'
+  import { ElMessage } from 'element-plus'
 export default {
     name:"login",
+    setup(){
+    },
     created(){
         
     },
     data(){
         return {
+            userName:"king",
+            password:"zhflovezhf1314",
             back1: require("@/assets/login.jpg"),
         }
     },
     methods:{
         loginIn(){
-            this.$router.push({name:'home'});
+            this.$http({
+                method:"post",
+                url:"/api/login",
+                data:{
+                    userName: this.userName,
+                    password:crypto.createHash('md5').update(this.password).digest("hex")
+                }
+            }).then(res=>{
+                if(res.data.data.length >= 1){
+                    this.$router.push({name:'home'});
+                }else{
+                    ElMessage({
+                        message: h('p', null, [
+                        h('span', null, '账号或密码错误！')
+                        ])
+                    });
+                }
+            })
         }
     }
 }
