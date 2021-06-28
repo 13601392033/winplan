@@ -129,6 +129,8 @@ export default {
                 }
             }).then(res=>{
                 if(res.data.data.length >= 1){
+                    console.log(res.data.token)
+                    localStorage.setItem("token", res.data.token)
                     this.$router.push({name:'home'});
                 }else{
                     ElMessage({

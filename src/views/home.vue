@@ -422,7 +422,12 @@ export default {
         "van-picker": Picker,
     },
     created(){
-
+        this.$http({
+            url:"/api/go",
+            method:"get",
+        }).then(res=>[
+            console.log(res)
+        ])
     },
     setup() {
         const columns = reactive(['生活', '工作', '学习', '感悟', 'mf']);
@@ -496,14 +501,14 @@ export default {
             popupContent:"",
             recordList:[
                 {
-                    title:"hello",
+                    title:"学习中的问题",
                     type:1,
-                    remark:"one"
+                    remark:"学习中，方向目标不明确，太过于模糊，以至于什么都想去接触，可又什么都学不好，还会让自己心情很烦躁，明确目标，咬准目标，吃掉目标~!"
                 },
                 {
-                    title:"hello",
+                    title:"hold on",
                     type:1,
-                    remark:"two"
+                    remark:"当你要坚持不下去的时候，想一想你之前的痛苦，这样就明白为什么要坚持了！"
                 },
                 {
                     title:"hello",

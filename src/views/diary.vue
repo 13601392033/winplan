@@ -1,6 +1,8 @@
 <template>
     <div class="habit">
-        <Headera style="color: #fff;background-image: linear-gradient(to bottom right,#FFAEB9,#FA8072,#FF4040);">
+        <Headera style="color: #fff;background-image: linear-gradient(to bottom right,#FFAEB9,#FA8072,#FF4040);position: fixed;
+    width: 100%;
+    z-index: 200;">
             <span class="header-title">日记</span>
             <span class="left-icon">
                 <router-link to="/main/home">
@@ -48,8 +50,6 @@
             
         </div>
         <i @click="openPopup" class="el-icon-plus add-position"></i>
-
-       
     </div>
 </template>
 
@@ -198,6 +198,7 @@
     display: flex;
     align-items: center;
     margin-bottom:10px;
+    margin-top:10px;
     height: 100px;
     background: #fff;
 }
@@ -215,6 +216,7 @@
 .habit-list{
     position: fixed;
     top: 71px;
+    padding-top: 10px;
     left: 0;
     right: 0;
     bottom: 0;
@@ -279,7 +281,6 @@ export default {
                     date : "2020-03-16",
                     detail:"回首向来萧瑟处，归去，也无风雨也无晴",
                 },
-
                 {
                     day: new Date().getDate(),
                     month: new Date().getMonth() + 1,
