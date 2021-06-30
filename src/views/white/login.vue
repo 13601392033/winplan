@@ -122,7 +122,7 @@ export default {
         loginIn(){
             this.$http({
                 method:"post",
-                url:"/api/login",
+                url:"/login",
                 data:{
                     userName: this.userName,
                     password:crypto.createHash('md5').update(this.password).digest("hex")

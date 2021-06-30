@@ -3,7 +3,9 @@
         <Headera>
             <span class="header-title">mf plan</span>
             <div class="attitude">保持姿态，迎接最美的蜕变</div>
+            <span @click="loginOut" class="login-out">退出</span>
         </Headera>
+        <!-- 任务popup -->
         <Popup ref="popup">
             <template v-slot:body>
                 <div class="body-title">
@@ -11,16 +13,18 @@
                         <i class="el-icon-pie-chart"></i>
                     </div>
                     
-                    <div class="title-right fl" :style="{width: modal.type == -1 || modal.type == undefined ? 80 +'%' : 66 + '%'}">
-                        <input v-model="popupTitle" type="text"/>
+                    <div class="title-right fl" style="width:64%;">
+                        <input v-model="taskModule.title" type="text"/>
                     </div>
-                    <div v-show="showType" class="type" @click="mf" ><i class="el-icon-moon-night icon-record-type" style="right: 0;" :class="[recordIcon(modal.type)]"></i></div>
+                    <div class="type" @click="mf" >
+                        <span>{{taskTypeCom}}</span>
+                    </div>
                 </div>
                 <div class="body-content">
-                    <textarea class="textarea" v-model="popupContent"></textarea>
+                    <textarea class="textarea" v-model="taskModule.content"></textarea>
                 </div>
                 <div class="body-footer">
-                    <i style="color:#FFC125" class="el-icon-success icon"></i>
+                    <i @click="saveData" style="color:#FFC125" class="el-icon-success icon"></i>
                     <i style="color:#B5B5B5" class="el-icon-error icon"></i>
                 </div>
             </template>
@@ -32,7 +36,7 @@
                 <div class="task-left clear">
                     <i style="color: #0066ff;" class="el-icon-edit-outline"></i>
                     <span class="task-title">任务</span>
-                    <i @click="openPopup" class="el-icon-circle-plus add-position"></i>
+                    <i @click="openPopup(null, 1)" class="el-icon-circle-plus add-position"></i>
                 </div>
                 <div class="task-right clear">
                     <router-link to="/main/task">
@@ -128,8 +132,11 @@
             </div>
         </div>
 
-        <van-popup v-model:show="show" position="bottom" :style="{ height: '60%' }">
+        <van-popup  v-model:show="show" position="bottom" :style="{ height: '60%' }">
             <van-picker
+                ref="vanPopup"
+                @cancel="show =false"
+                @confirm="confirmVanPopup"
                 title="标题"
                 :columns="columns"
                 :swipe-duration="300"
@@ -141,6 +148,12 @@
 </template>
 
 <style scoped>
+    .login-out{
+        position: absolute;
+        top: 9px;
+        right: 20px;
+        font-size: 16px;
+    }
     .taskDone{
         opacity: .6;
     }
@@ -219,7 +232,11 @@
         background: #1A73E8;
         position: absolute;
         right: 0;
-        width: 14%;
+        width: 16%;
+    }
+    .type span{
+        font-size: 18px;
+        letter-spacing: 2px;
     }
 
     .body-footer .icon{
@@ -387,7 +404,7 @@
     }
     .task-list{
         margin-top: 22px;
-        height: 197px;
+        height: 212px;
         overflow: auto;
     }
     .task-left{
@@ -413,8 +430,8 @@ import Popup from "@/views/common/popup.vue"
 import { Popup as vantPopup} from 'vant';
 import Headera from "@/views/common/header.vue"
 import { Picker } from 'vant';
-import { reactive, ref, watchEffect} from "vue"
-export default {
+import { Toast } from 'vant';
+export default {    
     name:"home",
     components:{
         Popup,Headera,
@@ -423,14 +440,21 @@ export default {
     },
     created(){
         this.$http({
-            url:"/api/go",
-            method:"get",
-        }).then(res=>[
-            console.log(res)
-        ])
+            url:"/init",
+            method:"post",
+        }).then(res=>{
+            if(res.data.code == 200){
+                this.taskList = res.data.data.map((item,index)=>{
+                    return {
+                        title : item.title,
+                        remark : item.content,
+                        state : item.state
+                    }
+                });            
+            }
+        })
     },
     setup() {
-        const columns = reactive(['生活', '工作', '学习', '感悟', 'mf']);
         // const snail = ref(1);
         // let mf = {};
         // function getPromiseWithAbort(p){
@@ -458,13 +482,20 @@ export default {
         // });
 
         return {
-            columns,
+            
         };
     },
     data(){
         return {
+            taskModule:{
+                type:1,
+                title:"",
+                content:"",
+            },
             showType:false,
             show:false,
+            type:undefined, // 1 == 任务
+            isEdit:false,
             taskList:[
                 {
                     title:"周记",
@@ -566,15 +597,29 @@ export default {
 
             ],
             lastDiary:{
-                    title:"日记~1",
-                    date:"2021-6-10"
-                },
+                title:"日记~1",
+                date:"2021-6-10"
+            },
             modal:{
                type:-1, 
             }
         }
     },
     computed:{
+        taskTypeCom(){
+            let type = this.taskModule.type
+            let ret = "";
+            if(type == 1){
+                ret = "one"
+            }else if(type == 2){
+                ret = "three"
+            }else if(type == 3){
+                ret = "seven"
+            }else if(type == 4){
+                ret = "infinity"
+            }
+            return ret
+        },
         habitBack(){
             return (item)=>{
                 return {
@@ -602,6 +647,23 @@ export default {
         }
     },
     methods:{
+        confirmVanPopup(){
+           console.log(this.$refs.vanPopup.getValues()[0].value);
+           this.taskModule.type = this.$refs.vanPopup.getValues()[0].value;
+           this.show = false;
+        },
+        loginOut(){
+            this.$http({
+                method:"post",
+                url:"/loginOut"
+            }).then(res=>{
+                console.log(res)
+            })
+            localStorage.clear();
+            this.$router.push({
+                name:"login"
+            })
+        },
         changeHabitState(i){
             let state = this.habitList[i].state;
             if(state == 1){
@@ -627,15 +689,51 @@ export default {
                 this.taskList[index].state = 1;
             }
         },
-        openPopup(item){
-            this.modal.type = item.type;
-            if(item.type){
-                this.showType = true;
-            }else{
-                this.showType = false;
+        saveData(){
+            if(this.type == 1){
+                this.$http({
+                    method:"post",
+                    url:"task/addTask",
+                    data:{
+                        title: this.taskModule.title,
+                        content: this.taskModule.content,
+                        type: this.taskModule.type,
+                    }
+                }).then(res=>{
+                    if(res.data.code == 200){
+                        Toast('提示内容')
+                    }
+                })
             }
-            this.popupTitle = item.title;
-            this.popupContent = item.remark
+        },
+        openPopup(item, type){ // type为确定当前 popup是由哪部分打开的，任务为1
+            this.type = type;
+            this.popupTitle = "";
+            this.popupContent = "";
+            this.showType = true;
+            if(item){
+                this.modal.type = item.type;
+                this.popupTitle = item.title;
+                this.popupContent = item.remark
+            }
+            this.columns = [
+                {
+                    text:"一天以内",
+                    value:"1"
+                },
+                {
+                    text:"三天以内",
+                    value:"2"
+                },
+                {
+                    text:"七天以内",
+                    value:"3"
+                },
+                {
+                    text:"无限期",
+                    value:"4"
+                },
+            ]
             this.$refs.popup.open()
         }
     }
