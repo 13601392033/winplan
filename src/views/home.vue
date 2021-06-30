@@ -648,7 +648,6 @@ export default {
     },
     methods:{
         confirmVanPopup(){
-           console.log(this.$refs.vanPopup.getValues()[0].value);
            this.taskModule.type = this.$refs.vanPopup.getValues()[0].value;
            this.show = false;
         },
@@ -701,7 +700,7 @@ export default {
                     }
                 }).then(res=>{
                     if(res.data.code == 200){
-                        Toast('提示内容')
+                        Toast(res.data.msg)
                     }
                 })
             }
@@ -713,8 +712,8 @@ export default {
             this.showType = true;
             if(item){
                 this.modal.type = item.type;
-                this.popupTitle = item.title;
-                this.popupContent = item.remark
+                this.taskModule.title = item.title;
+                this.taskModule.content = item.remark
             }
             this.columns = [
                 {
