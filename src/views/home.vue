@@ -5,14 +5,14 @@
             <div class="attitude">保持姿态，迎接最美的蜕变</div>
             <span @click="loginOut" class="login-out">退出</span>
         </Headera>
-        <!-- 任务popup -->
+
         <Popup ref="popup">
-            <template v-slot:body>
+            <template v-if="curPopup == 'task'" v-slot:body>
+                <!--任务内容-->
                 <div class="body-title">
                     <div class="title-left fl">
                         <i class="el-icon-pie-chart"></i>
                     </div>
-                    
                     <div class="title-right fl" style="width:64%;">
                         <input v-model="taskModule.title" type="text"/>
                     </div>
@@ -25,7 +25,31 @@
                 </div>
                 <div class="body-footer">
                     <i @click="saveData" style="color:#FFC125" class="el-icon-success icon"></i>
-                    <i style="color:#B5B5B5" class="el-icon-error icon"></i>
+                    <i @click="delTask" style="color: rgba(255,76,65,.9);" class="el-icon-delete-solid icon"></i>
+                    <i @click="$refs.popup.close()" style="color:#B5B5B5" class="el-icon-error icon"></i>
+                </div>
+            </template>
+
+            <!-- 记录内容 -->
+            <template v-else v-slot:body>
+                <div class="body-title">
+                    <div class="title-left fl">
+                        <i class="el-icon-pie-chart"></i>
+                    </div>
+                    <div class="title-right fl" style="width:64%;">
+                        <input v-model="recordModule.title" type="text"/>
+                    </div>
+                    <div class="type" @click="mf" >
+                        <span>{{recordTypeCom}}</span>
+                    </div>
+                </div>
+                <div class="body-content">
+                    <textarea class="textarea" v-model="recordModule.content"></textarea>
+                </div>
+                <div class="body-footer">
+                    <i @click="saveRecord" style="color:#FFC125" class="el-icon-success icon"></i>
+                    <i @click="delRecord" style="color: rgba(255,76,65,.9);" class="el-icon-delete-solid icon"></i>
+                    <i @click="$refs.popup.close()" style="color:#B5B5B5" class="el-icon-error icon"></i>
                 </div>
             </template>
         </Popup>
@@ -44,13 +68,14 @@
                     </router-link>
                 </div>
             </div>
+            <div class="empty-text" v-if="taskList.length <= 0">暂无任务</div>
             <ul class="task-list">
                 <li v-for="(item,i) in taskList" :key="i" class="task-item">
-                    <div @click="changeState(item,i)" class="check">
+                    <div @click="changeTaskState(item,i)" class="check">
                         <div v-if="item.state == 1" class="single-check"></div>
                         <svg v-else-if="item.state == 2" style="font-size:24px;color:#0066ff;width: 19px;height: 19px;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="11388"><path d="M416.832 798.08C400.64 798.08 384.512 791.872 372.16 779.52L119.424 525.76C94.784 500.992 94.784 460.8 119.424 436.032 144.128 411.264 184.128 411.264 208.768 436.032L416.832 644.928 814.4 245.76C839.04 220.928 879.04 220.928 903.744 245.76 928.384 270.528 928.384 310.656 903.744 335.424L461.504 779.52C449.152 791.872 432.96 798.08 416.832 798.08Z" p-id="11389"></path></svg>
                     </div>
-                    <div :class="{taskDone: item.state == 2}" class="item-content ell" @click="openPopup(item)">{{item.title}}</div>
+                    <div :class="{taskDone: item.state == 2}" class="item-content ell" @click="openPopup(item, 2)">{{item.title}}</div>
                 </li>
             </ul>
         </div>
@@ -61,7 +86,7 @@
                 <div class="task-left clear">
                     <i style="color: #EE0000;" class="el-icon-edit-outline"></i>
                     <span class="task-title">记录</span>
-                    <i @click="openPopup" style="color:#ff4c41" class="el-icon-circle-plus add-position"></i>
+                    <i @click="openPopupRecord(null, 1)" style="color:#ff4c41" class="el-icon-circle-plus add-position"></i>
                 </div>
                 <div class="task-right clear">
                     <router-link to="/main/record">
@@ -69,10 +94,11 @@
                     </router-link>
                 </div>
             </div>
+            <div class="empty-text" v-if="taskList.length <= 0">暂无任务</div>
             <ul class="record-list">
-                <li v-for="(item,i) in recordList" :key="i" class="record-item" @click="openPopup(item)">
+                <li v-for="(item,i) in recordList" :key="i" class="record-item" @click="openPopupRecord(item, 2)">
                     <div class="record-contain">
-                        <i class="el-icon-moon-night icon-record-type" :class="[recordIcon(item.type)]"></i>
+                        <i  class="icon-record-type" :class="[recordIcon(item.type)]"></i>
                         <div class="record-content ell">{{item.title}}</div>
                         <div class="detail ell">{{item.remark}}</div>
                     </div>
@@ -148,6 +174,11 @@
 </template>
 
 <style scoped>
+    .empty-text{
+        margin-top: 40px;
+        font-size: 20px;
+        font-weight: bold;
+    }
     .login-out{
         position: absolute;
         top: 9px;
@@ -322,7 +353,7 @@
     }
     .record-module{
         width:94%;
-        height:300px;
+        height:326px;
         margin: 28px auto 0;
         border-radius: 10px;
         background-color:rgba(255,255,255,.9);
@@ -337,7 +368,7 @@
         margin:0 auto;
     }
     .record-item{
-        height: 47px;
+        height: 50px;
         position: relative;
         line-height: 34px;
     }
@@ -350,7 +381,7 @@
         text-align: left;
     }
     .record-list{
-        height:244px;
+        height:269px;
         overflow: auto;
         margin-top:22px;
         margin-bottom: 10px;
@@ -430,8 +461,10 @@ import Popup from "@/views/common/popup.vue"
 import { Popup as vantPopup} from 'vant';
 import Headera from "@/views/common/header.vue"
 import { Picker } from 'vant';
-import { Toast } from 'vant';
-export default {    
+import { Toast, Dialog  } from 'vant';
+import {saveData, editTaskById, delTaskById} from "@/request/task"
+import {saveRecord, editRecordById, refreshRecordList, delRecordById} from "@/request/record"
+export default {
     name:"home",
     components:{
         Popup,Headera,
@@ -444,13 +477,29 @@ export default {
             method:"post",
         }).then(res=>{
             if(res.data.code == 200){
-                this.taskList = res.data.data.map((item,index)=>{
-                    return {
-                        title : item.title,
-                        remark : item.content,
-                        state : item.state
-                    }
-                });            
+                if(res.data.data && res.data.data.taskList.length > 0){
+                    this.taskList = res.data.data.taskList.map((item)=>{
+                        return {
+                            title : item.title,
+                            remark : item.content,
+                            state : item.state,
+                            type : item.type,
+                            id : item.id,
+                        }
+                    });
+
+                    this.recordList = res.data.data.recordList.map((item)=>{
+                        return {
+                            title : item.title,
+                            remark : item.content,
+                            type : item.type,
+                            id : item.id,
+                        }
+                    });
+                }
+                else{
+                    this.taskList = [];
+                }
             }
         })
     },
@@ -487,76 +536,26 @@ export default {
     },
     data(){
         return {
+            curPopup:"",//当前打开的popup
             taskModule:{
+                isEdit:undefined, // 1 为添加 2为编辑
                 type:1,
                 title:"",
                 content:"",
+                id:"",
             },
-            showType:false,
+            recordModule:{
+                title:"",
+                content:"",
+                id:"",
+                isEdit:undefined, // 1 为添加 2为编辑
+            },
             show:false,
-            type:undefined, // 1 == 任务
             isEdit:false,
-            taskList:[
-                {
-                    title:"周记",
-                    state:1,
-                    remark:`2021/6/7 补上周周记
-       上周坚持下来了绑腿、健身、鼻翼矫正，效果日益见长
-        每天中午和下午，尤其是下午这会总会特别烦躁，毫无斗志与心情，已经持续很久了，尤其是在周末，更是严重，需要格外注意，试着让自己放轻松。
-        关于不在胡思乱想，这一点做得很不好，一有点时间思绪就开始乱飘。
-        做事快，这一点做得还可以。
-        项目进展，有些慢了，需要赶上去，这周需要将静态页面全部出来，下周开始后台服务框架、数据库的搭建，接口的研发。`
-                },
-                {
-                    title:"dd",
-                    state:1,
-                    remark:"dasdasdasdqw"
-                },
-                {
-                    title:"aa",
-                    state:1,
-                    remark:"dasdasdasdqw"
-                },
-                {
-                    title:"cs",
-                    state:2,
-                    remark:"dasdasdasdqw"
-                },
-                {
-                    title:"daa",
-                    state:2,
-                    remark:"dasdasdasdqw"
-                },
-            ],
+            taskList:[],
             popupTitle:"",
             popupContent:"",
-            recordList:[
-                {
-                    title:"学习中的问题",
-                    type:1,
-                    remark:"学习中，方向目标不明确，太过于模糊，以至于什么都想去接触，可又什么都学不好，还会让自己心情很烦躁，明确目标，咬准目标，吃掉目标~!"
-                },
-                {
-                    title:"hold on",
-                    type:1,
-                    remark:"当你要坚持不下去的时候，想一想你之前的痛苦，这样就明白为什么要坚持了！"
-                },
-                {
-                    title:"hello",
-                    type:2,
-                    remark:"three"
-                },
-                {
-                    title:"hello",
-                    type:1,
-                    remark:"four"
-                },
-                {
-                    title:"hello",
-                    type:2,
-                    remark:"five"
-                }
-            ],
+            recordList:[],
             habitList:[
                 {
                     icon:"fa-quora",
@@ -620,13 +619,26 @@ export default {
             }
             return ret
         },
+        recordTypeCom(){
+            let type = this.recordModule.type
+            let ret = "";
+            if(type == 1){
+                ret = "学习"
+            }else if(type == 2){
+                ret = "工作"
+            }else if(type == 3){
+                ret = "生活"
+            }else if(type == 4){
+                ret = "感悟"
+            }
+            return ret
+        },
         habitBack(){
             return (item)=>{
                 return {
                     background : item.state == 1 ? item.background : ""
                 }
             }
-            
         },
         habitClass(){
             return (item)=>{
@@ -637,19 +649,72 @@ export default {
         },
         recordIcon(){
             return (type)=>{
+                console.log(type)
                 switch (type){
                     case 1:
                         return "el-icon-reading"
                     case 2:
+                        return "el-icon-tickets"
+                    case 3:
+                        return "el-icon-coffee-cup"
+                    case 4:
                         return "el-icon-moon-night"
+
                 }
             }
         }
     },
     methods:{
         confirmVanPopup(){
-           this.taskModule.type = this.$refs.vanPopup.getValues()[0].value;
-           this.show = false;
+            if(this.curPopup == "task"){
+                this.taskModule.type = this.$refs.vanPopup.getValues()[0].value;
+            }else{
+                this.recordModule.type = this.$refs.vanPopup.getValues()[0].value;
+            }
+            this.show = false;
+        },
+        refreshTaskList(){
+            this.$http({
+                url:"/task/refreshTaskList",
+                method:"post",
+            }).then(res=>{
+                if(res.data.code == 200){
+                    if(res.data && res.data.data.length > 0){
+                        this.taskList = res.data.data.map((item,index)=>{
+                            return {
+                                title : item.title,
+                                remark : item.content,
+                                state : item.state,
+                                type : item.type,
+                                id : item.id,
+                            }
+                        });
+                    }
+                    else{
+                        this.taskList = [];
+
+                    }
+                }
+            })
+        },
+        refreshRecordList(){
+            refreshRecordList().then(res=>{
+                if(res.data.code == 200){
+                    if(res.data && res.data.data.length > 0){
+                        this.recordList = res.data.data.map((item)=>{
+                            return {
+                                title : item.title,
+                                remark : item.content,
+                                type : item.type,
+                                id : item.id,
+                            }
+                        });
+                    }
+                    else{
+                        this.recordList = [];
+                    }
+                }
+            })
         },
         loginOut(){
             this.$http({
@@ -681,39 +746,185 @@ export default {
         mf(){
             this.show = true
         },
-        changeState(v, index){
+        //更新任务状态
+        changeTaskState(v){
+            let state = undefined;
             if(v.state == 1){
-                this.taskList[index].state = 2;
+                state = 2;
             }else if(v.state == 2){
-                this.taskList[index].state = 1;
+                state = 1;
             }
+            this.$http({
+                method: "post",
+                url: "/task/updateState",
+                data:{
+                    state: state,
+                    id: v.id,
+                }    
+            }).then(res=>{
+                if(res.data.code == 200){
+                    this.refreshTaskList();
+                }
+            })
         },
-        saveData(){
-            if(this.type == 1){
-                this.$http({
-                    method:"post",
-                    url:"task/addTask",
-                    data:{
-                        title: this.taskModule.title,
-                        content: this.taskModule.content,
-                        type: this.taskModule.type,
+        saveRecord(){
+            if(!this.recordModule.title){
+                Toast.fail("请输入标题");
+                return false;
+            }
+            if(!this.recordModule.content){
+                Toast.fail("请输入内容");
+                return false;
+            }
+            if(this.recordModule.isEdit == 2){
+                editRecordById(
+                    {
+                        title: this.recordModule.title,
+                        content: this.recordModule.content,
+                        type: this.recordModule.type,
+                        id: this.recordModule.id,
                     }
-                }).then(res=>{
+                ).then(res=>{
                     if(res.data.code == 200){
-                        Toast(res.data.msg)
+                        this.refreshRecordList();
+                        Toast(res.data.msg);
+                    }
+                })
+            }else{
+                saveRecord(
+                    {
+                        title: this.recordModule.title,
+                        content: this.recordModule.content,
+                        type: this.recordModule.type,
+                    }
+                ).then(res=>{
+                    if(res.data.code == 200){
+                        this.refreshRecordList();
+                        Toast(res.data.msg);
                     }
                 })
             }
         },
-        openPopup(item, type){ // type为确定当前 popup是由哪部分打开的，任务为1
-            this.type = type;
-            this.popupTitle = "";
-            this.popupContent = "";
-            this.showType = true;
-            if(item){
-                this.modal.type = item.type;
+        delTask(){
+            let self = this;
+            Dialog.confirm({
+                title: '删除',
+                message: '确定删除该任务吗',
+            })
+            .then(() => {
+                delTaskById({id : self.taskModule.id}).then(res=>{
+                    if(res.data.code == 200){
+                        self.$refs.popup.close();
+                        self.refreshTaskList();
+                        Toast(res.data.msg);
+                    }
+                })    
+            })
+            .catch(() => {                
+            })
+            
+        },
+        delRecord(){
+            let self = this;
+            Dialog.confirm({
+                title: '删除',
+                message: '确定删除该记录吗',
+            }).then(()=>{
+                delRecordById({id : self.recordModule.id}).then(res=>{
+                    if(res.data.code == 200){
+                        self.$refs.popup.close();
+                        self.refreshRecordList();
+                        Toast(res.data.msg);
+                    }
+                })
+            })
+            
+        },
+        saveData(){
+            if(!this.taskModule.title){
+                Toast.fail("请输入标题");
+                return false;
+            }
+            if(!this.taskModule.content){
+                Toast.fail("请输入内容");
+                return false;
+            }
+            if(this.taskModule.isEdit == 2){
+                editTaskById(
+                    {
+                        title: this.taskModule.title,
+                        content: this.taskModule.content,
+                        type: this.taskModule.type,
+                        id: this.taskModule.id,
+                    }
+                ).then(res=>{
+                    if(res.data.code == 200){
+                        this.refreshTaskList();
+                        Toast(res.data.msg);
+                        //this.$refs.popup.close();
+                    }
+                })
+            }else{
+                saveData(
+                    {
+                        title: this.taskModule.title,
+                        content: this.taskModule.content,
+                        type: this.taskModule.type,
+                    }
+                ).then(res=>{
+                    if(res.data.code == 200){
+                        this.refreshTaskList();
+                        Toast(res.data.msg);
+                        //this.$refs.popup.close();
+                    }
+                })
+            }
+        },
+        openPopupRecord(item, isEdit){
+            this.curPopup = "record";
+            this.recordModule.isEdit = isEdit;
+            if(item){   
+                this.recordModule.id = item.id;
+                this.recordModule.type = item.type;
+                this.recordModule.title = item.title;
+                this.recordModule.content = item.remark;
+            }else{
+                this.recordModule.title = "";
+                this.recordModule.content = "";
+                this.recordModule.type = 1;
+            }
+            this.columns = [
+                {
+                    text:"学习",
+                    value:"1"
+                },
+                {
+                    text:"工作",
+                    value:"2"
+                },
+                {
+                    text:"生活",
+                    value:"3"
+                },
+                {
+                    text:"感悟",
+                    value:"4"
+                },
+            ]
+            this.$refs.popup.open()
+        },
+        openPopup(item, isEdit){ // isEdit为是否为编辑
+            this.curPopup = "task";
+            this.taskModule.isEdit = isEdit
+            if(item){   
+                this.taskModule.id = item.id;
+                this.taskModule.type = item.type;
                 this.taskModule.title = item.title;
-                this.taskModule.content = item.remark
+                this.taskModule.content = item.remark;
+            }else{
+                this.taskModule.title = "";
+                this.taskModule.content = "";
+                this.taskModule.type = 1;
             }
             this.columns = [
                 {
