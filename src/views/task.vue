@@ -8,6 +8,7 @@
                 </router-link>
             </span>
         </Headera>
+         
         <Popup ref="popup">
             <template v-slot:body>
                 <div class="body-title">
@@ -47,6 +48,28 @@
                             <div class="ell item-detail">{{item.detail}}</div>
                         </div>
                     </li>
+                    <refresh :on-infinite-load="onInfiniteLoad"
+        :parent-pull-up-state="pullUpState">
+            
+        </refresh>
+                </ul>
+            </div>
+            <!--两天以内-->
+            <div class="task-item item-two">
+                <div class="item-title">
+                    within two days
+                </div>
+                <ul class="item-list">
+                    <li :class="{delay:item.isDelay}" v-for="(item,i) in taskOneList" :key="i" class="item-list-li">
+                        <div @click="changeState(item,i)" class="check">
+                            <div v-if="item.state == 1" class="single-check"></div>
+                            <svg class="svg-check" v-else-if="item.state == 2" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="11388"><path d="M416.832 798.08C400.64 798.08 384.512 791.872 372.16 779.52L119.424 525.76C94.784 500.992 94.784 460.8 119.424 436.032 144.128 411.264 184.128 411.264 208.768 436.032L416.832 644.928 814.4 245.76C839.04 220.928 879.04 220.928 903.744 245.76 928.384 270.528 928.384 310.656 903.744 335.424L461.504 779.52C449.152 791.872 432.96 798.08 416.832 798.08Z" p-id="11389"></path></svg>
+                        </div>
+                        <div @click="showPopup(item)" class="content">
+                            <div class="item-content ell">{{item.title}}</div>
+                            <div class="ell item-detail">{{item.detail}}</div>
+                        </div>
+                    </li>
                 </ul>
             </div>
             <!--三天以内-->
@@ -67,44 +90,8 @@
                     </li>
                 </ul>
             </div>
-            <!--七天以内-->
-            <div class="task-item item-seven">
-                <div class="item-title">
-                    within seven days
-                </div>
-                <ul class="item-list">
-                    <li :class="{delay:item.isDelay}" v-for="(item,i) in taskOneList" :key="i" class="item-list-li">
-                        <div @click="changeState(item,i)" class="check">
-                            <div v-if="item.state == 1" class="single-check"></div>
-                            <svg class="svg-check" v-else-if="item.state == 2" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="11388"><path d="M416.832 798.08C400.64 798.08 384.512 791.872 372.16 779.52L119.424 525.76C94.784 500.992 94.784 460.8 119.424 436.032 144.128 411.264 184.128 411.264 208.768 436.032L416.832 644.928 814.4 245.76C839.04 220.928 879.04 220.928 903.744 245.76 928.384 270.528 928.384 310.656 903.744 335.424L461.504 779.52C449.152 791.872 432.96 798.08 416.832 798.08Z" p-id="11389"></path></svg>
-                        </div>
-                        <div @click="showPopup(item)" class="content">
-                            <div class="item-content ell">{{item.title}}</div>
-                            <div class="ell item-detail">{{item.detail}}</div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <!--无期限-->
-            <div class="task-item item-infinity">
-                <div class="item-title">
-                    within infinity days
-                </div>
-                <ul class="item-list">
-                    <li :class="{delay:item.isDelay}" v-for="(item,i) in taskOneList" :key="i" class="item-list-li">
-                        <div @click="changeState(item,i)" class="check">
-                            <div v-if="item.state == 1" class="single-check"></div>
-                            <svg class="svg-check" v-else-if="item.state == 2" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="11388"><path d="M416.832 798.08C400.64 798.08 384.512 791.872 372.16 779.52L119.424 525.76C94.784 500.992 94.784 460.8 119.424 436.032 144.128 411.264 184.128 411.264 208.768 436.032L416.832 644.928 814.4 245.76C839.04 220.928 879.04 220.928 903.744 245.76 928.384 270.528 928.384 310.656 903.744 335.424L461.504 779.52C449.152 791.872 432.96 798.08 416.832 798.08Z" p-id="11389"></path></svg>
-                        </div>
-                        <div @click="showPopup(item)" class="content">
-                            <div class="item-content ell">{{item.title}}</div>
-                            <div class="ell item-detail">{{item.detail}}</div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
         </div>
-
+       
         <van-popup v-model:show="stateTypeCol" position="bottom" :style="{ height: '60%' }">
             <van-picker
                 title="标题"
@@ -233,6 +220,7 @@
 }
 .item-list{
     height: 270px;
+    margin-top: 15px;
     overflow: auto;
 }
 .item-list-li{
@@ -256,13 +244,11 @@
     margin-top: 10px;
 }
 .task-container .task-item{
-    height: 34px;
     position: relative;
     line-height: 34px;
     border-radius: 5px;
     padding-bottom: 20px;
     width: 100%;
-    height: 300px;
     overflow: hidden;
     background: #fff;
     margin-bottom:35px;
@@ -291,6 +277,7 @@ import Headera from "@/views/common/header.vue"
 import Popup from "@/views/common/popup.vue"
 import { Popup as vantPopup} from 'vant';
 import { Picker } from 'vant';
+import refresh from "@/views/common/refresh"
 export default {
     name:"task",
     components:{
@@ -298,6 +285,14 @@ export default {
         Popup,
         "van-picker":Picker,
         "van-popup":vantPopup,
+        refresh
+    },
+    created(){
+        let self = this;
+        setTimeout(()=>{
+            self.pullUpState = 1
+        },500)
+        
     },
     setup(){
         const columns = ['生活', '工作', '学习', '感悟', 'mf'];
@@ -308,6 +303,7 @@ export default {
     data(){
         return{
             stateTypeCol:false,
+            pullUpState:2,
             popup:{
                 title:"",
                 content:"",
@@ -316,6 +312,7 @@ export default {
                 typeId:"",
             },
             popupTitle:"",
+            test:5,
             popupContent:"",
             taskOneList:[
                 {
@@ -369,6 +366,32 @@ export default {
         }
     },
     methods:{
+        onInfiniteLoad (done) {
+            setTimeout(() => {
+                this.taskOneList.push({
+                    title:"完成xxx事情",
+                    detail:"a period of time when sb/sth has to wait because of a problem that makes sth slow or late",
+                    state:1,
+                    isDelay:false,
+                    type:"",
+                },)
+                if (this.pullUpState === 1) {
+                this.getPullUpMoreData()
+            }
+            done()    
+            }, 2000);
+            
+        },
+        getPullUpMoreData(){
+            if(this.test > 0){
+                this.pullUpState = 1;
+            }else{
+                this.pullUpState = 3;
+            }
+            
+
+            this.test -- 
+        },
         showTypeCol(){
             this.stateTypeCol = true;
         },

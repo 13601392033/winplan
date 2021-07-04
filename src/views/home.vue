@@ -281,7 +281,7 @@
         position: absolute;
     }
     .body-content .textarea{
-        width: 100%;
+        width: 94%;
         height: 63%;
         margin-top: 10px;
         border: none;
