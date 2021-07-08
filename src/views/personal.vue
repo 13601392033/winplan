@@ -55,7 +55,7 @@ export default {
     },
     data(){
         return {
-            src:require("@/assets/c2.jpg"),
+            src:require("@/assets/z2.jpg"),
             file:[{ url: 'https://img.yzcdn.cn/vant/leaf.jpg' ,isImage: false }],
         }
     },

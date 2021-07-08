@@ -23,3 +23,19 @@ export function delTaskById(data){
         data:data
     })
 }
+
+export function queryAllTasks(data){
+    return axios({
+        method:"post",
+        url:"task/queryAllTasks",
+        data:data
+    })
+}
+
+export function queryTasksByType(data){
+    return axios({
+        method:"post",
+        url:"task/queryTasksByType",
+        data:data
+    })
+}

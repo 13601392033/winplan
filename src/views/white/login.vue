@@ -102,7 +102,7 @@
 
 <script>
 import crypto from "crypto";
-import { defineComponent, h } from 'vue'
+import { h } from 'vue'
   import { ElMessage } from 'element-plus'
 export default {
     name:"login",

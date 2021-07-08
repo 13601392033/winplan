@@ -44,7 +44,7 @@
                     </div>
                 </div>
                 <div class="body-content">
-                    <textarea class="textarea" v-model="recordModule.content"></textarea>
+                    <textarea class="textarea hide-scroll" v-model="recordModule.content"></textarea>
                 </div>
                 <div class="body-footer">
                     <i @click="saveRecord" style="color:#FFC125" class="el-icon-success icon"></i>
@@ -94,7 +94,7 @@
                     </router-link>
                 </div>
             </div>
-            <div class="empty-text" v-if="taskList.length <= 0">暂无任务</div>
+            <div class="empty-text" v-if="recordList.length <= 0">暂无记录</div>
             <ul class="record-list">
                 <li v-for="(item,i) in recordList" :key="i" class="record-item" @click="openPopupRecord(item, 2)">
                     <div class="record-contain">
@@ -161,7 +161,7 @@
         <van-popup  v-model:show="show" position="bottom" :style="{ height: '60%' }">
             <van-picker
                 ref="vanPopup"
-                @cancel="show =false"
+                @cancel="show = false"
                 @confirm="confirmVanPopup"
                 title="标题"
                 :columns="columns"
@@ -472,36 +472,7 @@ export default {
         "van-picker": Picker,
     },
     created(){
-        this.$http({
-            url:"/init",
-            method:"post",
-        }).then(res=>{
-            if(res.data.code == 200){
-                if(res.data.data && res.data.data.taskList.length > 0){
-                    this.taskList = res.data.data.taskList.map((item)=>{
-                        return {
-                            title : item.title,
-                            remark : item.content,
-                            state : item.state,
-                            type : item.type,
-                            id : item.id,
-                        }
-                    });
-
-                    this.recordList = res.data.data.recordList.map((item)=>{
-                        return {
-                            title : item.title,
-                            remark : item.content,
-                            type : item.type,
-                            id : item.id,
-                        }
-                    });
-                }
-                else{
-                    this.taskList = [];
-                }
-            }
-        })
+        this.init()
     },
     setup() {
         // const snail = ref(1);
@@ -611,11 +582,9 @@ export default {
             if(type == 1){
                 ret = "one"
             }else if(type == 2){
-                ret = "three"
+                ret = "two"
             }else if(type == 3){
-                ret = "seven"
-            }else if(type == 4){
-                ret = "infinity"
+                ret = "three"
             }
             return ret
         },
@@ -665,6 +634,35 @@ export default {
         }
     },
     methods:{
+        init(){
+            this.$http({
+                url:"/init",
+                method:"post",
+            }).then(res=>{
+                if(res.data.code == 200){
+                    if(res.data.data){
+                        this.taskList = res.data.data.taskList.map((item)=>{
+                            return {
+                                title : item.title,
+                                remark : item.content,
+                                state : item.state,
+                                type : item.type,
+                                id : item.id,
+                            }
+                        });
+
+                        this.recordList = res.data.data.recordList.map((item)=>{
+                            return {
+                                title : item.title,
+                                remark : item.content,
+                                type : item.type,
+                                id : item.id,
+                            }
+                        });
+                    }
+                }
+            })
+        },
         confirmVanPopup(){
             if(this.curPopup == "task"){
                 this.taskModule.type = this.$refs.vanPopup.getValues()[0].value;
@@ -717,16 +715,23 @@ export default {
             })
         },
         loginOut(){
-            this.$http({
-                method:"post",
-                url:"/loginOut"
-            }).then(res=>{
-                console.log(res)
+            let self = this;
+            Dialog.confirm({
+                title: '退出',
+                message: '确定退出登录吗？',
+            }).then(()=>{
+                this.$http({
+                    method:"post",
+                    url:"/loginOut"
+                }).then(res=>{
+                    console.log(res)
+                })
+                localStorage.clear();
+                this.$router.push({
+                    name:"login"
+                })
             })
-            localStorage.clear();
-            this.$router.push({
-                name:"login"
-            })
+            
         },
         changeHabitState(i){
             let state = this.habitList[i].state;
@@ -822,7 +827,6 @@ export default {
             })
             .catch(() => {                
             })
-            
         },
         delRecord(){
             let self = this;
@@ -864,14 +868,13 @@ export default {
                         //this.$refs.popup.close();
                     }
                 })
-            }else{
+            }else{ 
                 saveData(
-                    {
-                        title: this.taskModule.title,
-                        content: this.taskModule.content,
-                        type: this.taskModule.type,
-                    }
-                ).then(res=>{
+                {
+                    title: this.taskModule.title,
+                    content: this.taskModule.content,
+                    type: this.taskModule.type,
+                }).then(res=>{
                     if(res.data.code == 200){
                         this.refreshTaskList();
                         Toast(res.data.msg);
@@ -932,16 +935,12 @@ export default {
                     value:"1"
                 },
                 {
-                    text:"三天以内",
+                    text:"两天以内",
                     value:"2"
                 },
                 {
-                    text:"七天以内",
+                    text:"三天以内",
                     value:"3"
-                },
-                {
-                    text:"无限期",
-                    value:"4"
                 },
             ]
             this.$refs.popup.open()

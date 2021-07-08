@@ -12,23 +12,25 @@
             <template v-slot:body>
                 <div class="body-title">
                     <div class="title-left fl">
-                        {{popup.type}}
+                        {{recordType(popup.type)}}
                     </div>
                     
                     <div class="title-right fl" style="width:66%">
                         <input v-model="popup.title" type="text"/>
                     </div>
-                    <div class="popup-type" @click="showTypeCol" ><i class="el-icon-moon-night icon-record-type" style="right: 0;" :class="[recordIcon(1)]"></i></div>
+                    <div class="popup-type" @click="showTypeCol" ><i class="icon-record-type" style="right: 0;" :class="[recordIcon(popup.type)]"></i></div>
                 </div>
                 <div class="body-content">
                     <textarea class="textarea" placeholder="记录些什么吧~" v-model="popup.content"></textarea>
                 </div>
                 <div class="body-footer">
-                    <i style="color:#FFC125" class="el-icon-success icon"></i>
-                    <i style="color:#B5B5B5" class="el-icon-error icon"></i>
+                    <i @click="saveRecord" style="color:#FFC125" class="el-icon-success icon"></i>
+                    <i @click="delRecord" style="color: rgba(255,76,65,.9);" class="el-icon-delete-solid icon"></i>
+                    <i @click="$refs.popup.close()" style="color:#B5B5B5" class="el-icon-error icon"></i>
                 </div>
             </template>
         </Popup>
+
         <div class="record-container">
             <div class="record-nav">
                 <ul class="nav-list">
@@ -37,19 +39,27 @@
                     </li>
                 </ul>
             </div>
-            <ul class="record-list" >
-                <li v-for="(item,i) in recordList" :key="i" class="record-item" @click="openPopup(item)">
+            <ul class="record-list">
+                <li v-for="(item,i) in recordList" :key="i" class="record-item" @click="openPopup(item, true)">
                     <div class="record-contain">
-                        <i class="el-icon-moon-night icon-record-type" :class="[recordIcon(item.type)]"></i>
+                        <i class="icon-record-type" :class="[recordIcon(item.type)]"></i>
                         <div class="record-content ell">{{item.title}}</div>
                         <div class="detail ell">{{item.remark}}</div>
                     </div>
                 </li>
+                <refresh :on-infinite-load="onInfiniteLoad"
+                        :parent-pull-up-state="pages.pullUpState">
+                </refresh>
             </ul>
+            <i @click="openPopup(null, false)" class="el-icon-plus add-position"></i>
         </div>
+
         <van-popup v-model:show="stateTypeCol" position="bottom" :style="{ height: '60%' }">
             <van-picker
+                ref="typePicker"
                 title="标题"
+                @cancel="stateTypeCol = false"
+                @confirm="confirmVanPopup"
                 :columns="columns"
                 :swipe-duration="300"
             />
@@ -58,6 +68,19 @@
 </template>
 
 <style scoped>
+.add-position{
+    position:fixed;
+    bottom: 20px;
+    color: #fff;
+    right: 23px;
+    border-radius: 50%;
+    background:#4682B4;
+    font-size: 40px;
+    padding: 6px;
+    font-weight: bold;
+    background-image: linear-gradient(to bottom right,#C7C7C7,#1A73E8,#6CA6CD);
+}
+
 .popup-type{
     height:40px;
     color:#fff;
@@ -130,7 +153,7 @@
 .detail{
     float: left;
     width: 100%;
-    font-size: 14px;
+    font-size: 12px;
     line-height: 1;
     text-align: left;
     bottom: 2px;
@@ -145,16 +168,16 @@
     margin:0 auto;
 }
 .record-item{
-    height: 47px;
+    height: 56px;
     position: relative;
-    line-height: 34px;
+    line-height: 40px;
 }
 .record-content{
     width: 100%;
     text-indent: 15%;
     font-weight: bold;
     float: left;
-    font-size: 18px;
+    font-size: 16px;
     text-align: left;
 }
 .record-list{
@@ -232,132 +255,226 @@
 <script>
 import Headera from "@/views/common/header.vue"
 import Popup from "@/views/common/popup.vue"
-import { Popup as vantPopup} from 'vant';
+import { Popup as vantPopup, Toast, Dialog} from 'vant';
 import { Picker } from 'vant';
+import refresh from "@/views/common/refresh"
+import {queryRecordList, saveRecord, editRecordById, delRecordById} from "@/request/record.js"
 export default {
     components:{
         Headera,
         Popup,
         "van-picker":Picker,
         "van-popup":vantPopup,
+        refresh,
+    },
+    created(){
+        this.init();
+       
     },
     setup(){
-        let containerHeight = window.screen.height - 221;
-        let listHeight = containerHeight - 60 - 24 - 20;
-        const columns = ['生活', '工作', '学习', '感悟', 'mf'];
+        const columns = [
+            {text: "学习", value: 1},
+            {text: "工作", value: 2},
+            {text: "生活", value: 3},
+            {text: "感悟", value: 4},
+        ];
         return {
-            containerHeight,
-            listHeight,
             columns,
         }
     },
     data(){
         return {
+            pages:{
+                pageNo: 1,
+                pageSize: 10,
+                pullUpState:0,
+                total:0,
+            },
             popup:{
                 title:"",
                 content:"",
-                type:"学习",
+                isEdit:false,
+                type:1, //1==学习 2==工作 3==生活 4==感悟
                 icon:"",
                 typeId:"",
             },
             navList:[
                 {
                     name:"全部",
+                    value: 0,
+                },
+                {
+                    name:"学习",
+                    value: 1,
                 },
                 {
                     name:"工作",
+                    value: 2,
                 },
                 {
                     name:"生活",
+                    value: 3,
                 },
                 {
                     name:"感悟",
-                },
-                {
-                    name:"健身",
+                    value: 4,
                 },
             ],
-            recordList:[
-                {
-                    title:"vue3为何采用proxy",
-                    type:1,
-                    remark:`vue2中的双向绑定是通过 Object.defineProperty设置get和set函数来实现，在监听数组的时候，如果通过下标的方式对数组进行添加和删除，vue无法监听到，Object.definePropert本身具有一定的监听数组下标变化的能力，但是考虑到性能和体验的差异太大，所有vue2没有实现，而是通过pop push shift unshift reverse sort splice函数来监听数组，但依然有一定的局限性，property只能劫持对象的属性，所以还需要对对象的所有属性进行深度遍历，proxy可以劫持整个对象，并返回被代理的对象，还可以代理数组中动态增加的属性，包括通过下标方式，所以v3选择用proxy实现底层的双向绑定`
-                },
-                {
-                    title:"vue 中的key",
-                    type:1,
-                    remark:"key的作用主要是为了高效的更新虚拟dom，还有在vue中使用相同标签名字的过度切换时，也可以使用key属性，目的是让vue区分它们，否则vue只会替换内部属性，而不会触发过度效果"
-                },
-                {
-                    title:"hello",
-                    type:1,
-                    remark:"one"
-                },
-                {
-                    title:"hello",
-                    type:1,
-                    remark:"one"
-                },
-                {
-                    title:"hello",
-                    type:1,
-                    remark:"one"
-                },
-                {
-                    title:"hello",
-                    type:1,
-                    remark:"two"
-                },
-                {
-                    title:"hello",
-                    type:2,
-                    remark:"three"
-                },
-                {
-                    title:"hello",
-                    type:1,
-                    remark:"four"
-                },
-                {
-                    title:"hello",
-                    type:2,
-                    remark:"five"
-                },
-                {
-                    title:"hello",
-                    type:2,
-                    remark:"five"
-                },
-                {
-                    title:"hello",
-                    type:2,
-                    remark:"five"
-                }
-            ],
+            recordList:[],
             curIndex:0,
             stateTypeCol: false,
         }
     },
     computed:{
+        recordType(){
+            return (type)=>{
+                switch (type){
+                    case 1:
+                        return "学习"
+                    case 2:
+                        return "工作"
+                    case 3:
+                        return "生活"
+                    case 4:
+                        return "感悟"
+                }
+            }
+        },
         recordIcon(){
             return (type)=>{
                 switch (type){
                     case 1:
                         return "el-icon-reading"
                     case 2:
+                        return "el-icon-tickets"
+                    case 3:
+                        return "el-icon-coffee-cup"
+                    case 4:
                         return "el-icon-moon-night"
+
                 }
             }
         }
     },
     methods:{
-        openPopup(item){
-            this.popup.title = item.title;
-            this.popup.content = item.remark;
+        async onInfiniteLoad(done){
+            this.pages.pageNo ++;            
+            this.pages.pullUpState = 2;
+            await this.queryListData();
+            done()
+        },
+        getPullUpMoreData(){
+            if(this.pages.total > (this.pages.pageNo * this.pages.pageSize)){
+                this.pages.pullUpState = 1;
+            }else{
+                this.pages.pullUpState = 3;
+            }
+        },
+        delRecord(){
+            let self = this;
+            Dialog.confirm({
+                title: '删除',
+                message: '确定删除该记录吗？',
+            }).then(()=>{
+                delRecordById({
+                    id: self.popup.id
+                }).then(res=>{
+                    if(res.data.code == 200){
+                        self.$refs.popup.close();
+                        self.refresh();
+                        Toast(res.data.msg)
+                    }
+                })    
+            })
+            
+        },
+        confirmVanPopup(){
+            this.popup.type = this.$refs.typePicker.getValues()[0].value;
+            this.stateTypeCol = false;
+        },
+        init(){
+            this.queryListData();
+        },
+        refresh(){
+            this.pages.pageNo = 1;
+            this.recordList = [];
+            this.queryListData();
+        },
+        queryListData(){
+            queryRecordList({
+                pageNo: this.pages.pageNo,
+                pageSize: this.pages.pageSize,
+                type: this.curIndex,
+            }).then(res=>{
+                if(res.data.code == 200){
+                    this.recordList = this.recordList.concat(res.data.data.map((item)=>{
+                        return {
+                            title : item.title,
+                            remark : item.content,
+                            type : item.type,
+                            id : item.id,
+                        }
+                    }));
+                    this.pages.total = res.data.total;
+                    if(this.pages.total == 0 || this.pages.total <= this.pages.pageSize){
+                        this.pages.pullUpState = 0
+                    }else{
+                        this.pages.pullUpState = 1
+                        this.getPullUpMoreData()
+                    }
+                }
+            })
+        },
+        saveRecord(){
+            if(this.popup.isEdit){
+                editRecordById({
+                    id: this.popup.id,
+                    title: this.popup.title,
+                    content: this.popup.content,
+                    type: this.popup.type,
+                }).then(res=>{
+                    if(res.data.code == 200){
+                        Toast(res.data.msg)
+                        this.refresh();
+                    }else{
+                        Toast.fail("修改失败")
+                    }
+                })
+            }else{
+                saveRecord({
+                    title: this.popup.title,
+                    content: this.popup.content,
+                    type: this.popup.type,
+                }).then(res=>{
+                    if(res.data.code == 200){
+                        Toast(res.data.msg)
+                        this.refresh();
+                    }else{
+                        Toast.fail("添加失败")
+                    }
+                })
+            }
+        },
+        openPopup(item, isEdit){
+            this.popup.isEdit = isEdit;
+            if(!isEdit){
+                this.popup.id = "";
+                this.popup.title = "";
+                this.popup.content = "";
+                this.popup.type = 1;
+            }else{
+                this.popup.id = item.id;
+                this.popup.title = item.title;
+                this.popup.content = item.remark;
+                this.popup.type = item.type;
+            }
+            
             this.$refs.popup.open();
         },
         queryList(item, index){
-            this.curIndex = index;
+            this.curIndex = item.value;
+            this.refresh();
+
         },
         showTypeCol(){
             this.stateTypeCol = true;

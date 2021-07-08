@@ -7,16 +7,37 @@ module.exports = {
     chainWebpack: (config) => {
         // 生产环境，开启js\css压缩
         if (process.env.NODE_ENV === 'production') {
-            config.plugin('compressionPlugin').use(new CompressionWebpackPlugin({
-                test: /\.(js|css|less)$/, // 匹配文件名
-                threshold: 100240, // 对超过100k的数据压缩
-                minRatio: 0.8,
-                //deleteOriginalAssets: true // 删除源文件
-            }))
+            const imagesRule = config.module.rule('images')
+            imagesRule
+                .use('image-webpack-loader')
+                .loader('image-webpack-loader')
+                .options({
+                    bypassOnDebug: true
+                })
+                .end()
         }
     },
     configureWebpack: {
-
+        plugins: [
+            new CompressionWebpackPlugin({
+                /* [file]被替换为原始资产文件名。
+                    [path]替换为原始资产的路径。
+                    [dir]替换为原始资产的目录。
+                    [name]被替换为原始资产的文件名。
+                    [ext]替换为原始资产的扩展名。
+                    [query]被查询替换。*/
+                filename: '[path].gz[query]',
+                //压缩算法
+                algorithm: 'gzip',
+                //匹配文件
+                test: /\.js$|\.css$|\.html$/,
+                //压缩超过此大小的文件,以字节为单位
+                threshold: 10240,
+                minRatio: 0.8,
+                //删除原始文件只保留压缩后的文件
+                deleteOriginalAssets: false
+            })
+        ],
         externals: {
             "vue": "Vue",
             "ElementPlus": "ElementPlus",

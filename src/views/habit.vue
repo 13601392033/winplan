@@ -1,10 +1,10 @@
 <template>
     <div class="habit">
-        <Headera style="color:#ff4c41;border-bottom:1px solid #fff;">
+        <Headera style="color:#fff;border-bottom:1px solid #fff;    background-image: linear-gradient(to right bottom, rgb(255, 174, 185), rgb(250, 128, 114), rgb(255, 64, 64));">
             <span class="header-title">习惯</span>
             <span class="left-icon">
                 <router-link to="/main/home">
-                    <i class="el-icon-arrow-left" style="font-size: 20px;color:#ff4c41"></i>
+                    <i class="el-icon-arrow-left" style="font-size: 20px;color:#fff"></i>
                 </router-link>
             </span>
         </Headera>
@@ -354,7 +354,6 @@
 
 /**习惯组件css样式start**/
 .add-position{
-    font-size: 60px;
     bottom: 75px;
     color: #fff;
     right: 23px;

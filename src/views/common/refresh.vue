@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
   <div class="load-moudle" @touchstart="touchStart($event)" @touchmove="touchMove($event)" @touchend="touchend($event)">
     <slot></slot>
     <footer class="load-more">
@@ -29,7 +29,8 @@ export default {
     onInfiniteLoad: {
       type: Function,
       require: false
-    }
+    },
+    
   },
   data () {
     return {
@@ -169,12 +170,11 @@ export default {
       return result
     }
   },
-  watch: {
-    parentPullUpState (curVal, oldVal) {
-        console.log("fa:"+curVal)
-      this.pullUpState = curVal
+    watch: {
+      parentPullUpState (curVal, oldVal) {
+          this.pullUpState = curVal
+      }
     }
-  }
 }
 </script>
 

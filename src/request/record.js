@@ -8,6 +8,14 @@ export function saveRecord(data){
     })
 }
 
+export function queryRecordList(data){
+    return axios({
+        method:"post",
+        url:"record/queryRecordList",
+        data:data
+    })
+}
+
 export function editRecordById(data){
     return axios({
         method:"post",

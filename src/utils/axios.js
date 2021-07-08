@@ -54,6 +54,11 @@ axios.interceptors.response.use(
     (response) => {
         hide();
         if(response.data.code == "303"){ // token失效
+            ElMessage.error(`Code: ${response.data.code}, Message: token失效`)
+            localStorage.clear();
+            router.push({name:"login"});
+        }else if(response.data.code == "304"){ // session失效
+            ElMessage.error(`Code: ${response.data.code}, Message: session失效`)
             localStorage.clear();
             router.push({name:"login"});
         }

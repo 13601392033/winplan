@@ -14,12 +14,26 @@ ul, li{
     top:0;
 }
 
+.hide-scroll::-webkit-scrollbar{
+    display: none;
+}
+
 .mask .loading{
     width:70px;
     position: absolute;
     top:50%;
     left:50%;
     transform: translate(-50%, -50%);
+}
+
+.popup-body .body-content textarea::-webkit-scrollbar{
+    display: none;
+}
+
+.popup-body .body-content textarea{
+    overflow: auto;
+    padding: 30px 0;
+    height: 250px !important;
 }
 
 .attitude{
