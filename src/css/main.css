@@ -25,7 +25,10 @@ ul, li{
     left:50%;
     transform: translate(-50%, -50%);
 }
-
+.null-text{
+    font-size: 20px;
+    font-weight: bold;
+}
 .popup-body .body-content textarea::-webkit-scrollbar{
     display: none;
 }

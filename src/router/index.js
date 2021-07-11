@@ -105,7 +105,7 @@ const router = createRouter({
     mode:"history",
     routes
 })
-let whiteList = ["login"];
+let whiteList = ["login","c"];
 router.beforeEach((to, from, next)=>{
     if(whiteList.find(name=>name==to.name)){ //白名单放行
         next();

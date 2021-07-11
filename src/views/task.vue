@@ -122,10 +122,7 @@
 .taskDone{
     opacity: .6;
 }
-.null-text{
-    font-size: 20px;
-    font-weight: bold;
-}
+
 .add-position{
     position:fixed;
     bottom: 20px;

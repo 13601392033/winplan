@@ -1,11 +1,16 @@
 <template>
-  <router-view></router-view>
+    <router-view></router-view>
 </template>
 
 <script>
 
 export default {
-  name: 'App',
+    name: 'App',
+    data(){
+        return{
+             direction: "slide-left"
+        }
+    },
 }
 </script>
 
@@ -16,7 +21,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-
 }
 body{
   margin:0;

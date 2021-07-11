@@ -13,13 +13,13 @@
                 <div class="popup-header">
                     <span class="ph-left">取消</span>
                     <span class="ph-title">添加习惯</span>
-                    <span class="ph-right">保存</span>
+                    <span class="ph-right" @click="saveHabit">保存</span>
                 </div>
             </template>
             <template v-slot:body style="background:#fff">
                 <div class="ph-body">
                     <div class="ph-body-item">
-                        <input type="text" class="title-input" placeholder="习惯名称" />
+                        <input type="text" v-model="habit.name" class="title-input" placeholder="习惯名称" />
                     </div>
                     <div class="ph-body-item">
                         <div class="item-back">
@@ -34,7 +34,7 @@
                     </div>
                      <div class="ph-body-item" style="height:110px;">
                         <div class="item-excitation">写点什么激励自己吧~</div>
-                        <input type="text" class="item-excitation-input" placeholder="永远年轻，永远热泪盈眶" />
+                        <input type="text" v-model="habit.remark" class="item-excitation-input" placeholder="永远年轻，永远热泪盈眶" />
                     </div>
                 </div>
             </template>
@@ -58,9 +58,10 @@
                 </div>
             </div>
             <ul class="habit-list">
+                <li v-show="habitList.length == 0"><p class="null-text">暂无内容</p></li>
                 <li @click="jumpDetail(item)" class="list-item" v-for="(item,index) in habitList" :key="index">
                     <span class="item-ele item-icon-back">
-                        <span class="radius">
+                        <span class="radius" :style="{background: item.backColor, color: item.color}">
                             <i v-if="item.type == 1" class="icon" :class="iconClass(item)"></i>
                             <span v-if="item.type == 0" class="icon">{{item.text}}</span>
                         </span>
@@ -461,12 +462,32 @@
 import Headera from "@/views/common/header.vue"
 import Popup from "@/views/common/popup.vue"
 import { Popup as vantPopup} from 'vant';
+import {queryHabitList, saveHabit} from '@/request/habit'
+import { Toast, Dialog  } from 'vant';
 export default {
     name : "habit",
     components:{
         Headera,
         Popup,
         "van-popup":vantPopup,
+    },
+    created(){
+        queryHabitList().then(res=>{
+            if(res.data.code == 200){
+                let data = res.data.data;
+                this.habitList = data.map((item)=>{
+                    return {
+                        type : item.logoType,
+                        remark : item.remark,
+                        icon : item.logo,
+                        text : item.logo,
+                        name : item.name,
+                        backColor : item.backColor,
+                        color : item.logoColor,
+                    }
+                })
+            }
+        })
     },
     setup(){
         
@@ -479,9 +500,10 @@ export default {
             isCurBack:undefined, 
             isCurColor:undefined,
             tempFirstText:"文",
-            iconList:[
-
-            ],
+            habit:{
+                name:"",
+                remark:"",
+            },
             stateChoice:false,
             sureChoice: 1, //当前确定的logo类型
             curChoice: 1,// 0为文本 1为图标
@@ -509,68 +531,26 @@ export default {
             ing:30,
             succ:24,
             stop:0,
-            habitList:[
-                {
-                    type:"1", // 0为文字 1为图标
-                    icon:"el-icon-time",
-                    backColor:"",
-                    name:"坚持自我",
-                    allDays:20,
-                    text:"文",
-                },
-                {
-                    type:"0", // 0为文字 1为图标
-                    backColor:"",
-                    text:"M",
-                    name:"坚持自我",
-                    allDays:20,
-                },
-                {
-                    type:"0", // 0为文字 1为图标
-                    backColor:"",
-                    text:"M",
-                    name:"坚持自我",
-                    allDays:20,
-                },
-                {
-                    type:"0", // 0为文字 1为图标
-                    backColor:"",
-                    text:"M",
-                    name:"坚持自我",
-                    allDays:20,
-                },
-                {
-                    type:"0", // 0为文字 1为图标
-                    backColor:"",
-                    text:"M",
-                    name:"坚持自我",
-                    allDays:20,
-                },
-                {
-                    type:"0", // 0为文字 1为图标
-                    backColor:"",
-                    text:"M",
-                    name:"坚持自我",
-                    allDays:20,
-                },
-                {
-                    type:"0", // 0为文字 1为图标
-                    backColor:"",
-                    text:"M",
-                    name:"坚持自我",
-                    allDays:20,
-                },
-                {
-                    type:"0", // 0为文字 1为图标
-                    backColor:"",
-                    text:"M",
-                    name:"坚持自我",
-                    allDays:20,
-                },
-            ]
+            habitList:[]
         }
     },
     methods:{
+        saveHabit(){
+            if(!this.habit.name){
+                Toast("请填写习惯名称！");
+            }
+            saveHabit({
+                name: this.habit.name,
+                remark: this.habit.remark,
+                logoType: this.curChoice,
+                backColor: this.backColor,
+                logoColor: this.color,
+                logo: this.curChoice == 0 ? this.firstText : this.iconChoice,
+                state: 1,
+            }).then(res=>{
+                console.log(res)
+            })
+        },
         jumpDetail(v){
             this.$router.push("habitDetail");
         },

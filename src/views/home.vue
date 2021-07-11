@@ -63,9 +63,12 @@
                     <i @click="openPopup(null, 1)" class="el-icon-circle-plus add-position"></i>
                 </div>
                 <div class="task-right clear">
-                    <router-link to="/main/task">
+                    <div @click="$router.push({name:'task'})">
                         <i  style="line-height:23px;color:#4682B4" class="el-icon-arrow-right"></i>
-                    </router-link>
+                    </div>
+                    <!-- <router-link to="/main/task">
+                        <i  style="line-height:23px;color:#4682B4" class="el-icon-arrow-right"></i>
+                    </router-link> -->
                 </div>
             </div>
             <div class="empty-text" v-if="taskList.length <= 0">暂无任务</div>
@@ -121,9 +124,13 @@
             </div>
             <div class="habit-container">
                 <ul class="habit-list">
-                    <li v-for="(item, index) in habitList " @click="changeHabitState(index)" :key="index" class="habit-item">
-                        <div :class="{done: item.state == 1}" :style="habitBack(item)"><i class="fa" :class="habitClass(item)"></i></div>
-                        <span class="ell">mf{{item.state}}</span>
+                    <li v-for="(item, index) in habitList " @click="changeHabitState(item)" :key="index" class="habit-item">
+                        <!-- <div :class="{done: item.state == 1}" :style="habitBack(item)" ><i class="fa" :class="habitClass(item)"></i></div> -->
+                        <span class="radius" :style="{background: item.backColor, color: item.color}">
+                            <i v-if="item.type == 1" class="icon" :class="iconClass(item)"></i>
+                            <span v-if="item.type == 0" class="icon">{{item.text}}</span>
+                        </span>
+                        <span style="width:100%;" class="ell">{{item.name}}</span>
                     </li>
                   
                 </ul>
@@ -225,9 +232,12 @@
         left:50%;
         transform: translate(-50%, -50%);
     }
-    .habit-item span{
-        width:100%;
-        display: inline-block;
+    .habit-item .radius{
+        width: 50px;
+        height: 50px;
+        background: #ddd;
+        border-radius: 50%;
+        position: relative;
         text-align: center;
     }
     .habit-item div{
@@ -242,10 +252,20 @@
         border:none;
         box-shadow: 1px 1px 7px #888888;
     }
+    .radius .icon{
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        left: 50%;
+        font-size: 27px;
+    }
     .habit-item{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         float:left;
         width: 33%;
-        height: 80px;
+        height: 100px;
         line-height: 40px;
         margin-bottom: 20px;
     }
@@ -464,6 +484,7 @@ import { Picker } from 'vant';
 import { Toast, Dialog  } from 'vant';
 import {saveData, editTaskById, delTaskById} from "@/request/task"
 import {saveRecord, editRecordById, refreshRecordList, delRecordById} from "@/request/record"
+import {addHabitLogs} from "@/request/habit"
 export default {
     name:"home",
     components:{
@@ -605,15 +626,20 @@ export default {
         habitBack(){
             return (item)=>{
                 return {
+                    color: item.color,
                     background : item.state == 1 ? item.background : ""
                 }
             }
         },
-        habitClass(){
+        iconClass(){
             return (item)=>{
-                let cla = new Map();
-                cla.set(item.icon, true);
-                return this.strMapToObj(cla)
+                if(item.type == 1){
+                    let map = new Map();
+                    map.set(item.icon, true);
+                    return this.strMapToObj(map)
+                }else{
+                    return {}
+                }
             }
         },
         recordIcon(){
@@ -659,6 +685,18 @@ export default {
                                 id : item.id,
                             }
                         });
+
+                        this.habitList = res.data.data.habitList.map((item)=>{
+                            return {
+                                type : item.logoType,
+                                remark : item.remark,
+                                icon : item.logo,
+                                text : item.logo,
+                                name : item.name,
+                                backColor : item.backColor,
+                                color : item.logoColor,
+                            }
+                        })
                     }
                 }
             })
@@ -733,13 +771,15 @@ export default {
             })
             
         },
-        changeHabitState(i){
-            let state = this.habitList[i].state;
-            if(state == 1){
-                this.habitList[i].state = 0
-            }else if(state == 0){
-                this.habitList[i].state = 1
-            }
+        changeHabitState(item){
+            // let state = this.habitList[i].state;
+            addHabitLogs({
+                habitId: item.id,
+                type: 1,
+                
+            }).then(res=>{
+                console.log(res)
+            })
         },
         strMapToObj(strMap) {
             let obj = Object.create(null);
