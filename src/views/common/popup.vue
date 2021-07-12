@@ -45,7 +45,7 @@ export default {
         open(){
             this.documentHeihgt = window.screen.height;
             this.dom = document.getElementsByClassName("popup")[0]
-            this.dom.style.display = "block"
+            this.dom.style.display = "flex"
             setTimeout(() => {
                 this.dom.style.top = "10%"
             }, 0);
@@ -76,7 +76,7 @@ export default {
             setTimeout(() => {
                 this.dom.style.display = "none"
                 this.dom.style.height = "90%"
-                document.getElementsByClassName("menu")[0].style.display = "block";
+                document.getElementsByClassName("menu")[0].style.display = "flex";
                 this.$emit("onClose")    
             }, 250);
             
@@ -97,7 +97,9 @@ export default {
     }
     .popup-body{
         color:#080808;
-        height:100%;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
     }
     .popup-header{
         width:100%;
@@ -111,6 +113,7 @@ export default {
     .popup{
         overflow: hidden;
         display: none;
+        flex-direction: column;
         position: fixed;
         height: 90%;
         background: white;

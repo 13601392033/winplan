@@ -35,8 +35,8 @@ ul, li{
 
 .popup-body .body-content textarea{
     overflow: auto;
-    padding: 30px 0;
-    height: 250px !important;
+    margin-top:5%;
+    height:90% !important;
 }
 
 .attitude{

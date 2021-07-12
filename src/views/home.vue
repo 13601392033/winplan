@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <div class="body-content">
-                    <textarea class="textarea" v-model="taskModule.content"></textarea>
+                    <textarea  class="textarea" v-model="taskModule.content"></textarea>
                 </div>
                 <div class="body-footer">
                     <i @click="saveData" style="color:#FFC125" class="el-icon-success icon"></i>
@@ -302,7 +302,6 @@
     }
     .body-content .textarea{
         width: 94%;
-        height: 63%;
         margin-top: 10px;
         border: none;
         padding-top:10px;
@@ -334,11 +333,10 @@
     }
     .body-content{
         width:100%;
-        height:100%;
+        flex: 1;
         background: #fff;
     }
     .body-footer{
-        position: fixed;
         background: #fff;
         bottom: 0px;
         width: 100%;

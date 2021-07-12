@@ -10,7 +10,6 @@ import "@/assets/menu_spand.png"
 
 const app = createApp(App).use(router).use(ElementPlus);
 
-
 app.config.globalProperties.$http = axios
 
 app.mount('#app')

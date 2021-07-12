@@ -151,7 +151,6 @@
 }
 .body-content .textarea{
     width: 96%;
-    height: 63%;
     margin-top: 10px;
     border: none;
     padding-top:10px;
@@ -193,11 +192,10 @@
 }
 .body-content{
     width:100%;
-    height:100%;
+    flex: 1;
     background: #fff;
 }
 .body-footer{
-    position: fixed;
     background: #fff;
     bottom: 0px;
     width: 100%;
