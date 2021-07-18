@@ -125,7 +125,6 @@
             <div class="habit-container">
                 <ul class="habit-list">
                     <li v-for="(item, index) in habitList " @click="changeHabitState(item)" :key="index" class="habit-item">
-                        <!-- <div :class="{done: item.state == 1}" :style="habitBack(item)" ><i class="fa" :class="habitClass(item)"></i></div> -->
                         <span class="radius" :style="{background: item.backColor, color: item.color}">
                             <i v-if="item.type == 1" class="icon" :class="iconClass(item)"></i>
                             <span v-if="item.type == 0" class="icon">{{item.text}}</span>
@@ -247,6 +246,11 @@
         margin: 0 auto;
         border:1px solid #5F6368;
         border-radius: 50%;
+    }
+    .habit-no{
+        background: #fff;
+        color: #000;
+        border: 1px solid #5A5A5A;
     }
     .habit-item .done{
         border:none;
@@ -688,6 +692,7 @@ export default {
                             return {
                                 type : item.logoType,
                                 remark : item.remark,
+                                id: item.id,
                                 icon : item.logo,
                                 text : item.logo,
                                 name : item.name,
