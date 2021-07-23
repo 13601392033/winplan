@@ -66,7 +66,7 @@
                             <span v-if="item.type == 0" class="icon">{{item.text}}</span>
                         </span>
                     </span>
-                    <span class="item-ele item-content">{{item.name}}</span>
+                    <span class="item-ele item-content ell">{{item.name}}</span>
                     <span class="item-ele item-days">
                         <span class="item-all-days">{{item.allDays}}天</span>
                         <span class="item-days-label">累计打卡</span>
@@ -91,14 +91,14 @@
                         <div class="bp-icon-list-header">
                             <span class="bp-choice-label">选择一个喜欢的图标~</span>
                             <span :style="{background:tempBackColor}" class="bp-choice-icon">
-                                <i :class="{iconChoice:true}" class="el-icon-time" :style="{color:tempColor}"></i>
+                                <i :class="iconChoice" :style="{color:tempColor}"></i>
                             </span>
                         </div>
                         <div>
                             <ul class="bp-icon-list-content displayBar">
-                                <li class="icon-list-item" v-for="(item, index) in 100" :key="index">
+                                <li @click="iconChoice = item" class="icon-list-item" v-for="(item, index) in iconConfig" :key="index">
                                     <div class="icon-item-wrapper">
-                                        <i class="el-icon-time"></i>
+                                        <i :class="item"></i>
                                     </div>
                                 </li>
                             </ul>
@@ -463,7 +463,8 @@ import Headera from "@/views/common/header.vue"
 import Popup from "@/views/common/popup.vue"
 import { Popup as vantPopup} from 'vant';
 import {queryHabitList, saveHabit} from '@/request/habit'
-import { Toast, Dialog  } from 'vant';
+import { Toast } from 'vant';
+import {iconConfig, colorConfig} from "@/config/icon.js"
 export default {
     name : "habit",
     components:{
@@ -472,28 +473,14 @@ export default {
         "van-popup":vantPopup,
     },
     created(){
-        queryHabitList().then(res=>{
-            if(res.data.code == 200){
-                let data = res.data.data;
-                this.habitList = data.map((item)=>{
-                    return {
-                        type : item.logoType,
-                        remark : item.remark,
-                        icon : item.logo,
-                        text : item.logo,
-                        name : item.name,
-                        backColor : item.backColor,
-                        color : item.logoColor,
-                    }
-                })
-            }
-        })
+        this.init()
     },
     setup(){
         
     },
     data(){
         return {
+            iconConfig: iconConfig,
             firstText:'文',
             iconChoice:"el-icon-time", // 选择icon
             bpTitle:"", // 第二层弹出框标题
@@ -511,22 +498,7 @@ export default {
             tempColor:"#fff",
             backColor: 'rgba(255, 69, 0, 0.68)',
             color:'#fff',
-            predefineColors: [
-            '#ff4500',
-            '#ff8c00',
-            '#ffd700',
-            '#90ee90',
-            '#00ced1',
-            '#1e90ff',
-            '#c71585',
-            'rgba(255, 69, 0, 0.68)',
-            'rgb(255, 120, 0)',
-            '#c7158577',
-            '#ff4c41',
-            '#336699',
-            '#ffffcc',
-            '#000'
-            ],
+            predefineColors: colorConfig,
             //习惯组件所需
             ing:30,
             succ:24,
@@ -535,9 +507,29 @@ export default {
         }
     },
     methods:{
+        init(){
+            queryHabitList().then(res=>{
+                if(res.data.code == 200){
+                    let data = res.data.data;
+                    this.habitList = data.map((item)=>{
+                        return {
+                            id: item.id,
+                            type : item.logoType,
+                            remark : item.remark,
+                            icon : item.logo,
+                            text : item.logo,
+                            name : item.name,
+                            backColor : item.backColor,
+                            color : item.logoColor,
+                        }
+                    })
+                }
+            })
+        },
         saveHabit(){
             if(!this.habit.name){
                 Toast("请填写习惯名称！");
+                return false;
             }
             saveHabit({
                 name: this.habit.name,
@@ -548,11 +540,18 @@ export default {
                 logo: this.curChoice == 0 ? this.firstText : this.iconChoice,
                 state: 1,
             }).then(res=>{
-                console.log(res)
+                if(res.data.code == 200){
+                    this.init();
+                    this.$refs.popup.close();
+                    Toast.success("添加成功");
+                }
             })
         },
         jumpDetail(v){
-            this.$router.push("habitDetail");
+            this.$router.push({
+                name:"habitDetail",
+                query:{ habitId: v.id}
+            });
         },
         sureChoiceMethod(){
             this.sureChoice = this.curChoice;

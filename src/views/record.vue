@@ -25,7 +25,7 @@
                 </div>
                 <div class="body-footer">
                     <i @click="saveRecord" style="color:#FFC125" class="el-icon-success icon"></i>
-                    <i @click="delRecord" style="color: rgba(255,76,65,.9);" class="el-icon-delete-solid icon"></i>
+                    <i @click="delRecord" v-show="popup.isEdit" style="color: rgba(255,76,65,.9);" class="el-icon-delete-solid icon"></i>
                     <i @click="$refs.popup.close()" style="color:#B5B5B5" class="el-icon-error icon"></i>
                 </div>
             </template>
@@ -152,10 +152,11 @@
     float: left;
     width: 100%;
     font-size: 12px;
-    line-height: 1;
+    line-height: 22px;
     text-align: left;
     bottom: 2px;
     text-indent: 15%;
+    letter-spacing: 1px;
     position: absolute;
 }
 .record-contain{
@@ -166,7 +167,7 @@
     margin:0 auto;
 }
 .record-item{
-    height: 56px;
+    height: 60px;
     position: relative;
     line-height: 40px;
 }
@@ -177,6 +178,7 @@
     float: left;
     font-size: 16px;
     text-align: left;
+    line-height: 46px;
 }
 .record-list{
     margin-top:22px;

@@ -80,6 +80,11 @@ ul, li{
     white-space: nowrap;
 }
 
+.body-content .textarea{
+    letter-spacing: 1px;
+    line-height: 24px;
+}
+
 .popup-mask{
     position: fixed;
     width:100%;

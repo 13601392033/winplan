@@ -16,6 +16,21 @@ export function addHabitLogs(data){
     })
 }
 
+export function refreshHabitLogs(){
+    return axios({
+        method:"post",
+        url:"habitLogs/refreshHabitLogs",
+    })
+}
+
+export function queryHabitById(data){
+    return axios({
+        method:"post",
+        url:"habit/queryHabitById",
+        data
+    })
+}
+
 export function queryHabitListInHome(data){
     return axios({
         method:"post",

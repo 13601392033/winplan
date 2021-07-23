@@ -241,13 +241,17 @@
     text-align: left;
     position: absolute;
     bottom: 0;
+    letter-spacing: 1px;
+    line-height: 26px;
     left: 15%;
     width: 80%;
     border-bottom: 1px solid #ddd;
-    font-size: 14px;
+    font-size: 12px;
 }
 .item-content{
     text-align: left;
+    font-size: 17px;
+    line-height: 41px;
 }
 .item-list{
     height: 270px;
@@ -256,7 +260,7 @@
 }
 .item-list-li{
     position: relative;
-    height:55px;
+    height:60px;
 }
 .item-title{
     color: rgb(222, 28, 49);

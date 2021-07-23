@@ -115,7 +115,7 @@ export default {
         return {
             userName:"king",
             password:"zhflovezhf1314",
-            back1: require("@/assets/login.jpg"),
+            back1: require("@/assets/b6.jpg"),
         }
     },
     methods:{

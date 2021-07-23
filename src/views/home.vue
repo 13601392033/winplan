@@ -3,7 +3,7 @@
         <Headera>
             <span class="header-title">mf plan</span>
             <div class="attitude">保持姿态，迎接最美的蜕变</div>
-            <span @click="loginOut" class="login-out">退出</span>
+            <span @click="loginOut" class="login-out"><i style="font-size:24px" class="el-icon-switch-button"></i></span>
         </Headera>
 
         <Popup ref="popup">
@@ -25,7 +25,7 @@
                 </div>
                 <div class="body-footer">
                     <i @click="saveData" style="color:#FFC125" class="el-icon-success icon"></i>
-                    <i @click="delTask" style="color: rgba(255,76,65,.9);" class="el-icon-delete-solid icon"></i>
+                    <i @click="delTask" v-show="taskModule.isEdit == 2" style="color: rgba(255,76,65,.9);" class="el-icon-delete-solid icon"></i>
                     <i @click="$refs.popup.close()" style="color:#B5B5B5" class="el-icon-error icon"></i>
                 </div>
             </template>
@@ -48,7 +48,7 @@
                 </div>
                 <div class="body-footer">
                     <i @click="saveRecord" style="color:#FFC125" class="el-icon-success icon"></i>
-                    <i @click="delRecord" style="color: rgba(255,76,65,.9);" class="el-icon-delete-solid icon"></i>
+                    <i @click="delRecord" v-show="recordModule.isEdit == 2" style="color: rgba(255,76,65,.9);" class="el-icon-delete-solid icon"></i>
                     <i @click="$refs.popup.close()" style="color:#B5B5B5" class="el-icon-error icon"></i>
                 </div>
             </template>
@@ -66,9 +66,6 @@
                     <div @click="$router.push({name:'task'})">
                         <i  style="line-height:23px;color:#4682B4" class="el-icon-arrow-right"></i>
                     </div>
-                    <!-- <router-link to="/main/task">
-                        <i  style="line-height:23px;color:#4682B4" class="el-icon-arrow-right"></i>
-                    </router-link> -->
                 </div>
             </div>
             <div class="empty-text" v-if="taskList.length <= 0">暂无任务</div>
@@ -125,7 +122,7 @@
             <div class="habit-container">
                 <ul class="habit-list">
                     <li v-for="(item, index) in habitList " @click="changeHabitState(item)" :key="index" class="habit-item">
-                        <span class="radius" :style="{background: item.backColor, color: item.color}">
+                        <span class="radius" :class="{habitStateIng: item.logs.type == 0 || !item.logs.type}" :style="{background: item.backColor, color: item.color}">
                             <i v-if="item.type == 1" class="icon" :class="iconClass(item)"></i>
                             <span v-if="item.type == 0" class="icon">{{item.text}}</span>
                         </span>
@@ -180,6 +177,11 @@
 </template>
 
 <style scoped>
+    .habitStateIng{
+        background: #fff !important;
+        color: #000 !important;
+        border: 1px solid rgba(95,99,104,.7) !important;
+    }
     .empty-text{
         margin-top: 40px;
         font-size: 20px;
@@ -232,8 +234,8 @@
         transform: translate(-50%, -50%);
     }
     .habit-item .radius{
-        width: 50px;
-        height: 50px;
+        width: 55px;
+        height: 55px;
         background: #ddd;
         border-radius: 50%;
         position: relative;
@@ -261,7 +263,7 @@
         top: 50%;
         transform: translate(-50%,-50%);
         left: 50%;
-        font-size: 27px;
+        font-size: 28px;
     }
     .habit-item{
         display: flex;
@@ -274,7 +276,39 @@
         margin-bottom: 20px;
     }
     .habit-list{
-        overflow: hidden;
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+        width:100%;
+        height:255px;
+        flex-wrap: wrap;
+    }
+    .habit-list::-webkit-scrollbar {
+        /*滚动条整体样式*/
+        width : 10px;  /*高宽分别对应横竖滚动条的尺寸*/
+        height: 10px;
+    }
+    .habit-list::-webkit-scrollbar-thumb {
+        /*滚动条里面小方块*/
+        border-radius   : 10px;
+        background-color: skyblue;
+        width:5px;
+        background-image: -webkit-linear-gradient(
+            45deg,
+            rgba(255, 255, 255, 0.2) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.2) 50%,
+            rgba(255, 255, 255, 0.2) 75%,
+            transparent 75%,
+            transparent
+        );
+    }
+    .habit-list::-webkit-scrollbar-track {
+        /*滚动条里面轨道*/
+        box-shadow   : inset 0 0 5px rgba(0, 0, 0, 0.2);
+        background   : #ededed;
+        border-radius: 10px;
     }
     .habit-container{
         width:100%;
@@ -351,7 +385,8 @@
         float: left;
         width: 100%;
         font-size: 14px;
-        line-height: 1;
+        line-height: 22px;
+        letter-spacing: 1px;
         text-align: left;
         bottom: 2px;
         text-indent: 15%;
@@ -375,7 +410,7 @@
     }
     .record-module{
         width:94%;
-        height:326px;
+        height:385px;
         margin: 28px auto 0;
         border-radius: 10px;
         background-color:rgba(255,255,255,.9);
@@ -390,20 +425,20 @@
         margin:0 auto;
     }
     .record-item{
-        height: 50px;
+        height: 60px;
         position: relative;
-        line-height: 34px;
     }
     .record-content{
         width: 100%;
         text-indent: 15%;
         font-weight: bold;
         float: left;
+        line-height:46px;
         font-size: 18px;
         text-align: left;
     }
     .record-list{
-        height:269px;
+        height:326;
         overflow: auto;
         margin-top:22px;
         margin-bottom: 10px;
@@ -422,13 +457,13 @@
         margin: 28px auto 0;
         border-radius: 10px;
         background-color:rgba(255,255,255,.9);
-        height:300px;
+        height:363px;
         border:1px solid #FFFFF0;
     }
     .check{
         width: 15%;
         position: relative;
-        height: 30px;
+        height: 100%;
         float:left;
         position: relative;
     }
@@ -442,22 +477,22 @@
     .single-check{
         position: absolute;
         left: 50%;
-        transform: translateX(-50%);
-        top: 5px;
-        width:16px;
-        height:16px;
+        transform: translate(-50%,-50%);
+        top: 50%;
+        width: 16px;
+        height: 16px;
         border-radius: 50%;
-        border:1px solid #0066ff;
+        border: 1px solid #0066ff;
         display: inline-block;
     }
     .task-item{
-        height: 34px;
+        height: 50px;
         position: relative;
-        line-height: 34px;
+        line-height: 50px;
     }
     .task-list{
         margin-top: 22px;
-        height: 212px;
+        height: 304px;
         overflow: auto;
     }
     .task-left{
@@ -486,7 +521,7 @@ import { Picker } from 'vant';
 import { Toast, Dialog  } from 'vant';
 import {saveData, editTaskById, delTaskById} from "@/request/task"
 import {saveRecord, editRecordById, refreshRecordList, delRecordById} from "@/request/record"
-import {addHabitLogs} from "@/request/habit"
+import {addHabitLogs, refreshHabitLogs} from "@/request/habit"
 export default {
     name:"home",
     components:{
@@ -550,51 +585,13 @@ export default {
             popupTitle:"",
             popupContent:"",
             recordList:[],
-            habitList:[
-                {
-                    icon:"fa-quora",
-                    title:"hellofa-quora",
-                    background:"#3399cc",
-                    state:1,//1 为已完成 0 为未完成
-                },
-                {
-                    icon:"fa-quora",
-                    title:"hellofa-quora",
-                    background:"#3399cc",
-                    state:0,//1 为已完成 0 为未完成
-                },
-                {
-                    icon:"fa-quora",
-                    title:"hellofa-quora",
-                    background:"#3399cc",
-                    state:0,//1 为已完成 0 为未完成
-                },
-                {
-                    icon:"fa-quora",
-                    title:"hellofa-quora",
-                    background:"#3399cc",
-                    state:1,//1 为已完成 0 为未完成
-                },
-                {
-                    icon:"fa-quora",
-                    title:"hellofa-quora",
-                    background:"#3399cc",
-                    state:1,//1 为已完成 0 为未完成
-                },
-                {
-                    icon:"fa-quora",
-                    title:"hellofa-quora",
-                    background:"#3399cc",
-                    state:0,//1 为已完成 0 为未完成
-                },
-
-            ],
+            habitList:[],
             lastDiary:{
                 title:"日记~1",
                 date:"2021-6-10"
             },
             modal:{
-               type:-1, 
+               type:-1,
             }
         }
     },
@@ -646,7 +643,6 @@ export default {
         },
         recordIcon(){
             return (type)=>{
-                console.log(type)
                 switch (type){
                     case 1:
                         return "el-icon-reading"
@@ -696,6 +692,7 @@ export default {
                                 icon : item.logo,
                                 text : item.logo,
                                 name : item.name,
+                                logs: item.logs.length > 0 ? item.logs[0] : [],
                                 backColor : item.backColor,
                                 color : item.logoColor,
                             }
@@ -719,7 +716,7 @@ export default {
             }).then(res=>{
                 if(res.data.code == 200){
                     if(res.data && res.data.data.length > 0){
-                        this.taskList = res.data.data.map((item,index)=>{
+                        this.taskList = res.data.data.map((item)=>{
                             return {
                                 title : item.title,
                                 remark : item.content,
@@ -755,6 +752,26 @@ export default {
                 }
             })
         },
+        refreshHabitList(){
+            refreshHabitLogs().then(res=>{
+                if(res.data.code == 200){
+                    this.habitList = res.data.data.map((item)=>{
+                        return {
+                            type : item.logoType,
+                            remark : item.remark,
+                            id: item.id,
+                            icon : item.logo,
+                            text : item.logo,
+                            name : item.name,
+                            logs: item.logs.length > 0 ? item.logs[0] : [],
+                            backColor : item.backColor,
+                            color : item.logoColor,
+                        }
+                    })
+                }
+                
+            })
+        },
         loginOut(){
             let self = this;
             Dialog.confirm({
@@ -775,13 +792,19 @@ export default {
             
         },
         changeHabitState(item){
-            // let state = this.habitList[i].state;
+            let state = item.logs.type //0 == 未完成 1 == 已完成
+            if(state == 0 || !state){
+                state = 1
+            }else if(state == 1){
+                state = 0
+            }
             addHabitLogs({
                 habitId: item.id,
-                type: 1,
-                
+                type: state,
             }).then(res=>{
-                console.log(res)
+                if(res.data.code == 200){
+                    this.refreshHabitList();
+                }
             })
         },
         strMapToObj(strMap) {
