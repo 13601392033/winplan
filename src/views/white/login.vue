@@ -75,7 +75,6 @@
     animation-delay: 2.1s;
 }
 
-
 @keyframes animate3 {
     0% {
         top: 10px;
@@ -179,6 +178,7 @@ export default {
         margin: 0 auto;
         height:1px;
         background: #969799;
+        background: rgba(255,255,255,.7);
     }
     .form-item{
         width: 90%;

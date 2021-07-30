@@ -32,8 +32,9 @@
             </template>
         </Popup>
         <div class="habit-container">
+            <div class="empty-text" v-if="diaryList.length <= 0">暂无日记</div>
             <ul class="habit-list">
-                <li @click="jumpDetail(item)" class="list-item" v-for="(item,index) in habitList" :key="index">
+                <li  class="list-item" v-for="(item,index) in diaryList" :key="index">
                     <div class="diary-left fl">
                         <span class="day">{{item.day}}</span>
                         <br/>
@@ -41,19 +42,31 @@
                         
                     </div>
                     <div class="diary-line"></div>
-                    <div class="diary-right fl">
-                        <i class="el-icon-edit"></i>
-                        <span style="margin-left:10px;">记下你的此时此刻~</span>
+                    <div class="diary-right fl ell">
+                        
+                        <span class="diary-detail">{{item.detail}}</span>
                     </div>
                 </li>
+                <refresh :on-infinite-load="onInfiniteLoad"
+                        :parent-pull-up-state="pages.pullUpState">
+                </refresh>
             </ul>
             
         </div>
-        <i @click="openPopup" class="el-icon-plus add-position"></i>
+        <i @click="jumpModule" class="el-icon-plus add-position"></i>
     </div>
 </template>
 
 <style scoped>
+.empty-text{
+    margin-top: 100px;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+.diary-detail{
+    letter-spacing: 1px;
+}
 .body-content .textarea{
     width: 100%;
     height: 63%;
@@ -128,19 +141,17 @@
     line-height: 14px;
     align-items: center;
     margin-left: 26px;
-
     display: flex;
 }
 /**习惯组件css样式start**/
 .add-position{
-    font-size: 60px;
-    bottom: 75px;
+    bottom: 42px;
     color: #fff;
     right: 23px;
     border-radius: 50%;
     background: rgb(250, 128, 114);
-    font-size: 40px;
-    padding: 6px;
+    font-size: 28px;
+    padding: 12px;
     font-weight: bold;
 }
 
@@ -208,7 +219,6 @@
     width:33%;
 }
 
-
 .habit-statistics{
     overflow: hidden;
     padding: 20px 0;
@@ -239,18 +249,21 @@
 <script>
 import Headera from "@/views/common/header.vue"
 import Popup from "@/views/common/popup.vue"
+import {queryDiaryList} from "@/request/diary"
+import refresh from "@/views/common/refresh"
 export default {
     name : "habit",
     components:{
         Headera,
-        Popup
+        Popup,
+        refresh,
     },
-    setup(){
-        
+    created(){
+        this.init();
     },
     data(){
         return {
-            habitList:[
+            diaryList:[
                 {
                     day: new Date().getDate(),
                     month: new Date().getMonth() + 1,
@@ -296,56 +309,48 @@ export default {
             ],
             date: new Date(),
             detail:"",
+            pages:{
+                pageNo: 1,
+                pageSize: 1,
+                pullUpState:0,
+                total:10,
+            },
         }
     },
     methods:{
-        jumpDetail(item){
-            this.date = item.date;
-            this.detail = item.detail;
-            this.$refs.popup.open();
+        jumpModule(){
+            this.$router.push({
+                name:"diaryModule"
+            });
         },
-        changeChoice(v){
-            if(v == 1){
-                this.bpTitle = "挑选图标和颜色";
-            }else{
-                this.bpTitle = "输入文字和挑选颜色";
-            }
-            this.curChoice = v;
-            this.stateChoice = true;
+        init(){
+            this.queryDiaryList();
         },
-        openPopup(){
-            this.date = new Date().getTime();
-            this.detail = "";
-            this.$refs.popup.open();
+        async onInfiniteLoad(done){
+            this.pages.pageNo ++;
+            this.pages.pullUpState = 2;
+            await this.queryDiaryList();
+            done()
         },
-        onClosePopup(){
-            document.getElementsByClassName("menu")[0].style.display = "block"
-        },
-        strMapToObj(strMap) {
-            let obj = Object.create(null);
-            for (let [k,v] of strMap) {
-                obj[k] = v;
-            }
-            return obj;
-        },
-    },
-    computed:{
-        iconChoiceComputed(){
-            let map = new Map()
-            map.set(this.iconChoice, true)
-            return this.strMapToObj(map)
-        },
-        iconClass(){
-            return (item)=>{
-                if(item.type == 1){
-                    let map = new Map();
-                    map.set(item.icon, true);
-                    return this.strMapToObj(map)
-                }else{
-                    return {}
+        queryDiaryList(){
+            queryDiaryList({
+                pageNo: this.pages.pageNo,
+                pageSize: this.pages.pageSize,
+            }).then(res=>{
+                if(res.data.code == 200){
+                    this.diaryList = res.data.data;
                 }
+            })
+        },
+        getPullUpMoreData(){
+            if(this.pages.total > (this.pages.pageNo * this.pages.pageSize)){
+                this.pages.pullUpState = 1;
+            }else{
+                this.pages.pullUpState = 3;
             }
-        }
-    }
+            console.log(this.pages.pullUpState)
+        },
+
+    },
 }
 </script>

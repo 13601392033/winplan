@@ -26,16 +26,15 @@
 @keyframes mf{
     0% {
         opacity: 0;
-        margin-left: -400px;
-        transform: scale3d(1,1,1);
+        transform: scale3d(3,3,2);
     }
 }
 
 @keyframes mf2{
     100% {
         opacity: 0;
-        margin-left: -400px;
-        transform: scale3d(1,1,1);
+        transform-origin:100% 100%;
+        transform: scale3d(1.5,1.5,1.5);
     }
 }
 
@@ -87,7 +86,6 @@
     top: 50%;
     height: 350px;
     position: fixed;
-    
 }
 .nav-ul{
     width:91%;
@@ -99,7 +97,7 @@
     overflow: auto;
 }
 .nav-ul::-webkit-scrollbar {
-  display: none; /* Chrome Safari */
+  display: none;
 }
 .nav-ul li{
     text-align: left;

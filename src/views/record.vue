@@ -269,7 +269,6 @@ export default {
     },
     created(){
         this.init();
-       
     },
     setup(){
         const columns = [

@@ -186,6 +186,7 @@
         margin-top: 40px;
         font-size: 20px;
         font-weight: bold;
+        letter-spacing: 1px;
     }
     .login-out{
         position: absolute;

@@ -62,6 +62,11 @@ const routes = [
                 path: "diary",
                 component: ()=>import("@/views/diary.vue"),
             },
+            {
+                name:"diaryModule",
+                path: "diaryModule",
+                component: ()=>import("@/views/diaryModule.vue"),
+            },
         ]
     },
 ]

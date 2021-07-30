@@ -173,6 +173,7 @@ export default {
     watch: {
       parentPullUpState (curVal, oldVal) {
           this.pullUpState = curVal
+          console.log(this.pullUpState)
       }
     }
 }
