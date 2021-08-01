@@ -1,25 +1,25 @@
 import axios from "@/utils/axios.js"
 
-export function saveData(data){
+export function addDiary(data){
     return axios({
         method:"post",
-        url:"task/addTask",
+        url:"diary/addDiary",
         data:data
     })
 }
 
-export function editTaskById(data){
+export function editDiaryById(data){
     return axios({
         method:"post",
-        url:"task/editTaskById",
+        url:"diary/editDiaryById",
         data:data
     })
 }
 
-export function delTaskById(data){
+export function delDiaryById(data){
     return axios({
         method:"post",
-        url:"task/delTaskById",
+        url:"diary/delDiaryById",
         data:data
     })
 }

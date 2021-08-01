@@ -493,7 +493,7 @@
     }
     .task-list{
         margin-top: 22px;
-        height: 304px;
+        height: 308px;
         overflow: auto;
     }
     .task-left{

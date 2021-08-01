@@ -34,7 +34,7 @@
         <div class="habit-container">
             <div class="empty-text" v-if="diaryList.length <= 0">暂无日记</div>
             <ul class="habit-list">
-                <li  class="list-item" v-for="(item,index) in diaryList" :key="index">
+                <li @click="jumpModule(item)" class="list-item" v-for="(item,index) in diaryList" :key="index">
                     <div class="diary-left fl">
                         <span class="day">{{item.day}}</span>
                         <br/>
@@ -53,7 +53,7 @@
             </ul>
             
         </div>
-        <i @click="jumpModule" class="el-icon-plus add-position"></i>
+        <i @click="jumpModule(null)" class="el-icon-plus add-position"></i>
     </div>
 </template>
 
@@ -263,64 +263,22 @@ export default {
     },
     data(){
         return {
-            diaryList:[
-                {
-                    day: new Date().getDate(),
-                    month: new Date().getMonth() + 1,
-                    date : "2020-03-16",
-                    detail:"回首向来萧瑟处，归去，也无风雨也无晴",
-                },
-                {
-                    day: new Date().getDate(),
-                    month: new Date().getMonth() + 1,
-                    date : "2020-03-16",
-                    detail:"回首向来萧瑟处，归去，也无风雨也无晴",
-                },
-                {
-                    day: new Date().getDate(),
-                    month: new Date().getMonth() + 1,
-                    date : "2020-03-16",
-                    detail:"回首向来萧瑟处，归去，也无风雨也无晴",
-                },
-                {
-                    day: new Date().getDate(),
-                    month: new Date().getMonth() + 1,
-                    date : "2020-03-16",
-                    detail:"回首向来萧瑟处，归去，也无风雨也无晴",
-                },
-                {
-                    day: new Date().getDate(),
-                    month: new Date().getMonth() + 1,
-                    date : "2020-03-16",
-                    detail:"回首向来萧瑟处，归去，也无风雨也无晴",
-                },
-                {
-                    day: new Date().getDate(),
-                    month: new Date().getMonth() + 1,
-                    date : "2020-03-16",
-                    detail:"回首向来萧瑟处，归去，也无风雨也无晴",
-                },
-                {
-                    day: new Date().getDate(),
-                    month: new Date().getMonth() + 1,
-                    date : "2020-03-16",
-                    detail:"回首向来萧瑟处，归去，也无风雨也无晴",
-                },
-            ],
+            diaryList:[],
             date: new Date(),
             detail:"",
             pages:{
                 pageNo: 1,
-                pageSize: 1,
+                pageSize: 20,
                 pullUpState:0,
-                total:10,
+                total:0,
             },
         }
     },
     methods:{
-        jumpModule(){
+        jumpModule(item){
             this.$router.push({
-                name:"diaryModule"
+                name: "diaryModule",
+                query: item
             });
         },
         init(){
@@ -338,7 +296,23 @@ export default {
                 pageSize: this.pages.pageSize,
             }).then(res=>{
                 if(res.data.code == 200){
-                    this.diaryList = res.data.data;
+                    this.diaryList = this.diaryList.concat(res.data.data.map((item)=>{
+                        return {
+                            id : item.id,
+                            detail : item.content,
+                            day : new Date(item.date).getDate(),
+                            month : new Date(item.date).getMonth() + 1,
+                            date : item.date,
+                        }
+                    }));
+                    this.pages.total = res.data.total;
+
+                    if(this.pages.total == 0 || this.pages.total <= this.pages.pageSize){
+                        this.pages.pullUpState = 0
+                    }else{
+                        this.pages.pullUpState = 1
+                        this.getPullUpMoreData()
+                    }
                 }
             })
         },
@@ -348,7 +322,6 @@ export default {
             }else{
                 this.pages.pullUpState = 3;
             }
-            console.log(this.pages.pullUpState)
         },
 
     },
