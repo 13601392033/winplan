@@ -6,7 +6,9 @@
             </div>
         </div>
     </div>
+    <div class="cube">
     <div class="nav" >
+        
         <div class="nav-back" style="width:100%;height:100%;" :style="{background:'url('+backImg+') no-repeat' }">
             <div class="nav-container">
                 <ul class="nav-ul">
@@ -17,6 +19,7 @@
             </div>
         </div>
     </div>
+    </div>
 </template>
 
 <style scoped>
@@ -26,7 +29,7 @@
 @keyframes mf{
     0% {
         opacity: 0;
-        transform: scale3d(3,3,2);
+        transform: scale3d(3,3,1.5);
     }
 }
 
@@ -79,13 +82,26 @@
     transform: translateY(-50%);
 }
 .nav{
-    display: none;
+    display: block;
     transform: translateY(-50%);
     width: 195px;
     z-index: 100000;
-    top: 50%;
     height: 350px;
     position: fixed;
+    -webkit-transform: translateZ(0);
+   -moz-transform: translateZ(0);
+   -ms-transform: translateZ(0);
+   -o-transform: translateZ(0);
+   transform: translateZ(0);
+}
+
+.cube{
+    position: fixed;
+    z-index: 100000;
+    height: 100%;
+    width:1px;
+    display: none;
+    align-items: center;
 }
 .nav-ul{
     width:91%;
@@ -125,7 +141,7 @@ export default {
     },
     methods:{
         jump(item){
-            let nav = document.getElementsByClassName("nav")[0];
+            let nav = document.getElementsByClassName("cube")[0];
             this.hide();
                 nav.classList.remove("nav-in")
                 nav.classList.add("nav-out")
@@ -134,7 +150,10 @@ export default {
                     this.state = 0;
                     nav.style = "display:none;"
                 },300)
-            this.$router.push({name: item.name});
+                setTimeout(() => {
+                    this.$router.push({name: item.name});
+                }, 200);
+            
         },
         showMe(){
             let gif = require("@/assets/loading.gif");
@@ -154,13 +173,13 @@ export default {
             }
         },
         switchState(){
-            let nav = document.getElementsByClassName("nav")[0];
+            let nav = document.getElementsByClassName("cube")[0];
             if(this.state == 0){
                 this.showMe();
                 nav.classList.remove("nav-out")
                 nav.classList.add("nav-in")
                 this.state = 1;
-                nav.style = "display:block;"
+                nav.style = "display:flex;"
 
                 let dom = document.getElementsByClassName("mask")[0];
                 dom.addEventListener("click", ()=>{

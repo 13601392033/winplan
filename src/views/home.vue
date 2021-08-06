@@ -783,11 +783,10 @@ export default {
                     method:"post",
                     url:"/loginOut"
                 }).then(res=>{
-                    console.log(res)
-                })
-                localStorage.clear();
-                this.$router.push({
-                    name:"login"
+                    this.$router.push({
+                        name:"login"
+                    })
+                    localStorage.clear();
                 })
             })
             

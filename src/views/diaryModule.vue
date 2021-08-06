@@ -21,10 +21,39 @@
                 <textarea v-model="content" placeholder="今天发生了哪些想要记录下的事？" class="diary-textarea"></textarea>
             </div>
         </div>
+        <div class="diary-footer">
+            <span :class="{opa: leftDis}" class="prev" @click="leftDis ? null : jump(0)">上一篇</span>
+            <span :class="{opa: rightDis}" class="next" @click="rightDis ? null : jump(1)">下一篇</span>
+        </div>
     </div>
 </template>
 
 <style scoped>
+.diary-content{
+    position: fixed;
+    margin: 0 auto;
+    bottom: 80px;
+    top: 100px;
+    left: 0px;
+    right: 0px;
+    width: 96%;
+}
+.opa{
+    opacity: .3;
+}
+.diary-footer{
+    position: fixed;
+    bottom:30px;
+    width:100%;
+}
+.prev{
+    float:left;
+    margin-left:20px;
+}
+.next{
+    float:right;
+    margin-right:20px;
+}
 .done{
     position: absolute;
     right: 20px;
@@ -38,7 +67,7 @@
     text-indent: 3px;
     margin-top:20px;
     letter-spacing: 1px;
-    height:200px;
+    height: 100%;
     border: none;
 }
 .diary-textarea::-webkit-input-placeholder {
@@ -51,6 +80,7 @@
 }
 .diary-tag{
     letter-spacing: 1px;
+    color:#8A8A8A;
 }
 .diary-tag span{
     margin-left:5px;
@@ -69,7 +99,7 @@
 </style>
 
 <script>
-import {addDiary, editDiaryById, delDiaryById} from "@/request/diary"
+import {addDiary, editDiaryById, queryNearById, delDiaryById, queryDiaryById} from "@/request/diary"
 import moment from "moment"
 import {Dialog, Toast} from 'vant';
 moment.locale("zh-cn");
@@ -81,26 +111,71 @@ export default {
     data(){
         return {
             moment: moment,
+            leftDis: false,
+            rightDis: false,
             date: new Date(),
             isEdit: false,
             content:"",
             year: undefined,
             week: undefined,
             day: undefined,
+            incId: undefined,
             diaryId: undefined,
         }
     },
     methods:{
+        jump(n){
+            queryNearById({
+                incId: parseInt(this.incId),
+                type: n,
+            }).then(res=>{
+                if(res.data.code == 200){
+                    if(res.data.data.length > 0){
+                        let data = res.data.data[0];
+                        this.incId = data.incId
+                        this.diaryId = data.id;
+                        this.content = data.content;
+                        this.$router.push({
+                            name: "diaryModule",
+                            query: {
+                                id: data.id,
+                                incId: data.incId
+                            }
+                        })
+                        this.leftDis = false;
+                        this.rightDis = false;
+                    }else{
+                        if(n == 0){
+                            this.leftDis = true;
+                        }else{
+                            this.rightDis = true;
+                        }
+                        Toast.fail("没有了哦");
+                    }
+                }
+            })
+        },
         init(){
             let id = this.$route.query.id;
             if(id){
-                let date = parseInt(this.$route.query.date);
-                this.year = moment(new Date(date)).format("L");
-                this.week = moment(new Date(date)).format("dddd");
-                this.day = moment(new Date(date)).format("LT");
-                this.content = this.$route.query.detail;
-                this.isEdit = true;
-                this.diaryId = id;
+                this.incId = this.$route.query.incId;
+                queryDiaryById({
+                    id: id
+                }).then(res=>{
+                    if(res.data.code == 200){
+                        let data = res.data.data[0];
+                        let date = parseInt(data.date);
+                        this.year = moment(new Date(date)).format("L");
+                        this.week = moment(new Date(date)).format("dddd");
+                        this.day = moment(new Date(date)).format("LT");
+                        this.content = data.content;
+                        this.isEdit = true;
+                        this.diaryId = data.id;
+                        this.leftDis = false;
+                        this.rightDis = false;
+                    }
+                })  
+                
             }else{
                 let date = new Date().getTime();
                 this.year = moment(new Date(date)).format("L");

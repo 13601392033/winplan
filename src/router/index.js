@@ -9,18 +9,6 @@ const routes = [
         component: login,
     },
     {
-        path: "/login",
-        name: "login",
-        margin:"68px",
-        component: login,
-    },
-    {
-        path: "/login",
-        name: "login",
-        margin:"68px",
-        component: login,
-    },
-    {
         path: "/main",
         name: "main",
         margin:"90px",

@@ -20,46 +20,100 @@
             <div class="detail-item">
                 <div class="item-label">昵称</div>
                 <div class="item-value">
-                    mf
+                    <input v-model="name" class="item-input" type="text"/>
+
                 </div>
             </div>
             <div class="detail-item">
                 <div class="item-label">年龄</div>
                 <div class="item-value">
-                    23
+                    <input v-model.number="age" class="item-input" type="number"/>
                 </div>
             </div>
             <div class="detail-item">
                 <div class="item-label">邮箱</div>
                 <div class="item-value">
-                    13601392033@163.com
+                    <input v-model="email" class="item-input" type="text"/>
                 </div>
             </div>
             <div class="detail-item">
                 <div class="item-label">手机号</div>
                 <div class="item-value">
-                    13601392033
+                    <input v-model="phone" class="item-input" type="text"/>
                 </div>
             </div>
+            <el-button type="primary" @click="save" class="save-btn">保存</el-button>
         </div>
     </div>
 </template>
 
 <script>
 import Headera from "@/views/common/header.vue"
+import {upload} from "@/request/user.js"
+import {queryUser, updateUserById} from "@/request/user.js"
+import {Toast} from "vant"
 export default {
     name:"personal",
     components:{
         Headera,
-        //"van-uploader":Uploader,
     },
     data(){
         return {
+            name:"",
+            age:"",
+            email:"",
+            phone:"",
             src:require("@/assets/z2.jpg"),
             file:[{ url: 'https://img.yzcdn.cn/vant/leaf.jpg' ,isImage: false }],
         }
     },
+    created(){
+        this.init();
+    },
     methods:{
+        init(){
+            queryUser({
+                username: localStorage.getItem("username")
+            }).then(res=>{
+                if(res.data.code == 200){
+                    let data = res.data.data[0];
+                    let dataSrc = "http://localhost:9011/uploads/" + data.avatar;
+                    if (process.env.NODE_ENV === 'production') {
+                        dataSrc = "http://1.117.21.31:9011/uploads/" + data.avatar;
+                    }
+                    this.src = dataSrc;
+                    this.name = data.name;
+                    this.age = data.age;
+                    this.email = data.email;
+                    this.phone = data.phone;
+                }
+            })
+        },
+        checkPhone(phone){ 
+            if(!(/^1(3|4|5|7|8)\d{9}$/.test(phone))){ 
+                Toast.fail("请输入正确的手机号！");
+                return false;
+            }
+            return true;
+        },
+        save(){
+            if(!this.checkPhone(this.phone)){
+                return false;
+            }
+            updateUserById({
+                username: localStorage.getItem("username"),
+                age: this.age,
+                email: this.email,
+                name: this.name,
+                phone: this.phone,
+            }).then(res=>{
+                if(res.data.code == 200){
+                    Toast.success(res.data.msg);
+                }else{
+                    Toast.fail("修改失败！");
+                }
+            })
+        },
         triggerUpload(){
             let fileInput = document.getElementsByClassName("file")[0];
             fileInput.click();
@@ -72,12 +126,30 @@ export default {
                 let res = e.target.result;
                 this.src = res
             }
+            let formData = new FormData();
+            formData.append("file", file);
+            formData.append("username", localStorage.getItem("username"));
+            upload(formData).then(res=>{
+                console.log(res)
+            })
         }
     }
 }
 </script>
 
 <style scoped>
+.save-btn{
+    margin-top:20px;
+    width: 80%;
+    border-radius: 30px;
+    letter-spacing: 4px;
+    font-size: 20px;
+}
+.item-input{
+    border:none;
+    outline:none;
+    text-align: right;
+}
 .avatar{
     width:60px;
     height:60px;

@@ -24,6 +24,22 @@ export function delDiaryById(data){
     })
 }
 
+export function queryDiaryById(data){
+    return axios({
+        method:"post",
+        url:"diary/queryDiaryById",
+        data:data
+    })
+}
+
+export function queryNearById(data){
+    return axios({
+        method:"post",
+        url:"diary/queryNearById",
+        data:data
+    })
+}
+
 export function queryDiaryList(data){
     return axios({
         method:"post",

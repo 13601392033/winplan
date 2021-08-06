@@ -352,8 +352,16 @@ export default {
             })
         },
         editHabit() {
-            this.stateOper = false
+            
+            this.stateOper = false;
             this.$refs.popup.open()
+            setTimeout(() => {
+                document.getElementsByClassName("menu")[0].style.display = "none";    
+            }, 0);
+            
+        },
+        onClosePopup(){
+            document.getElementsByClassName("menu")[0].style.display = "block"
         },
         sureChoiceMethod() {
             this.sureChoice = this.curChoice

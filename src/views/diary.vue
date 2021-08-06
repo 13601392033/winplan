@@ -127,10 +127,12 @@
     background: #C7C7C7;
     top: 0;
     left: 46px;
-    margin: 0 30px;
+    margin: 0 25px 0 22px;
 }
 .mon{
     color:#AAAAAA;
+    width: 50px;
+    white-space: nowrap;
 }
 .day{
     font-weight: bold;
@@ -140,7 +142,7 @@
     flex-direction: column;
     line-height: 14px;
     align-items: center;
-    margin-left: 26px;
+    margin-left: 20px;
     display: flex;
 }
 /**习惯组件css样式start**/
@@ -276,9 +278,18 @@ export default {
     },
     methods:{
         jumpModule(item){
+            let query = {};
+            if(item){
+                query={
+                    id: item.id,
+                    incId: item.incId
+                }
+            }else{
+                query = {};
+            }
             this.$router.push({
                 name: "diaryModule",
-                query: item
+                query: query
             });
         },
         init(){
@@ -303,6 +314,7 @@ export default {
                             day : new Date(item.date).getDate(),
                             month : new Date(item.date).getMonth() + 1,
                             date : item.date,
+                            incId : item.incId
                         }
                     }));
                     this.pages.total = res.data.total;
