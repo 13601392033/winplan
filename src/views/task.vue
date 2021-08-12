@@ -263,10 +263,8 @@
     height:60px;
 }
 .item-title{
-    color: rgb(222, 28, 49);
     color: #fff;
-    background: rgb(241, 147, 156);
-    background: #F56C6C;
+    background: rgba(41,61,88,.9);
     height: 50px;
     line-height: 50px;
     font-size: 20px;
@@ -298,6 +296,7 @@
     overflow: auto;
     width: 100%;
     height: 100%;
+    background: rgba(20,79,104,.7);
 }
 .left-icon{
     position: absolute;

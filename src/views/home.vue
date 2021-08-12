@@ -23,7 +23,7 @@
                 <div class="body-content">
                     <textarea  class="textarea" v-model="taskModule.content"></textarea>
                 </div>
-                <div class="body-footer">
+                <div class="body-footer" key="task">
                     <i @click="saveData" style="color:#FFC125" class="el-icon-success icon"></i>
                     <i @click="delTask" v-show="taskModule.isEdit == 2" style="color: rgba(255,76,65,.9);" class="el-icon-delete-solid icon"></i>
                     <i @click="$refs.popup.close()" style="color:#B5B5B5" class="el-icon-error icon"></i>
@@ -46,7 +46,7 @@
                 <div class="body-content">
                     <textarea class="textarea hide-scroll" v-model="recordModule.content"></textarea>
                 </div>
-                <div class="body-footer">
+                <div class="body-footer" key="record">
                     <i @click="saveRecord" style="color:#FFC125" class="el-icon-success icon"></i>
                     <i @click="delRecord" v-show="recordModule.isEdit == 2" style="color: rgba(255,76,65,.9);" class="el-icon-delete-solid icon"></i>
                     <i @click="$refs.popup.close()" style="color:#B5B5B5" class="el-icon-error icon"></i>

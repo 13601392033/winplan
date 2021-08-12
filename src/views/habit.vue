@@ -68,7 +68,10 @@
                     </span>
                     <span class="item-ele item-content ell">{{item.name}}</span>
                     <span class="item-ele item-days">
-                        <span class="item-all-days">{{item.allDays}}天</span>
+                        <span class="item-all-days">
+                            <span class="num">{{item.days}}</span>
+                            <span class="tian">天</span>
+                        </span>
                         <span class="item-days-label">累计打卡</span>
                     </span>
                 </li>
@@ -147,6 +150,13 @@
 </template>
 
 <style scoped>
+
+.item-all-days .num{
+    font-size: 26px;
+}
+.item-all-days .tian{
+    font-size: 24px;
+}
 
 .item-excitation-input{
     width:90%;
@@ -376,11 +386,13 @@
 
 .item-days-label{
     color:#909399;
+    font-size: 12px;
 }
 
 .item-days{
     line-height: 24px;
     margin-right:10px;
+    letter-spacing: 1px;
 }
 .item-all-days{
     display: block;
@@ -419,8 +431,8 @@
     margin-left: 3%;
     display: flex;
     align-items:center;
-    margin-bottom: 20px;
-    height: 70px;
+    margin-bottom: 15px;
+    height: 80px;
     line-height: 70px;
     background: #fff;
 }
@@ -520,6 +532,7 @@ export default {
                             text : item.logo,
                             name : item.name,
                             backColor : item.backColor,
+                            days : item.days,
                             color : item.logoColor,
                         }
                     })

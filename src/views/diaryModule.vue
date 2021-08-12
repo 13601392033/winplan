@@ -29,6 +29,7 @@
 </template>
 
 <style scoped>
+
 .diary-content{
     position: fixed;
     margin: 0 auto;
@@ -135,6 +136,10 @@ export default {
                         this.incId = data.incId
                         this.diaryId = data.id;
                         this.content = data.content;
+                        let date = parseInt(data.date);
+                        this.year = moment(new Date(date)).format("L");
+                        this.week = moment(new Date(date)).format("dddd");
+                        this.day = moment(new Date(date)).format("LT");
                         this.$router.push({
                             name: "diaryModule",
                             query: {
