@@ -310,7 +310,7 @@ export default {
                     this.diaryList = this.diaryList.concat(res.data.data.map((item)=>{
                         return {
                             id : item.id,
-                            detail : item.content,
+                            detail : item.text,
                             day : new Date(item.date).getDate(),
                             month : new Date(item.date).getMonth() + 1,
                             date : item.date,

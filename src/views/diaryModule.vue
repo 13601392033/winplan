@@ -17,19 +17,24 @@
                 <span class="tag-day">{{week}}</span>
                 <span class="tag-time">{{day}}</span>
             </div>
-            <div class="diary-content">
-                <textarea v-model="content" placeholder="今天发生了哪些想要记录下的事？" class="diary-textarea"></textarea>
+            <div class="diary-content" v-show="editor">
+                <QuillEditor @ready="ready" ref="editor"  contentType="html" v-model:content="content" style="letter-spacing:3px;">
+                </QuillEditor>
+                <!--<textarea v-model="content" placeholder="今天发生了哪些想要记录下的事？" class="diary-textarea"></textarea>-->
             </div>
         </div>
-        <div class="diary-footer">
+        <div class="diary-footer" v-if="isEdit">
             <span :class="{opa: leftDis}" class="prev" @click="leftDis ? null : jump(0)">上一篇</span>
             <span :class="{opa: rightDis}" class="next" @click="rightDis ? null : jump(1)">下一篇</span>
         </div>
     </div>
+
 </template>
 
 <style scoped>
-
+.diary-footer span{
+    background: #fff;
+}
 .diary-content{
     position: fixed;
     margin: 0 auto;
@@ -103,11 +108,16 @@
 import {addDiary, editDiaryById, queryNearById, delDiaryById, queryDiaryById} from "@/request/diary"
 import moment from "moment"
 import {Dialog, Toast} from 'vant';
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css';
 moment.locale("zh-cn");
 export default {
     name : "habit",
     created(){
         this.init();
+    },
+    components:{
+        QuillEditor,
     },
     data(){
         return {
@@ -115,6 +125,7 @@ export default {
             leftDis: false,
             rightDis: false,
             date: new Date(),
+            editor:false,
             isEdit: false,
             content:"",
             year: undefined,
@@ -125,7 +136,12 @@ export default {
         }
     },
     methods:{
+        ready(el){
+            console.log(el)
+            el.blur.bind(el);
+        },
         jump(n){
+            this.editor = false;
             queryNearById({
                 incId: parseInt(this.incId),
                 type: n,
@@ -136,6 +152,7 @@ export default {
                         this.incId = data.incId
                         this.diaryId = data.id;
                         this.content = data.content;
+                        this.$refs.editor.setContents(this.content);
                         let date = parseInt(data.date);
                         this.year = moment(new Date(date)).format("L");
                         this.week = moment(new Date(date)).format("dddd");
@@ -158,6 +175,8 @@ export default {
                         Toast.fail("没有了哦");
                     }
                 }
+            }).finally(()=>{
+                this.editor = true;
             })
         },
         init(){
@@ -174,10 +193,14 @@ export default {
                         this.week = moment(new Date(date)).format("dddd");
                         this.day = moment(new Date(date)).format("LT");
                         this.content = data.content;
+                        this.$refs.editor.setContents(this.content);
+                        // document.getElementsByClassName("mf")[0].focus()
+                        // document.getElementsByClassName("mf")[0].blur()
+                        document.getElementsByClassName("tag-date")[0].click();
                         this.isEdit = true;
                         this.diaryId = data.id;
                         this.leftDis = false;
-                        this.rightDis = false;
+                        this.rightDis = false;this.editor = true;
                     }
                 })  
                 
@@ -186,6 +209,7 @@ export default {
                 this.year = moment(new Date(date)).format("L");
                 this.week = moment(new Date(date)).format("dddd");
                 this.day = moment(new Date(date)).format("LT");
+                this.editor = true;
             }
         },
         delDiary(){
@@ -213,9 +237,11 @@ export default {
                 Toast.fail("写点什么吧~");
                 return false;
             }
+            let text = this.$refs.editor.getText().substring(0,15);
             if(!this.isEdit){
                 addDiary({
                     content: this.content,
+                    text:text
                 }).then(res=>{
                     Toast.success(res.data.msg);
                     if(res.data.code == 200){
@@ -228,6 +254,7 @@ export default {
                 editDiaryById({
                     id: this.diaryId,
                     content: this.content,
+                    text:text
                 }).then(res=>{
                     if(res.data.code == 200){
                         Toast.success(res.data.msg)

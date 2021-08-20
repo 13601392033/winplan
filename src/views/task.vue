@@ -393,7 +393,6 @@ export default {
             }else if(v.type == 1){
                 vd += this.oneDay
             }
-            console.log(vd)
             return vd < date;
         },
         delTask(){

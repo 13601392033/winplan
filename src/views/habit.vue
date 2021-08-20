@@ -365,13 +365,13 @@
 
 /**习惯组件css样式start**/
 .add-position{
-    bottom: 75px;
+    bottom: 63px;
     color: #fff;
-    right: 23px;
+    right: 25px;
     border-radius: 50%;
     background: #409EFF;
     background: #FA8072;
-    font-size: 40px;
+    font-size: 33px;
     padding: 6px;
     font-weight: bold;
 }
