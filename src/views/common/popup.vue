@@ -3,7 +3,9 @@
         <div class="mf" @click="close"></div>
         <div :style="{height:height}" class="popup-header" @touchstart="startDraw" @touchmove="draw" @touchend="endDraw">
             <div v-if="isBack" class="popup-drop" :style="{background:'url('+b8+') no-repeat'}">
+                
             </div>
+            
             <slot v-else name="header"></slot>
         </div>
         <div class="popup-body" :style="{background:popupBodyBack}">
@@ -22,7 +24,7 @@ export default {
             default:true,
         },
         height:{
-            default:"100px",
+            default:"108px",
         },
         popupBodyBack:{
             default:null
@@ -33,7 +35,7 @@ export default {
     ],
     data(){
         return {
-            b8:require("@/assets/z2.jpg"),
+            b8:require("@/assets/m7.jpg"),
             isMove:undefined,
             documentHeihgt:undefined,
             reduce : undefined,
@@ -103,7 +105,7 @@ export default {
     }
     .popup-header{
         width:100%;
-        height:100px;
+        height:108px;
     }
     .popup-drop{
         width:100%;

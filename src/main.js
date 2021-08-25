@@ -3,7 +3,7 @@ import "@/css/main.css"
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from "./router"
-import ElementPlus from 'ElementPlus'
+import ElementPlus from 'element-plus'
 import axios from "./utils/axios"
 import "@/assets/menu_spand.png"
 import moment from "moment"

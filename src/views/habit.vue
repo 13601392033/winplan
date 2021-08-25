@@ -40,7 +40,7 @@
             </template>
         </Popup>
         <div class="habit-container">
-            <div class="habit-statistics">
+            <!-- <div class="habit-statistics">
                 <div class="stat-item" style="margin-left: .5%;color:#409EFF">
                     <i class="stat-icon el-icon-time"></i>
                     <span class="stat-label">进行中</span>
@@ -56,7 +56,7 @@
                     <span class="stat-label">已暂停</span>
                     <div class="habit-num">{{stop}}</div>
                 </div>
-            </div>
+            </div> -->
             <ul class="habit-list">
                 <li v-show="habitList.length == 0"><p class="null-text">暂无内容</p></li>
                 <li @click="jumpDetail(item)" class="list-item" v-for="(item,index) in habitList" :key="index">
@@ -449,7 +449,7 @@
 }
 .habit-list{
     position: fixed;
-    top: 161px;
+    top: 60px;
     left: 0;
     right: 0;
     bottom: 0;

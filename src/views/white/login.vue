@@ -7,7 +7,9 @@
             <span></span>
         </div> -->
         <div class="login-title">
-            <h3>win plan</h3>
+            <h3>
+                <span :style="{animationDelay:(index/10) + 1+'s'}" v-for="(item, index) in title" :key="item">{{item}}</span>
+            </h3>
         </div>
         <div class="login-form">
             <div class="form-item">
@@ -19,84 +21,39 @@
             </div>
             <div class="line"></div>
             <div class="login-btn" @click="loginIn">
-                登录
+                登&nbsp;&nbsp;录
             </div>
         </div>
     </div>
 </template>
 
-<style scoped>
-.special{
-    position: absolute;
-    width: 100%;
-    height: 119px;
-    overflow: hidden;
-}
-.special span{
-    position: absolute;
-    width: 20% !important;
-    opacity: .7;
-    border-radius: 30px;
-    height: 10px;
-    background: linear-gradient(90deg, transparent, #66ffff);
-    animation-iteration-count:3 !important;
-}
-.special span:nth-child(1){
-    width: 40%;
-    right: -26%;
-    transform: translateX(-50%) rotate(-32deg);
-    top:-40px;
-    animation: animate1 1.5s linear infinite;
-    animation-delay: 2s;
-}
-.special span:nth-child(2){
-    top:-40px;
-    width: 40%;
-    right:-26%;
-    transform: translateX(-50%) rotate(-32deg);
-    animation: animate1 1.5s linear infinite;
-    animation-delay: 2.1s;
-}
-.special span:nth-child(3){
-    width: 40%;
-    left: 40%;
-    transform: translateX(-50%) rotate(32deg);
-    top:-46px;
-    animation: animate3 1.5s linear infinite;
-    animation-delay: 2s;
+<style >
+.login-title h3 span{
+    animation:mymove 1s  both;
+    -webkit-animation:mymove 1s both;
+    
 }
 
-.special span:nth-child(4){
-    width: 40%;
-    left: 40%;
-    transform: translateX(-50%) rotate(32deg);
-    top:-46px;
-    animation: animate3 1.5s linear infinite;
-    animation-delay: 2.1s;
-}
-
-@keyframes animate3 {
+@keyframes mymove {
     0% {
-        top: 10px;
+        opacity: 0;
+        transform: translateY(-80%);
     }
-    50%,
     100% {
-        left:80%;
-        top: 155px;
+        opacity: 1;
+        transform: translateY(0);
     }
 }
-
-@keyframes animate1 {
+@-webkit-keyframes mymove {
     0% {
-        top: 10px;
+        opacity: 0;
+        transform: translateY(-80%);
     }
-    50%,
     100% {
-        right:80%;
-        top: 155px;
+        opacity: 1;
+        transform: translateY(0);
     }
 }
-
 </style>
 
 <script>
@@ -113,8 +70,9 @@ export default {
     data(){
         return {
             userName:"king",
-            password:"zhflovezhf1314",
+            password:"",
             back1: require("@/assets/b6.jpg"),
+            title:"win plan"
         }
     },
     methods:{
@@ -147,7 +105,7 @@ export default {
 
 <style scoped>
     .login-btn:active{
-            box-shadow: 1px -2px 23px #ccffff;
+        box-shadow: 1px -2px 23px #ccffff;
     }
     .login-btn{
         background: transparent;
@@ -158,7 +116,7 @@ export default {
         border-radius:30px;
         height:40px;
         margin-top:20px;
-        font-size: 14px;
+        font-size: 22px;
     }
     .login-title h3{
         position: absolute;
@@ -191,6 +149,8 @@ export default {
         background: transparent;
         width: 100%;
         outline:none;
+        font-size: 18px;
+        letter-spacing: 2px;
         height:30px;
     }
     .wrapper{

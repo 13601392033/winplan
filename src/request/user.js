@@ -23,3 +23,11 @@ export function updateUserById(data){
         data:data
     })
 }
+
+export function updateUserPasswordById(data){
+    return axios({
+        method:"post",
+        url:"user/updateUserPasswordById",
+        data:data
+    })
+}

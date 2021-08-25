@@ -26,6 +26,11 @@ const routes = [
                 component:()=>import("@/views/home.vue")
             },
             {
+                name:"week",
+                path:"week",
+                component:()=>import("@/views/week.vue")
+            },
+            {
                 name:"task",
                 path: "task",
                 component: ()=>import("@/views/task.vue"),
@@ -60,6 +65,11 @@ const routes = [
 ]
 
 let navRoutes = [
+    {
+        name:"week",
+        title:"week",
+        margin:"68px",
+    },
     {
         name:"personal",
         title:"我的",

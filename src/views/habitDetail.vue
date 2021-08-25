@@ -422,6 +422,7 @@ export default {
 <style scoped>
 .item-remark {
     flex: 1;
+    margin:0 20px;
     color: #6699cc;
     font-size: 16px;
     letter-spacing: 4px;

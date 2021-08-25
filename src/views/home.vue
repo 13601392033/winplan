@@ -121,8 +121,8 @@
             </div>
             <div class="habit-container">
                 <ul class="habit-list">
-                    <li v-for="(item, index) in habitList " @click="changeHabitState(item)" :key="index" class="habit-item">
-                        <span class="radius" :class="{habitStateIng: item.logs.type == 0 || !item.logs.type}" :style="{background: item.backColor, color: item.color}">
+                    <li v-for="(item, index) in habitList "  :key="index" class="habit-item">
+                        <span class="radius" @click="changeHabitState(item)" :class="{habitStateIng: item.logs.type == 0 || !item.logs.type}" :style="{background: item.backColor, color: item.color}">
                             <i v-if="item.type == 1" class="icon" :class="iconClass(item)"></i>
                             <span v-if="item.type == 0" class="icon">{{item.text}}</span>
                         </span>
@@ -439,20 +439,20 @@
         text-align: left;
     }
     .record-list{
-        height:326;
+        height:326px;
         overflow: auto;
         margin-top:22px;
         margin-bottom: 10px;
     }
     .home{
-
         overflow: auto;
         width:100%;
         height:100%;
         position:fixed;
-        background-image: linear-gradient(to bottom right,#C7C7C7,#336699,#6CA6CD);
+        background-image:linear-gradient(to bottom right,#d3f5f4,#6CA6CD,#4682B4);
         background-size:100% 100% !important;
     }
+    .home::-webkit-scrollbar { width: 0 !important }
     .home-module{
         width:94%;
         margin: 28px auto 0;

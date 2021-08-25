@@ -133,7 +133,7 @@
     font-size: 40px;
     padding: 6px;
     font-weight: bold;
-    background-image: linear-gradient(to bottom right,#ff4c41,#ff3333,#6CA6CD);
+    background-image: linear-gradient(to bottom right,#d3f5f4,#6CA6CD,#4682B4);
 }
 
 .content{
@@ -254,7 +254,7 @@
     line-height: 41px;
 }
 .item-list{
-    height: 270px;
+    height: 305px;
     margin-top: 15px;
     overflow: auto;
 }
@@ -290,13 +290,12 @@
 
 .task{
     background: rgb(122, 115, 116);
-    background-image: linear-gradient(to bottom right,#C7C7C7,#336699,#6CA6CD);
+    background-image: linear-gradient(to bottom right,#C7C7C7,#336699,#80d6c9);
     position: fixed;
     overflow-x:hidden;
     overflow: auto;
     width: 100%;
     height: 100%;
-    background: rgba(20,79,104,.7);
 }
 .left-icon{
     position: absolute;

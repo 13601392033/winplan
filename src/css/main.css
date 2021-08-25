@@ -43,6 +43,7 @@ ul, li{
     font-family: KaiTi;
     font-size: 20px;
     margin-top: 7px;
+    letter-spacing: 2px;
 }
 .header{
     color:#F5FFFA;
@@ -50,7 +51,7 @@ ul, li{
     position: relative;
 }
 .header-title{
-    font-family: monospace;
+    font-family: cursive;
     font-size: 30px;
     letter-spacing: 3px;
 }

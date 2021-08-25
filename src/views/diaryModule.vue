@@ -18,7 +18,7 @@
                 <span class="tag-time">{{day}}</span>
             </div>
             <div class="diary-content" v-show="editor">
-                <QuillEditor @ready="ready" ref="editor"  contentType="html" v-model:content="content" style="letter-spacing:3px;">
+                <QuillEditor @ready="ready" ref="editor"  contentType="html" v-model:content="content" style="letter-spacing:3px;font-size:16px;">
                 </QuillEditor>
                 <!--<textarea v-model="content" placeholder="今天发生了哪些想要记录下的事？" class="diary-textarea"></textarea>-->
             </div>
@@ -137,7 +137,6 @@ export default {
     },
     methods:{
         ready(el){
-            console.log(el)
             el.blur.bind(el);
         },
         jump(n){
@@ -194,13 +193,12 @@ export default {
                         this.day = moment(new Date(date)).format("LT");
                         this.content = data.content;
                         this.$refs.editor.setContents(this.content);
-                        // document.getElementsByClassName("mf")[0].focus()
-                        // document.getElementsByClassName("mf")[0].blur()
                         document.getElementsByClassName("tag-date")[0].click();
                         this.isEdit = true;
                         this.diaryId = data.id;
                         this.leftDis = false;
-                        this.rightDis = false;this.editor = true;
+                        this.rightDis = false;
+                        this.editor = true;
                     }
                 })  
                 
