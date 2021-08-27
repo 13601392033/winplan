@@ -348,17 +348,17 @@ export default {
     data(){
         return{
             onePages:{
-                pageSize: 10,
+                pageSize: 20,
                 pageNo: 1,
                 pullUpState:2,
             },
             twoPages:{
-                pageSize: 10,
+                pageSize: 20,
                 pageNo: 1,
                 pullUpState:2,
             },
             threePages:{
-                pageSize: 10,
+                pageSize: 20,    
                 pageNo: 1,
                 pullUpState:2,
             },
@@ -522,9 +522,23 @@ export default {
                             this.taskThreeList.push(obj)
                         }
                     });
-                    this.onePages.total = res.data.total[0] ? res.data.total[0].total : 0;
-                    this.twoPages.total = res.data.total[1] ?  res.data.total[1].total : 0;
-                    this.threePages.total = res.data.total[2] ? res.data.total[2].total : 0;
+                    let oneTotal = 0;
+                    let twoTotal = 0;
+                    let threeTotal = 0;
+                    res.data.total.forEach(item=>{
+                        if(item._id == 1){
+                            oneTotal = item.total
+                        }
+                        if(item._id == 2){
+                            twoTotal = item.total
+                        }
+                        if(item._id == 3){
+                            threeTotal = item.total
+                        }
+                    })
+                    this.onePages.total = oneTotal;
+                    this.twoPages.total = twoTotal;
+                    this.threePages.total = threeTotal;
                     this.initBranch("taskOneList", "onePages");
                     this.initBranch("taskTwoList", "twoPages");
                     this.initBranch("taskThreeList", "threePages");

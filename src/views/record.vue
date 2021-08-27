@@ -78,7 +78,7 @@
     font-size: 40px;
     padding: 6px;
     font-weight: bold;
-    background-image: linear-gradient(to bottom right,#C7C7C7,#1A73E8,#6CA6CD);
+    background-image: linear-gradient(to bottom right,#d3f5f4,#6CA6CD,#4682B4);
 }
 
 .popup-type{

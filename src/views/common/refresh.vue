@@ -1,7 +1,8 @@
 <template>
   <div class="load-moudle" @touchstart="touchStart($event)" @touchmove="touchMove($event)" @touchend="touchend($event)">
     <slot></slot>
-    <footer class="load-more">
+    <footer class="load-more" style="-moz-user-select:none;
+-webkit-user-select:none;">
       <slot name="load-more">
         <div class="more-tip" v-if="pullUpState==1">
           <span class="more-text">{{pullUpInfo.moreText}}</span>
@@ -71,7 +72,6 @@ export default {
           // console.log('没滑动')
           break
         case 1:
-          // console.log('向上')
           this.scrollToTheEnd()
           break
         case 2:
@@ -105,15 +105,18 @@ export default {
       // 变量scrollHeight是滚动条的总高度
       let scrollHeight = document.documentElement.clientHeight || document.body.scrollHeight
       // 滚动条到底部的条件
-      
-      if (scrollTop + scrollHeight >= innerHeight) {
-          
-            if (this.pullUpState !== 3 && !this.isLoading) {
+      if (this.pullUpState !== 3) {
                 
                 this.infiniteLoad()
             }
-        // console.log('距顶部' + scrollTop + '滚动条总高度' + scrollHeight + '内容高度' + innerHeight)
-      }
+    //   if (scrollTop + scrollHeight >= innerHeight) {
+          
+    //         if (this.pullUpState !== 3 && !this.isLoading) {
+                
+    //             this.infiniteLoad()
+    //         }
+    //     // console.log('距顶部' + scrollTop + '滚动条总高度' + scrollHeight + '内容高度' + innerHeight)
+    //   }
     },
 
     /**
@@ -173,7 +176,6 @@ export default {
     watch: {
       parentPullUpState (curVal, oldVal) {
           this.pullUpState = curVal
-          console.log(this.pullUpState)
       }
     }
 }

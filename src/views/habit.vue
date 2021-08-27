@@ -58,7 +58,7 @@
                 </div>
             </div> -->
             <ul class="habit-list">
-                <li v-show="habitList.length == 0"><p class="null-text">暂无内容</p></li>
+                
                 <li @click="jumpDetail(item)" class="list-item" v-for="(item,index) in habitList" :key="index">
                     <span class="item-ele item-icon-back">
                         <span class="radius" :style="{background: item.backColor, color: item.color}">
@@ -75,6 +75,7 @@
                         <span class="item-days-label">累计打卡</span>
                     </span>
                 </li>
+                <li v-show="habitList.length == 0"><p style="margin-top:28px;" class="null-text">暂无内容</p></li>
             </ul>
             
         </div>

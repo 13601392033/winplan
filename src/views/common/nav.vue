@@ -7,18 +7,18 @@
         </div>
     </div>
     <div class="cube">
-    <div class="nav" >
-        
-        <div class="nav-back" style="width:100%;height:100%;" :style="{background:'url('+backImg+') no-repeat' }">
-            <div class="nav-container">
-                <ul class="nav-ul">
-                    <li v-for="item in routes" :key="item.name" :style="{marginLeft: item.margin}">
-                        <span @click="jump(item)" style="">{{item.title}}</span>
-                    </li>
-                </ul>
+        <div class="nav" >
+            
+            <div class="nav-back" style="width:100%;height:100%;" :style="{background:'url('+backImg+') no-repeat' }">
+                <div class="nav-container">
+                    <ul class="nav-ul">
+                        <li v-for="item in routes" :key="item.name" :style="{marginLeft: item.margin}">
+                            <span @click="jump(item)" style="">{{item.title}}</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
     </div>
 </template>
 
@@ -29,15 +29,15 @@
 @keyframes mf{
     0% {
         opacity: 0;
-        transform: scale3d(3,3,1.5);
+        transform: scale3d(0.3,0.3,0.3);
     }
 }
 
 @keyframes mf2{
     100% {
         opacity: 0;
-        transform-origin:100% 100%;
-        transform: scale3d(1.5,1.5,1.5);
+        
+        transform: scale3d(1.5,1.5,3);
     }
 }
 
@@ -84,7 +84,7 @@
 .nav{
     display: block;
     transform: translateY(-50%);
-    width: 195px;
+    width: 204px;
     z-index: 100000;
     height: 350px;
     position: fixed;
@@ -153,7 +153,6 @@ export default {
                 setTimeout(() => {
                     this.$router.push({name: item.name});
                 }, 200);
-            
         },
         showMe(){
             let gif = require("@/assets/loading.gif");
@@ -184,13 +183,14 @@ export default {
                 let dom = document.getElementsByClassName("mask")[0];
                 dom.addEventListener("click", ()=>{
                     this.state = 2;
+                    console.log(111)
                     this.hide();
                     nav.classList.remove("nav-in")
                     nav.classList.add("nav-out")
                     setTimeout(()=>{
                         this.state = 0;
                         nav.style = "display:none;"
-                    },300)    
+                    },300)
                 })
             }else if(this.state == 1){
                 this.hide();

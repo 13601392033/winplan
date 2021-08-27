@@ -120,6 +120,7 @@
                 </div>
             </div>
             <div class="habit-container">
+                <div class="empty-text" v-if="habitList.length <= 0">暂无习惯</div>
                 <ul class="habit-list">
                     <li v-for="(item, index) in habitList "  :key="index" class="habit-item">
                         <span class="radius" @click="changeHabitState(item)" :class="{habitStateIng: item.logs.type == 0 || !item.logs.type}" :style="{background: item.backColor, color: item.color}">

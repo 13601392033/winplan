@@ -39,7 +39,6 @@
                         <span class="day">{{item.day}}</span>
                         <br/>
                         <span class="mon">{{item.month}}月</span>
-                        
                     </div>
                     <div class="diary-line"></div>
                     <div class="diary-right fl ell">
@@ -47,7 +46,7 @@
                         <span class="diary-detail">{{item.detail}}</span>
                     </div>
                 </li>
-                <refresh :on-infinite-load="onInfiniteLoad"
+                <refresh style="margin-bottom:20px;" :on-infinite-load="onInfiniteLoad"
                         :parent-pull-up-state="pages.pullUpState">
                 </refresh>
             </ul>
@@ -270,7 +269,7 @@ export default {
             detail:"",
             pages:{
                 pageNo: 1,
-                pageSize: 20,
+                pageSize: 10,
                 pullUpState:0,
                 total:0,
             },

@@ -179,7 +179,10 @@ export default {
                     // if (process.env.NODE_ENV === 'production') {
                     //     dataSrc = "http://1.117.21.31:9011/uploads/" + data.avatar;
                     // }
-                    this.src = dataSrc;
+                    if(data.avatar){
+                        this.src = dataSrc;
+                    }
+                    
                     this.name = data.name;
                     this.age = data.age;
                     this.email = data.email;
