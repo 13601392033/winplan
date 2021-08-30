@@ -10,7 +10,12 @@ import moment from "moment"
 
 
 const app = createApp(App).use(router).use(ElementPlus);
+let httpSrc = "http://localhost:9011/"
+if (process.env.NODE_ENV === 'production') {
+    httpSrc = "http://http://1.117.21.31:9011/"
+}
 
+app.config.globalProperties.httpSrc = httpSrc
 app.config.globalProperties.$http = axios
 app.config.globalProperties.$moment = moment
 

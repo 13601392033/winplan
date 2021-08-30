@@ -129,7 +129,7 @@ export default {
             },
             phone:"",
             src:require("@/assets/z2.jpg"),
-            file:[{ url: 'https://img.yzcdn.cn/vant/leaf.jpg' ,isImage: false }],
+            
         }
     },
     created(){
@@ -176,9 +176,11 @@ export default {
                 if(res.data.code == 200){
                     let data = res.data.data[0];
                     let dataSrc = "http://1.117.21.31:9011/uploads/" + data.avatar;
-                    // if (process.env.NODE_ENV === 'production') {
-                    //     dataSrc = "http://1.117.21.31:9011/uploads/" + data.avatar;
-                    // }
+                    if (process.env.NODE_ENV === 'production') {
+                        dataSrc = "http://1.117.21.31:9011/uploads/" + data.avatar;
+                    }else{
+                        dataSrc = "http://localhost:9011/uploads/" + data.avatar;
+                    }
                     if(data.avatar){
                         this.src = dataSrc;
                     }

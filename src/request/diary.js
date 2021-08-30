@@ -40,6 +40,14 @@ export function queryNearById(data){
     })
 }
 
+export function diaryUpload(data){
+    return axios({
+        method:"post",
+        url:"diary/upload",
+        data:data
+    })
+}
+
 export function queryDiaryList(data){
     return axios({
         method:"post",

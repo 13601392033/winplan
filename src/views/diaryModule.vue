@@ -18,9 +18,11 @@
                 <span class="tag-time">{{day}}</span>
             </div>
             <div class="diary-content" v-show="editor">
-                <QuillEditor @ready="ready" ref="editor"  contentType="html" v-model:content="content" style="letter-spacing:3px;font-size:16px;">
-                </QuillEditor>
+                <!-- <QuillEditor @ready="ready" ref="editor"  contentType="html" v-model:content="content" style="letter-spacing:3px;font-size:16px;">
+                </QuillEditor> -->
                 <!--<textarea v-model="content" placeholder="今天发生了哪些想要记录下的事？" class="diary-textarea"></textarea>-->
+                <div class="editor-content" ref='editorCon'></div>
+                
             </div>
         </div>
         <div class="diary-footer" v-if="isEdit">
@@ -31,14 +33,30 @@
 
 </template>
 
+<style>
+.editor-content .w-e-text-container{
+    flex:1
+}
+</style>
+
 <style scoped>
+.editor-content{
+    display: flex;
+    flex:1;
+    overflow: auto;
+    flex-direction: column;
+}
 .diary-footer span{
     background: #fff;
 }
 .diary-content{
     position: fixed;
+        display: flex;
+    flex: 1;
+    flex-direction: column;
     margin: 0 auto;
-    bottom: 80px;
+    bottom: 26px;
+    margin-bottom:10px;
     top: 100px;
     left: 0px;
     right: 0px;
@@ -49,7 +67,7 @@
 }
 .diary-footer{
     position: fixed;
-    bottom:30px;
+    bottom:10px;
     width:100%;
 }
 .prev{
@@ -105,19 +123,70 @@
 </style>
 
 <script>
-import {addDiary, editDiaryById, queryNearById, delDiaryById, queryDiaryById} from "@/request/diary"
+import {addDiary, editDiaryById, queryNearById, delDiaryById, queryDiaryById, diaryUpload} from "@/request/diary"
 import moment from "moment"
 import {Dialog, Toast} from 'vant';
-import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
+
+import { onMounted, onBeforeUnmount, ref, reactive } from 'vue';
+import WangEditor from 'wangeditor';
 moment.locale("zh-cn");
 export default {
     name : "habit",
-    created(){
+    mounted(){
         this.init();
     },
     components:{
-        QuillEditor,
+        //QuillEditor,
+    },
+    setup() {
+        const editor = ref();
+        const content = reactive({
+            html: '',
+            text: '',
+        });
+        let instance;
+        onMounted(() => {
+            instance = new WangEditor(editor.value);
+            instance.config.uploadImgMaxLength = 1 // 一次最多上传机长图片
+            instance.config.customUploadImg = function (resultFiles, insertImgFn) {
+                console.log(resultFiles)
+                let formData = new FormData();
+                formData.append("file", resultFiles[0]);
+                diaryUpload(formData).then(res=>{
+                    if(res.data.code == 200){
+                        let httpSrc = "http://localhost:9011/uploads/"
+                        if (process.env.NODE_ENV === 'production') {
+                            httpSrc = "http://1.117.21.31:9011/uploads/"
+                        }
+                        insertImgFn(httpSrc + res.data.data)
+                    }
+                })
+            }
+            instance.create();
+        });
+        onBeforeUnmount(() => {
+            instance.destroy();
+            instance = null;
+        });
+        const syncHTML = (html) => {
+           instance.txt.html(html);
+        };
+        const getHtml = ()=>{
+            return instance.txt.html()
+        }
+        const getText = ()=>{
+            return instance.txt.text()
+        }
+        
+        return {
+            syncHTML,
+            instance,
+            editorCon:editor,
+            contentCon:content,
+            getHtml,
+            getText
+        };
     },
     data(){
         return {
@@ -151,7 +220,7 @@ export default {
                         this.incId = data.incId
                         this.diaryId = data.id;
                         this.content = data.content;
-                        this.$refs.editor.setContents(this.content);
+                        this.syncHTML(this.content);
                         let date = parseInt(data.date);
                         this.year = moment(new Date(date)).format("L");
                         this.week = moment(new Date(date)).format("dddd");
@@ -192,8 +261,7 @@ export default {
                         this.week = moment(new Date(date)).format("dddd");
                         this.day = moment(new Date(date)).format("LT");
                         this.content = data.content;
-                        this.$refs.editor.setContents(this.content);
-                        document.getElementsByClassName("tag-date")[0].click();
+                        this.syncHTML(this.content);
                         this.isEdit = true;
                         this.diaryId = data.id;
                         this.leftDis = false;
@@ -231,14 +299,15 @@ export default {
             })
         },
         save(){
-            if(!this.content){
+            let html = this.getHtml();
+            if(!html){
                 Toast.fail("写点什么吧~");
                 return false;
             }
-            let text = this.$refs.editor.getText().substring(0,15);
+            let text = this.getText().substring(0,15);
             if(!this.isEdit){
                 addDiary({
-                    content: this.content,
+                    content: html,
                     text:text
                 }).then(res=>{
                     Toast.success(res.data.msg);
@@ -251,7 +320,7 @@ export default {
             }else{
                 editDiaryById({
                     id: this.diaryId,
-                    content: this.content,
+                    content: html,
                     text:text
                 }).then(res=>{
                     if(res.data.code == 200){
