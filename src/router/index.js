@@ -62,6 +62,11 @@ const routes = [
             },
         ]
     },
+    {
+        path: "/",
+        name: "login",
+        component: login,
+    },
 ]
 
 let navRoutes = [
