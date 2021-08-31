@@ -19,4 +19,7 @@ app.config.globalProperties.httpSrc = httpSrc
 app.config.globalProperties.$http = axios
 app.config.globalProperties.$moment = moment
 
+let data = require("./assets/d1.jpg")
+localStorage.setItem("back", data)
+
 app.mount('#app')

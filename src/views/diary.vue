@@ -1,8 +1,6 @@
 <template>
-    <div class="habit">
-        <Headera style="color: #fff;background-image: linear-gradient(to bottom right,#FFAEB9,#FA8072,#FF4040);position: fixed;
-    width: 100%;
-    z-index: 200;">
+    <div class="diary" :style="{background:'url('+back+')'}">
+        <Headera>
             <span class="header-title">日记</span>
             <span class="left-icon">
                 <router-link to="/main/home">
@@ -31,9 +29,9 @@
                 </div>
             </template>
         </Popup>
-        <div class="habit-container">
+        <div class="diary-container">
             <div class="empty-text" v-if="diaryList.length <= 0">暂无日记</div>
-            <ul class="habit-list">
+            <ul class="diary-list">
                 <li @click="jumpModule(item)" class="list-item" v-for="(item,index) in diaryList" :key="index">
                     <div class="diary-left fl">
                         <span class="day">{{item.day}}</span>
@@ -197,7 +195,7 @@
 .stat-label{
     font-size: 16px;
 }
-.habit-num{
+.diary-num{
     font-size:24px;
 }
 .stat-icon{
@@ -205,11 +203,11 @@
 }
 .list-item{
     border-radius: 10px;
-    width: 96%;
-    margin-left: 2%;
+    width: 94%;
+    margin-left: 3%;
     display: flex;
     align-items: center;
-    margin-bottom:10px;
+    margin-bottom:15px;
     margin-top:10px;
     height: 100px;
     background: #fff;
@@ -220,11 +218,11 @@
     width:33%;
 }
 
-.habit-statistics{
+.diary-statistics{
     overflow: hidden;
     padding: 20px 0;
 }
-.habit-list{
+.diary-list{
     position: fixed;
     top: 71px;
     padding-top: 10px;
@@ -233,8 +231,9 @@
     bottom: 0;
     overflow: auto;
 }
-.habit{
+.diary{
     position:fixed;
+    background-size: 100% 100% !important;
     width:100%;
     height:100%;
     background-image: linear-gradient(to bottom right,#FFFAF0,#FFF0F5);
@@ -253,7 +252,7 @@ import Popup from "@/views/common/popup.vue"
 import {queryDiaryList} from "@/request/diary"
 import refresh from "@/views/common/refresh"
 export default {
-    name : "habit",
+    name : "diary",
     components:{
         Headera,
         Popup,
@@ -264,6 +263,7 @@ export default {
     },
     data(){
         return {
+            back: localStorage.getItem("back"),
             diaryList:[],
             date: new Date(),
             detail:"",

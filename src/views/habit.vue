@@ -1,6 +1,6 @@
 <template>
-    <div class="habit">
-        <Headera style="color:#fff;border-bottom:1px solid #fff;    background-image: linear-gradient(to right bottom, rgb(255, 174, 185), rgb(250, 128, 114), rgb(255, 64, 64));">
+    <div class="habit" :style="{background:'url('+back+')'}">
+        <Headera>
             <span class="header-title">习惯</span>
             <span class="left-icon">
                 <router-link to="/main/home">
@@ -427,13 +427,13 @@
     font-size:18px;
 }
 .list-item{
-    border-radius: 6px;
+    border-radius: 10px;
     width: 94%;
     margin-left: 3%;
     display: flex;
     align-items:center;
-    margin-bottom: 15px;
-    height: 80px;
+    margin-bottom: 22px;
+    height: 87px;
     line-height: 70px;
     background: #fff;
 }
@@ -461,6 +461,7 @@
     position:fixed;
     width:100%;
     height:100%;
+    background-size: 100% 100% !important;
     background-image: linear-gradient(to bottom right,#FFFAF0,#FFF0F5);
 }
 .left-icon{
@@ -493,6 +494,7 @@ export default {
     },
     data(){
         return {
+            back: localStorage.getItem("back"),
             iconConfig: iconConfig,
             firstText:'文',
             iconChoice:"el-icon-time", // 选择icon

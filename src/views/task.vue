@@ -1,5 +1,5 @@
 <template>
-    <div class="task">
+    <div class="task" :style="{background:'url('+back+')'}">
         <Headera style="color:#000;border-bottom:1px solid #fff;margin-bottom: 23px;">
             <span class="header-title">任务</span>
             <span class="left-icon">
@@ -264,7 +264,7 @@
 }
 .item-title{
     color: #fff;
-    background: rgba(41,61,88,.9);
+    background-image:linear-gradient(to bottom right,#4682B4,#6CA6CD,#4682B4);
     height: 50px;
     line-height: 50px;
     font-size: 20px;
@@ -294,6 +294,7 @@
     position: fixed;
     overflow-x:hidden;
     overflow: auto;
+    background-size:100% 100% !important;
     width: 100%;
     height: 100%;
 }
@@ -347,8 +348,9 @@ export default {
     },
     data(){
         return{
+            back: localStorage.getItem("back"),
             onePages:{
-                pageSize: 20,
+                pageSize: 5,
                 pageNo: 1,
                 pullUpState:2,
             },
@@ -358,7 +360,7 @@ export default {
                 pullUpState:2,
             },
             threePages:{
-                pageSize: 20,    
+                pageSize: 20,
                 pageNo: 1,
                 pullUpState:2,
             },

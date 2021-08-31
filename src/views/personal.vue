@@ -21,7 +21,6 @@
                 <div class="item-label">昵称</div>
                 <div class="item-value">
                     <input v-model="name" class="item-input" type="text"/>
-
                 </div>
             </div>
             <div class="detail-item">

@@ -1,5 +1,5 @@
 <template>
-    <div class="record">
+    <div class="record" :style="{background:'url('+back+')'}">
         <Headera style="color:#000;">
             <span class="header-title">记录</span>
             <span class="left-icon">
@@ -243,6 +243,7 @@
     width: 100%;
     height: 100%;
     overflow:hidden;
+    background-size:100% 100% !important;
 }
 .left-icon{
     position: absolute;
@@ -283,6 +284,7 @@ export default {
     },
     data(){
         return {
+            back: localStorage.getItem("back"),
             pages:{
                 pageNo: 1,
                 pageSize: 10,

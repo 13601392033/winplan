@@ -5,7 +5,9 @@
 -webkit-user-select:none;">
       <slot name="load-more">
         <div class="more-tip" v-if="pullUpState==1">
-          <span class="more-text">{{pullUpInfo.moreText}}</span>
+            <span class="connecting-line"></span>
+            <span class="more-text">{{pullUpInfo.moreText}}</span>
+            <span class="connecting-line"></span>
         </div>
         <div class="loading-tip" v-if="pullUpState==2">
           <span class="loading-icon"></span>
@@ -185,8 +187,7 @@ export default {
 <style scoped>
 .load-more {
   width: 100%;
-  color: #c0c0c0;
-  background: #fafafa;
+  color: #D6D6D6;
   font-size: 24px;
 }
 
@@ -220,7 +221,7 @@ export default {
 
 .connecting-line {
   display: inline-flex;
-  width: 150px;
+  flex:1;
   height: 2px;
   background: #ddd;
   margin-left: 20px;

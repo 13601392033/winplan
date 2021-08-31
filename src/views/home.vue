@@ -1,5 +1,5 @@
 <template>
-    <div class="home" >
+    <div class="home" :style="{background:'url('+back+')'}" >
         <Headera>
             <span class="header-title">mf plan</span>
             <div class="attitude">保持姿态，迎接最美的蜕变</div>
@@ -516,6 +516,8 @@
 </style>
 
 <script>
+
+/*eslint-disable*/
 import Popup from "@/views/common/popup.vue"
 import { Popup as vantPopup} from 'vant';
 import Headera from "@/views/common/header.vue"
@@ -524,6 +526,20 @@ import { Toast, Dialog  } from 'vant';
 import {saveData, editTaskById, delTaskById} from "@/request/task"
 import {saveRecord, editRecordById, refreshRecordList, delRecordById} from "@/request/record"
 import {addHabitLogs, refreshHabitLogs} from "@/request/habit"
+
+function randomNum(minNum,maxNum){ 
+    switch(arguments.length){ 
+        case 1: 
+            return parseInt(Math.random()*minNum+1,10); 
+        break; 
+        case 2: 
+            return parseInt(Math.random()*(maxNum-minNum+1)+minNum,10); 
+        break; 
+            default: 
+                return 0; 
+            break; 
+    } 
+}
 export default {
     name:"home",
     components:{
@@ -567,6 +583,7 @@ export default {
     },
     data(){
         return {
+            
             curPopup:"",//当前打开的popup
             taskModule:{
                 isEdit:undefined, // 1 为添加 2为编辑
@@ -598,6 +615,11 @@ export default {
         }
     },
     computed:{
+        back(){
+            let data = require("./../assets/d"+ randomNum(1,4) +".jpg")
+            localStorage.setItem("back", data)
+            return data
+        },
         taskTypeCom(){
             let type = this.taskModule.type
             let ret = "";

@@ -149,6 +149,11 @@ export default {
         onMounted(() => {
             instance = new WangEditor(editor.value);
             instance.config.uploadImgMaxLength = 1 // 一次最多上传机长图片
+            instance.config.excludeMenus = [
+                'emoticon',
+                'quote',
+                'video'
+            ]
             instance.config.customUploadImg = function (resultFiles, insertImgFn) {
                 console.log(resultFiles)
                 let formData = new FormData();

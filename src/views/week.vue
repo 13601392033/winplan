@@ -85,7 +85,7 @@ export default {
                     habit:"go on"
                 },
             ],
-            back: require("./../assets/g2.jpg")
+            back: require("./../assets/d2.jpg")
         }
     }
 }
