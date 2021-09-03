@@ -15,6 +15,7 @@ if (process.env.NODE_ENV === 'production') {
     httpSrc = "http://http://1.117.21.31:9011/"
 }
 
+moment.locale("zh-cn");
 app.config.globalProperties.httpSrc = httpSrc
 app.config.globalProperties.$http = axios
 app.config.globalProperties.$moment = moment

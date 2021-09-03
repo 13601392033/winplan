@@ -455,7 +455,6 @@
     right: 0;
     bottom: 0;
     overflow: auto;
-    margin-bottom: 20px;
 }
 .habit{
     position:fixed;

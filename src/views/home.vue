@@ -583,7 +583,6 @@ export default {
     },
     data(){
         return {
-            
             curPopup:"",//当前打开的popup
             taskModule:{
                 isEdit:undefined, // 1 为添加 2为编辑
@@ -616,7 +615,7 @@ export default {
     },
     computed:{
         back(){
-            let data = require("./../assets/d"+ randomNum(1,4) +".jpg")
+            let data = require("./../assets/d"+ randomNum(1,6) +".jpg")
             localStorage.setItem("back", data)
             return data
         },

@@ -230,7 +230,7 @@
     top: 70px;
     left: 3%;
     right: 3%;
-    bottom: 20px;
+    bottom: 30px;
 }
 .header-title{
     color:#fff;

@@ -350,7 +350,7 @@ export default {
         return{
             back: localStorage.getItem("back"),
             onePages:{
-                pageSize: 5,
+                pageSize: 20,
                 pageNo: 1,
                 pullUpState:2,
             },
