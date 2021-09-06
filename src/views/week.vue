@@ -1,5 +1,7 @@
 <template>
     <div class="week" :style="{background:'url('+back+')'}">
+        <h1 v-if="isNull" style="font-size:26px;font-family:cursive;margin-top:20px;">暂无数据</h1>
+
         <div class="camera">
             <ul class="stage">
                 <li class="box" v-for="(item, index) in list" :key="index" :style="{transform: 'rotateY('+(index*40)+'deg) translateZ(310px)'}">
@@ -30,7 +32,7 @@
                             </div>
 
                             <div class="record-module" style="clear:both">
-                                <div v-if="sonItem.type == 2">
+                                <div v-if="sonItem.type == 2" class="narrow">
                                     <div class="record-title">
                                         {{sonItem.title}}
                                     </div>
@@ -41,7 +43,7 @@
                             </div>
 
                             <div class="diary-module" style="clear:both">
-                                <div v-if="sonItem.type == 4">
+                                <div v-if="sonItem.type == 4" class="narrow">
                                     <div class="record-title">
                                         {{sonItem.title}}
                                     </div>
@@ -61,6 +63,9 @@
 </template>
 
 <style scoped>
+.narrow{
+    transform:scale(.9);
+}
 .task-succ{
     background: #66cc99;
     color: #fff;
@@ -85,7 +90,7 @@
 }
 .habit-container{
     float: left;
-    width: 40%;
+    width: 45%;
     margin-right: 5%;
     margin-top:10px;
     display: flex;
@@ -96,7 +101,6 @@
 }
 .module{
     text-align: left;
-    margin:10px;
     color:#080808;
     letter-spacing: 1px;
 }
@@ -133,10 +137,36 @@
     border:1px solid #ddd;
     margin:10px;
     height:70%;
-    width:210px;
+    width:235px;
     overflow: auto;
     background: rgba(255,255,255,.8);
 }
+ .box::-webkit-scrollbar {
+  /*滚动条整体样式*/
+  width : 3px;  /*高宽分别对应横竖滚动条的尺寸*/
+  height: 1px;
+  }
+   .box::-webkit-scrollbar-thumb {
+  /*滚动条里面小方块*/
+  border-radius   : 10px;
+  background-color: skyblue;
+  background-image: -webkit-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.2) 25%,
+      transparent 25%,
+      transparent 50%,
+      rgba(255, 255, 255, 0.2) 50%,
+      rgba(255, 255, 255, 0.2) 75%,
+      transparent 75%,
+      transparent
+  );
+  }
+  .box::-webkit-scrollbar-track {
+  /*滚动条里面轨道*/
+  box-shadow   : inset 0 0 5px rgba(0, 0, 0, 0.2);
+  background   : #ededed;
+  border-radius: 10px;
+  }
 .week{
     position:fixed;
     width:100%;
@@ -149,19 +179,15 @@
 import $ from 'jquery'
 import {initWeek} from "@/request/week.js"
 $(function () {
-    function mf (mf) {
-        mf.preventDefault(); 
-    }
     var roY = 0, roX = -10;
     var xN = 0, yN = 0;
     var play = null;
-    $(document).on('touchstart', (e) =>{
+    $(".week").on('touchstart', (e) =>{
         let x_ = e.targetTouches[0].clientX;
         let y_ = e.targetTouches[0].clientY;
         clearInterval(play);
         $(this).bind('touchmove',(ev) =>{
             /*获取当前鼠标的坐标*/
-            document.body.addEventListener('touchmove', mf, {passive: false});
             var x = ev.targetTouches[0].clientX;
             var y = ev.targetTouches[0].clientY;
             /*两次坐标之间的距离*/
@@ -179,7 +205,6 @@ $(function () {
         });
     }).on('touchend',()=> {
         $(this).unbind('touchmove');
-        document.body.removeEventListener('touchmove', mf, {passive: false});
         var play = setInterval(function () {
             xN *= 0.95;
             yN *= 0.95
@@ -198,14 +223,17 @@ export default {
     data(){
         return {
             list:[],
-            back: require("./../assets/d2.jpg"),
+            back: require("./../assets/m4.jpg"),
+            isNull:false,
         }
     },
     created(){
         initWeek().then(res=>{
             if(res.data.code == 200){
                 this.list = res.data.data
-
+                if(res.data.data.length == 0){
+                    this.isNull = true;
+                }
             }
         })
     },

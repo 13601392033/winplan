@@ -39,9 +39,8 @@ module.exports = {
             })
         ],
         externals: {
-            "vue": "Vue",
+            
             "ElementPlus": "ElementPlus",
-            "axios": "axios",
             "vant":"Vant"
         },
         resolve: {

@@ -1,4 +1,4 @@
-import {createRouter, createWebHashHistory} from "vue-router"
+import {createRouter, createWebHistory} from "vue-router"
 import login from "@/views/white/login"
 
 const routes = [
@@ -63,9 +63,9 @@ const routes = [
         ]
     },
     {
-        path: "/",
-        name: "login",
-        component: login,
+        path: '/:pathMatch(.*)',
+        
+        redirect: login,
     },
 ]
 
@@ -109,8 +109,7 @@ let navRoutes = [
 export  {navRoutes as routes};
 
 const router = createRouter({
-    history: createWebHashHistory(),
-    mode:"history",
+    history: createWebHistory(),
     routes
 })
 let whiteList = ["login","c"];
