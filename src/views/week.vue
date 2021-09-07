@@ -182,7 +182,22 @@
 <script>
 import $ from 'jquery'
 import {initWeek} from "@/request/week.js"
-
+function throttle(fn,delay,ev){
+    let valid = true
+    console.log(delay)
+    return ()=>{
+       if(!valid){
+           //休息时间 暂不接客
+           return false 
+       }
+       // 工作时间，执行函数并且在间隔期内把状态位设为无效
+        valid = false
+        setTimeout(() => {
+            fn(ev)
+            valid = true;
+        }, delay)
+    }
+}
 export default {
     data(){
         return {
@@ -212,28 +227,27 @@ export default {
                 var play = null;
 
                 $(".week").on('touchstart', (e) =>{
-                    
                     let x_ = e.targetTouches[0].clientX;
                     let y_ = e.targetTouches[0].clientY;
-                    
                     clearInterval(play);
-                    
                     $(this).bind('touchmove',(ev) =>{
-                        /*获取当前鼠标的坐标*/
-                        var x = ev.targetTouches[0].clientX;
-                        var y = ev.targetTouches[0].clientY;
-                        /*两次坐标之间的距离*/
-                        xN = x - x_;
-                        yN = y - y_;
-                        
-                        roY += xN * 0.2;
-                        roX -= yN * 0.1;
-                        $('.stage').css({
-                            transform: 'perspective(1500px) rotateX('+roX+'deg) rotateY(' + roY + 'deg)'
-                        });
-                        /*之前的鼠标坐标*/
-                        x_ = ev.targetTouches[0].clientX;
-                        y_ = ev.targetTouches[0].clientY;
+                        throttle((ev)=>{
+                            /*获取当前鼠标的坐标*/
+                            var x = ev.targetTouches[0].clientX;
+                            var y = ev.targetTouches[0].clientY;
+                            /*两次坐标之间的距离*/
+                            xN = x - x_;
+                            yN = y - y_;
+                            
+                            roY += xN * 0.2;
+                            roX -= yN * 0.1;
+                            $('.stage').css({
+                                transform: 'perspective(1500px) rotateX('+roX+'deg) rotateY(' + roY + 'deg)'
+                            });
+                            /*之前的鼠标坐标*/
+                            x_ = ev.targetTouches[0].clientX;
+                            y_ = ev.targetTouches[0].clientY;
+                        },50,ev)()
                     });
                     }).on('touchend',()=> {
                         $(this).unbind('touchmove');
