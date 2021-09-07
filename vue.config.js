@@ -39,7 +39,7 @@ module.exports = {
             })
         ],
         externals: {
-            
+            "vue": "Vue",
             "ElementPlus": "ElementPlus",
             "vant":"Vant"
         },

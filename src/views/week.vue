@@ -4,7 +4,7 @@
 
         <div class="camera">
             <ul class="stage">
-                <li class="box" v-for="(item, index) in list" :key="index" :style="{transform: 'rotateY('+(index*40)+'deg) translateZ(310px)'}">
+                <li  class="box" v-for="(item, index) in list" :key="index" :style="{transform: 'rotateY('+(index*45)+'deg) translateZ(310px)'}">
                     <p class="title">{{$moment(item[0]).format('dddd')}}</p>
                     <div class="module">
                         <div class="item-module" v-for="(sonItem,i) in item[1]" :key="i" :class="{'habit-container':sonItem.type==3}">
@@ -51,11 +51,9 @@
                                         <span v-html="sonItem.content"></span>
                                     </div>
                                 </div>
-                            </div>
-                            
+                            </div>  
                         </div>
                     </div>
-                    
                 </li>
             </ul>
         </div>
@@ -63,6 +61,12 @@
 </template>
 
 <style scoped>
+.locking{
+    overflow: auto!important;;
+}
+.lock{
+    float:right;
+}
 .narrow{
     transform:scale(.9);
 }
@@ -135,10 +139,10 @@
 .box{
     position: absolute;
     border:1px solid #ddd;
+    overflow: auto  ;
     margin:10px;
     height:70%;
     width:235px;
-    overflow: auto;
     background: rgba(255,255,255,.8);
 }
  .box::-webkit-scrollbar {
@@ -178,47 +182,7 @@
 <script>
 import $ from 'jquery'
 import {initWeek} from "@/request/week.js"
-$(function () {
-    var roY = 0, roX = -10;
-    var xN = 0, yN = 0;
-    var play = null;
-    $(".week").on('touchstart', (e) =>{
-        let x_ = e.targetTouches[0].clientX;
-        let y_ = e.targetTouches[0].clientY;
-        clearInterval(play);
-        $(this).bind('touchmove',(ev) =>{
-            /*获取当前鼠标的坐标*/
-            var x = ev.targetTouches[0].clientX;
-            var y = ev.targetTouches[0].clientY;
-            /*两次坐标之间的距离*/
-            xN = x - x_;
-            yN = y - y_;
-            
-            roY += xN * 0.2;
-            roX -= yN * 0.1;
-            $('.stage').css({
-                transform: 'perspective(1500px) rotateX(' + roX + 'deg) rotateY(' + roY + 'deg)'
-            });
-            /*之前的鼠标坐标*/
-            x_ = ev.targetTouches[0].clientX;
-            y_ = ev.targetTouches[0].clientY;
-        });
-    }).on('touchend',()=> {
-        $(this).unbind('touchmove');
-        var play = setInterval(function () {
-            xN *= 0.95;
-            yN *= 0.95
-            if (Math.abs(xN) < 1 && Math.abs(yN) < 1) {
-                clearInterval(play);
-            }
-            roY += xN * 0.2;
-            roX -= yN * 0.1;
-            $('.stage').css({
-                transform: 'perspective(1500px) rotateX(' + roX + 'deg) rotateY(' + roY + 'deg)'
-            });
-        }, 30);
-    });
-});
+
 export default {
     data(){
         return {
@@ -237,7 +201,57 @@ export default {
             }
         })
     },
+    mounted(){
+        this.init()
+    },
     methods:{
+        init(){
+            $(function () {
+                var roY = 0, roX = -10;
+                var xN = 0, yN = 0;
+                var play = null;
+
+                $(".week").on('touchstart', (e) =>{
+                    
+                    let x_ = e.targetTouches[0].clientX;
+                    let y_ = e.targetTouches[0].clientY;
+                    
+                    clearInterval(play);
+                    
+                    $(this).bind('touchmove',(ev) =>{
+                        /*获取当前鼠标的坐标*/
+                        var x = ev.targetTouches[0].clientX;
+                        var y = ev.targetTouches[0].clientY;
+                        /*两次坐标之间的距离*/
+                        xN = x - x_;
+                        yN = y - y_;
+                        
+                        roY += xN * 0.2;
+                        roX -= yN * 0.1;
+                        $('.stage').css({
+                            transform: 'perspective(1500px) rotateX('+roX+'deg) rotateY(' + roY + 'deg)'
+                        });
+                        /*之前的鼠标坐标*/
+                        x_ = ev.targetTouches[0].clientX;
+                        y_ = ev.targetTouches[0].clientY;
+                    });
+                    }).on('touchend',()=> {
+                        $(this).unbind('touchmove');
+                        var play = setInterval(function () {
+                            xN *= 0.95;
+                            yN *= 0.95
+                            if (Math.abs(xN) < 1 && Math.abs(yN) < 1) {
+                                clearInterval(play);
+                            }
+                            roY += xN * 0.2;
+                            roX -= yN * 0.1;
+                            $('.stage').css({
+                                transform: 'perspective(1500px) rotateX('+roX+'deg) rotateY(' + roY + 'deg)'
+                            });
+                        }, 30);
+                    });
+            });
+        },
         strMapToObj(strMap) {
             let obj = Object.create(null);
             for (let [k,v] of strMap) {
