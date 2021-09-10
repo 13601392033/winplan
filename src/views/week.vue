@@ -3,6 +3,9 @@
         <h1 v-if="isNull" style="font-size:26px;font-family:cursive;margin-top:20px;">暂无数据</h1>
 
         <div class="camera">
+            <div class="show-box" @click="showRemark">
+                <i class="el-icon-collection"></i>
+            </div>
             <ul class="stage">
                 <li  v-for="(item, index) in list" :key="index" >
                     <div class="box" :style="{transform: 'rotateY('+(index*45)+'deg) translateZ(310px)'}">
@@ -65,21 +68,49 @@
                 </li>
             </ul>
         </div>
+        <el-dialog
+        title="周报记录"
+        v-model="dialogVisible"
+        width="90%"
+        >
+        <textarea class="week-textarea" placeholder="周报记录~" v-model="week.remark"></textarea>
+        <template #footer>
+            <div class="week-footer">
+                <el-button type="primary" icon="el-icon-edit" circle @click="saveWeek"></el-button>
+            </div>
+        </template>
+        </el-dialog>
+
     </div>
 </template>
 
 <style scoped>
+.week-textarea{
+    resize: none;
+    border:none;
+    width:100%;
+    height:100px;
+    letter-spacing: 1px;
+    font-size: 16px;
+    line-height: 22px;
+}
+.show-box{  
+    font-size: 28px;
+    position: fixed;
+    color: #909399;
+    right: 4px;
+    top: 4px;
+}
 .top{
     position: fixed;
-    left:-5px;
+    right:-5px;
     font-size: 20px;
 }
 .bottom{
     position: fixed;
-    left:-5px;
+    right:-5px;
     bottom:0;
     font-size: 20px;
-    
 }
 .locking{
     overflow: auto!important;;
@@ -200,8 +231,10 @@
 </style>
 
 <script>
+/*eslint-disable*/
 import $ from 'jquery'
-import {initWeek} from "@/request/week.js"
+import {initWeek, addWeek, updateWeek} from "@/request/week.js"
+import { Toast } from 'vant';
 function throttle(fn,delay,ev){
     let valid = true
     return ()=>{
@@ -217,32 +250,85 @@ function throttle(fn,delay,ev){
         }, delay)
     }
 }
-
-
-
+function randomNum(minNum,maxNum){ 
+    switch(arguments.length){ 
+        case 1: 
+            return parseInt(Math.random()*minNum+1,10);
+        break; 
+        case 2: 
+            return parseInt(Math.random()*(maxNum-minNum+1)+minNum,10); 
+        break; 
+            default: 
+                return 0; 
+            break; 
+    } 
+}
 export default {
     data(){
         return {
             list:[],
-            back: require("./../assets/m4.jpg"),
             isNull:false,
             num:100,
+            dialogVisible:false,
+            week:{
+                id:undefined,
+                remark:"week remark"
+            },
+            isEdit:false,
         }
     },
     created(){
-        initWeek().then(res=>{
-            if(res.data.code == 200){
-                this.list = res.data.data
-                if(res.data.data.length == 0){
-                    this.isNull = true;
-                }
-            }
-        })
+        this.initData();
     },
     mounted(){
         this.init()
     },
     methods:{
+        initData(){
+            initWeek().then(res=>{
+                if(res.data.code == 200){
+                    this.list = res.data.data
+                    let week = res.data.weekRemark;
+                    if(week.length == 0 || !week){
+                        //没有week remark记录
+                        this.isEdit = false;
+                    }else{
+                        this.week.id = week[0].id;
+                        this.week.remark = week[0].summary;
+                        this.isEdit = true;
+                    }
+                    if(res.data.data.length == 0){
+                        this.isNull = true;
+                    }
+                }
+            })
+        },
+        saveWeek(){
+            if(this.isEdit){
+                updateWeek({id: this.week.id, remark: this.week.remark}).then(res=>{
+                    if(res.data.code == 200){
+                        Toast.success(res.data.msg)
+                    }else{
+                        Toast.fail(res.data.msg)
+                    }
+                })
+            }else{
+                addWeek({
+                    remark: this.week.remark
+                }).then(res=>{
+                    if(res.data.code == 200){
+                        this.initData();
+                        Toast.success(res.data.msg)
+                    }else{
+                        Toast.fail(res.data.msg)
+                    }
+                })
+            }
+            
+        },
+        showRemark(){
+            this.dialogVisible = true;
+        },
         boxTop(e, index){
             let top;
             if(e.target.style.top){
@@ -336,6 +422,10 @@ export default {
         },
     },
     computed:{
+        back(){
+            let data = require("./../assets/a"+ randomNum(1,5) +".jpg")
+            return data
+        },
         stateClass(){
             return (item)=>{
                 let obj = {};

@@ -173,8 +173,6 @@
             />
         </van-popup>
     </div>
-
-    <router-view></router-view>
 </template>
 
 <style scoped>
