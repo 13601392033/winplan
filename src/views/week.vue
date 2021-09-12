@@ -272,7 +272,7 @@ export default {
             dialogVisible:false,
             week:{
                 id:undefined,
-                remark:"week remark"
+                remark:""
             },
             isEdit:false,
         }
