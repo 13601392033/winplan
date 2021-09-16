@@ -67,7 +67,7 @@ export default {
         return {
             list:[],
             isNull:false,
-            back:localStorage.getItem("back"),
+            back:require("../assets/d5.jpg"),
             moment:this.$moment
         }
     },

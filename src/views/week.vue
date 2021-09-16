@@ -100,11 +100,13 @@
 .show-box{  
     font-size: 28px;
     position: fixed;
+    z-index:1000;
     color: #909399;
     right: 4px;
     top: 4px;
 }
 .jump-box{  
+    z-index:1000;
     font-size: 28px;
     position: fixed;
     color: #909399;
