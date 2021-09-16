@@ -806,7 +806,8 @@ export default {
                     this.$router.push({
                         name:"login"
                     })
-                    localStorage.clear();
+                    localStorage.setItem("token", null);
+                    localStorage.setItem("username", null);
                 })
             })
             

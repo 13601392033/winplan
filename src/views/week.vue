@@ -6,6 +6,9 @@
             <div class="show-box" @click="showRemark">
                 <i class="el-icon-collection"></i>
             </div>
+            <div class="jump-box" @click="jump">
+                <i class="el-icon-more"></i>
+            </div>
             <ul class="stage">
                 <li  v-for="(item, index) in list" :key="index" >
                     <div class="box" :style="{transform: 'rotateY('+(index*45)+'deg) translateZ(310px)'}">
@@ -101,9 +104,17 @@
     right: 4px;
     top: 4px;
 }
+.jump-box{  
+    font-size: 28px;
+    position: fixed;
+    color: #909399;
+    right: 4px;
+    bottom: 4px;
+}
 .top{
     position: fixed;
     right:-5px;
+    color:rgba(51,153,204,.7);
     font-size: 20px;
 }
 .bottom{
@@ -111,6 +122,7 @@
     right:-5px;
     bottom:0;
     font-size: 20px;
+    color:rgba(51,153,204,.7);
 }
 .locking{
     overflow: auto!important;;
@@ -280,12 +292,27 @@ export default {
     created(){
         this.initData();
     },
+    watch:{
+        '$route.query'(){
+            this.initData()
+        }
+    },
     mounted(){
         this.init()
     },
     methods:{
+        jump(){
+            this.$router.push({
+                name:"allWeek"
+            })
+        },
         initData(){
-            initWeek().then(res=>{
+            let params = {}
+            if(this.$route.query.id){
+                params.weekId = this.$route.query.id
+            }
+            console.log(params)
+            initWeek(params).then(res=>{
                 if(res.data.code == 200){
                     this.list = res.data.data
                     let week = res.data.weekRemark;

@@ -77,6 +77,7 @@ export default {
     },
     methods:{
         loginIn(){
+            
             this.$http({
                 method:"post",
                 url:"/login",
@@ -85,8 +86,25 @@ export default {
                     password:crypto.createHash('md5').update(this.password).digest("hex")
                 }
             }).then(res=>{
+                
                 if(res.data.data.length >= 1){
-                    console.log(res.data.token)
+                    let routes = JSON.parse(localStorage.getItem("routes"))
+                    if(res.data.data[0].username != "king"){
+                        console.log(routes)
+                        let newArr = routes.filter((item)=>{
+                            return item.name != "week"
+                        })
+                        localStorage.setItem("routes", JSON.stringify(newArr));
+                    }else{
+                        routes.unshift(
+                            {
+                                name:"week",
+                                title:"week",
+                                margin:"68px",
+                            }
+                        )
+                        localStorage.setItem("routes", JSON.stringify(routes));
+                    }
                     localStorage.setItem("token", res.data.token)
                     localStorage.setItem("username", res.data.data[0].username)
                     this.$router.push({name:'home'});

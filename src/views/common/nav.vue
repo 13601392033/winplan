@@ -8,7 +8,6 @@
     </div>
     <div class="cube">
         <div class="nav" >
-            
             <div class="nav-back" style="width:100%;height:100%;" :style="{background:'url('+backImg+') no-repeat' }">
                 <div class="nav-container">
                     <ul class="nav-ul">
@@ -133,12 +132,9 @@
 </style>
 
 <script>
-import {routes} from "@/router/index.js"
+
 export default {
     name:"nava",
-    created(){
-        
-    },
     methods:{
         jump(item){
             let nav = document.getElementsByClassName("cube")[0];
@@ -208,14 +204,11 @@ export default {
     data(){
         return {
             state:0,//0为菜单未打开 1 为已打开 2为过度状态
-            routes:routes,
+            routes:JSON.parse(localStorage.getItem("routes")),
             backImg:require("@/assets/menu_spand.png"),
             menu1:require("@/assets/menu1.png"),
             menu2:require("@/assets/1.png"),
         }
     },
-    mounted(){
-        
-    }
 }
 </script>

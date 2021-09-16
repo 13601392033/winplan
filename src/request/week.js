@@ -16,6 +16,14 @@ export function addWeek(data){
     })
 }
 
+export function queryAllWeek(data){
+    return axios({
+        method:"post",
+        url:"week/allWeek",
+        data:data
+    })
+}
+
 export function updateWeek(data){
     return axios({
         method:"post",

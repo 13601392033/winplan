@@ -31,6 +31,11 @@ const routes = [
                 component:()=>import("@/views/week.vue")
             },
             {
+                name:"allWeek",
+                path:"allWeek",
+                component:()=>import("@/views/allWeek.vue")
+            },
+            {
                 name:"task",
                 path: "task",
                 component: ()=>import("@/views/task.vue"),
@@ -71,11 +76,6 @@ const routes = [
 
 let navRoutes = [
     {
-        name:"week",
-        title:"week",
-        margin:"68px",
-    },
-    {
         name:"personal",
         title:"我的",
         margin:"68px",
@@ -106,7 +106,24 @@ let navRoutes = [
         margin:"68px",
     },
 ];
-export  {navRoutes as routes};
+
+
+if(localStorage.getItem("username") != "king"){
+    let newArr = navRoutes.filter((item)=>{
+        return item.name != "week"
+    })
+    localStorage.setItem("routes", JSON.stringify(newArr));
+}else{
+    navRoutes.unshift(
+        {
+            name:"week",
+            title:"week",
+            margin:"68px",
+        }
+    )
+    localStorage.setItem("routes", JSON.stringify(navRoutes));
+}
+
 
 const router = createRouter({
     history: createWebHashHistory(),
