@@ -21,7 +21,7 @@
                         <div class="module">
                             <div class="item-module" v-for="(sonItem,i) in item[1]" :key="i" :class="{'habit-container':sonItem.type==3}">
 
-                                <div class="task-module" >
+                                <div v-if="sonItem.type == 1" class="task-module" >
                                     <div v-if="sonItem.type == 1" :class="stateClass(sonItem)">
                                         <div class="task-title">
                                             {{sonItem.title}}
@@ -32,7 +32,7 @@
                                     </div>
                                 </div>
 
-                                <div class="habit-module">
+                                <div v-if="sonItem.type == 3" class="habit-module">
                                     <div v-if="sonItem.type == 3">
                                         <div class="habit" :style="{'background': sonItem.habit[0].backColor, 'color': sonItem.habit[0].logoColor}">
                                             <div class="habit-item">
@@ -43,7 +43,7 @@
                                     </div>
                                 </div>
 
-                                <div class="record-module" style="clear:both">
+                                <div v-if="sonItem.type == 2" class="record-module" style="clear:both">
                                     <div v-if="sonItem.type == 2" class="narrow">
                                         <div class="record-title">
                                             {{sonItem.title}}
@@ -54,7 +54,7 @@
                                     </div>
                                 </div>
 
-                                <div class="diary-module" style="clear:both">
+                                <div v-if="sonItem.type == 4" class="diary-module" style="clear:both">
                                     <div v-if="sonItem.type == 4" class="narrow">
                                         <div class="record-title">
                                             {{sonItem.title}}
@@ -88,6 +88,20 @@
 </template>
 
 <style scoped>
+.diary-module{
+    color: #fff;
+    outline: 1px white dashed;
+    outline-offset: -2px;
+    padding:5px;
+    margin: 10px 5px;
+    border-radius: 4%;
+    background: #35333c;
+}
+.item-module{
+    width:100%;
+    height: 100%;
+    overflow: hidden;
+}
 .week-textarea{
     resize: none;
     border:none;
@@ -206,7 +220,7 @@
     border:1px solid #ddd;
     overflow: hidden;
     margin:10px;
-    height:70%;
+    height:65%;
     width:235px;
     background: rgba(255,255,255,.8);
 }
