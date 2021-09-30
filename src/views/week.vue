@@ -67,7 +67,6 @@
                             </div>
                         </div>
                     </div>
-                    
                 </li>
             </ul>
         </div>
@@ -88,6 +87,15 @@
 </template>
 
 <style scoped>
+.record-module{
+    color: #fff;
+    outline: 1px white dashed;
+    outline-offset: -2px;
+    padding: 5px;
+    margin: 10px 5px;
+    border-radius: 4%;
+    background: rgba(86,152,195,.7);
+}
 .diary-module{
     color: #fff;
     outline: 1px white dashed;
@@ -95,7 +103,7 @@
     padding:5px;
     margin: 10px 5px;
     border-radius: 4%;
-    background: #35333c;
+    background: rgba(132,124,116,.8);
 }
 .item-module{
     width:100%;
@@ -119,7 +127,7 @@
     right: 4px;
     top: 4px;
 }
-.jump-box{  
+.jump-box{
     z-index:1000;
     font-size: 28px;
     position: fixed;
@@ -208,7 +216,9 @@
 }
 .stage{
     transform-style:preserve-3d;
+    -webkit-transform-style: preserve-3d;
     transform:perspective(1500px) rotateX(-5.95901deg) rotateY(0deg);
+    -webkit-transform:perspective(1500px) rotateX(-5.95901deg) rotateY(0deg);
     position: relative;
     width: 223px;
     height:100%;
@@ -466,7 +476,7 @@ export default {
     },
     computed:{
         back(){
-            let data = require("./../assets/a"+ randomNum(1,5) +".jpg")
+            let data = require("./../assets/f"+ randomNum(1,3) +".jpg")
             return data
         },
         stateClass(){
