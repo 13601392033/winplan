@@ -9,7 +9,7 @@ if (process.env.NODE_ENV == 'development') {
 }
 const axios = Axios.create({
     baseURL,
-    timeout: 20000 // 请求超时 20s
+    timeout: 60000 // 请求超时 60s
 })
 
 function showMe(){

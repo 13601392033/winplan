@@ -10,14 +10,16 @@
                 <i class="el-icon-more"></i>
             </div>
             <ul class="stage">
-                <li  v-for="(item, index) in list" :key="index" >
-                    <div class="box" :style="{transform: 'rotateY('+(index*45)+'deg) translateZ(310px)'}">
+                <li class="box" :style="{transform: 'rotateY('+(index*45)+'deg) translateZ(310px)'}" v-for="(item, index) in list" :key="index" >
                         <div class="scroll">
                             <i class="el-icon-top top" @click="boxTop($event, index)"></i>
                             <i class="el-icon-bottom bottom" @click="boxBottom($event,index)"></i> 
                         </div>
                         
-                        <p class="title">{{$moment(item[0]).format('dddd')}}</p>
+                        <p class="title">
+                            <span class="title-date">{{$moment(item[0]).format('M-DD')}}</span>
+                            <span>{{$moment(item[0]).format('dddd')}}</span>
+                        </p>
                         <div class="module">
                             <div class="item-module" v-for="(sonItem,i) in item[1]" :key="i" :class="{'habit-container':sonItem.type==3}">
 
@@ -66,7 +68,6 @@
                                 </div>  
                             </div>
                         </div>
-                    </div>
                 </li>
             </ul>
         </div>
@@ -87,6 +88,12 @@
 </template>
 
 <style scoped>
+.title-date{
+    position:absolute;
+    left:5px;
+    font-size: 12px;
+    top: 5px;
+}
 .record-module{
     color: #fff;
     outline: 1px white dashed;
@@ -160,14 +167,22 @@
 .task-succ{
     background: #66cc99;
     color: #fff;
-    border-radius: 20px;
+    border-radius: 5px;
+    outline: 1px white dashed;
+    outline-offset: -2px;
     padding:4px 10px;
+    line-height: 18px;
+    margin:0 5px;
 }
 .task-err{
     background: rgb(241, 147, 156);
     padding: 4px 10px;
-    border-radius: 20px;
+    border-radius: 5px;
     color: #fff;
+    outline: 1px white dashed;
+    outline-offset: -2px;
+    line-height: 18px;
+    margin: 0 5px;
 }
 .habit{
     width:50px;
@@ -209,6 +224,7 @@
 .title{
     font-size:16px;
     letter-spacing: 2px;
+    margin-bottom:10px;
 }
 .camera{
     width:100%;
@@ -402,6 +418,7 @@ export default {
             let bottom;
             let box = document.getElementsByClassName("box")[index]
             let top = document.getElementsByClassName('top')[index]
+            console.log(top)
             if(e.target.style.bottom){
                 bottom = parseInt(e.target.style.bottom.substring(0,e.target.style.bottom.length-2));
             }else{

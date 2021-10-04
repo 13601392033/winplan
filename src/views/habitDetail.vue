@@ -39,6 +39,14 @@
                 </div>
             </div>
             <div class="detail-item">
+                <div class="item-label">上次打卡时间</div>
+                <div class="item-value">
+                    <div class="">
+                        {{detail.lastDate}}
+                    </div>
+                </div>
+            </div>
+            <div class="detail-item">
                 <div class="item-label">实际打卡</div>
                 <div class="item-value">
                     <div class="">
@@ -304,6 +312,7 @@ export default {
                     this.tempFirstText = data.logoType == 0 ? data.logo : ''
                     this.detail = {
                         id: data.id,
+                        lastDate: data.lastDate,
                         name: data.name,
                         type: data.logoType, // 0为文字 1为图标
                         icon: data.logo,
@@ -312,7 +321,7 @@ export default {
                         background: data.backColor,
                         color: data.logoColor,
                         days: res.data.curBestDays, // 当前连续坚持天数
-                        allDays: res.data.data[0].logs.length, //总共天数
+                        allDays: res.data.data[0].logs, //总共天数
                         bestLongDays: res.data.bestLongDays, //最长连续天数
                         startDate: this.$moment(data.date).format('YYYY-MM-DD'),
                     }

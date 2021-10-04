@@ -127,7 +127,7 @@ export default {
                 doubleNewPass:"",
             },
             phone:"",
-            src:require("@/assets/d6.jpg"),
+            src:require("@/assets/d3.jpg"),
             
         }
     },

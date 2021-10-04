@@ -20,7 +20,7 @@ app.config.globalProperties.httpSrc = httpSrc
 app.config.globalProperties.$http = axios
 app.config.globalProperties.$moment = moment
 
-let data = require("./assets/d"+ randomNum(1,6) +".jpg")
+let data = require("./assets/d"+ randomNum(1,5) +".jpg")
 localStorage.setItem("back", data)
 
 app.mount('#app')
