@@ -321,7 +321,7 @@ export default {
                         background: data.backColor,
                         color: data.logoColor,
                         days: res.data.curBestDays, // 当前连续坚持天数
-                        allDays: res.data.data[0].logs, //总共天数
+                        allDays: data.allDays, //总共天数
                         bestLongDays: res.data.bestLongDays, //最长连续天数
                         startDate: this.$moment(data.date).format('YYYY-MM-DD'),
                     }
