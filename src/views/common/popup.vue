@@ -16,6 +16,22 @@
 
 <script>
 
+function throttle(fn,delay,e){
+    let valid = true
+    return function() {
+       if(!valid){
+           //休息时间 暂不接客
+           return false 
+       }
+       // 工作时间，执行函数并且在间隔期内把状态位设为无效
+        valid = false
+        setTimeout(() => {
+            fn(e)
+            valid = true;
+        }, delay)
+    }
+}
+
 let height = undefined
 export default {
     name:"popup",
@@ -59,8 +75,19 @@ export default {
             this.reduce = this.documentHeihgt - height;
         },
         draw(e){
-            let pageY = e.targetTouches[0].pageY;
+            // throttle(()=>{
+            //     let pageY = e.targetTouches[e.targetTouches.length-1].pageY;
+            //     console.log(pageY,this.reduce)
+            //     if(this.reduce > pageY){
+            //         return 
+            //     }
+            //     this.dom.style.top = pageY + "px"
+            //     this.isMove = "ing";
+            // },10,e)()
+            
+            let pageY = e.targetTouches[e.targetTouches.length-1].pageY;
             if(this.reduce > pageY){
+                this.dom.style.top = "10%"
                 return 
             }
             this.dom.style.top = pageY + "px"

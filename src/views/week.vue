@@ -69,6 +69,7 @@
                             </div>
                         </div>
                 </li>
+                <p class="p"></p>
             </ul>
         </div>
         <el-dialog
@@ -88,6 +89,18 @@
 </template>
 
 <style scoped>
+.p{
+    width: 1200px;
+    height: 1200px;
+    background: -webkit-radial-gradient(center center, 600px 600px, rgba(255, 255, 255, .4), rgba(0, 0, 0, 0));
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-top: -720px;
+    margin-left: -599px;
+    border-radius: 600px;
+    transform: rotateX(90deg);
+}
 .title-date{
     position:absolute;
     left:5px;
@@ -247,7 +260,7 @@
     overflow: hidden;
     margin:10px;
     height:65%;
-    width:235px;
+    width:215px;
     background: rgba(255,255,255,.8);
 }
  .box::-webkit-scrollbar {
