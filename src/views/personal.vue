@@ -41,6 +41,7 @@
                     <input v-model="phone" class="item-input" type="text"/>
                 </div>
             </div>
+            <div @click="changeIsBigFont" class="change-btn">{{isBigFont ? '切换标准模式' : '切换大字体模式'}}</div>
             <div @click="showChangePass" class="change-btn">修改密码</div>
             <el-button type="primary" @click="save" class="save-btn">保存</el-button>
         </div>
@@ -128,13 +129,22 @@ export default {
             },
             phone:"",
             src:require("@/assets/d3.jpg"),
-            
+            isBigFont: false,
         }
     },
     created(){
         this.init();
+        this.isBigFontHandle();
     },
     methods:{
+        changeIsBigFont() {
+            this.isBigFont ? document.querySelector(':root').setAttribute('style', '--caring-font: 0px') :
+            document.querySelector(':root').setAttribute('style', '--caring-font: 4px');
+            this.isBigFontHandle();
+        },
+        isBigFontHandle() {
+            this.isBigFont = document.querySelector(':root').getAttribute('style')?.includes('0px') ? false : true;
+        },
         updatePass(){
             if(!this.pass.oldPass){
                 Toast.fail("请输入旧密码");
@@ -235,7 +245,7 @@ export default {
                 console.log(res)
             })
         }
-    }
+    },
 }
 </script>
 
@@ -252,6 +262,7 @@ export default {
 }
 .save-btn{
     margin-top:20px;
+    padding-bottom: 26px;
     width: 80%;
     border-radius: 30px;
     letter-spacing: 4px;

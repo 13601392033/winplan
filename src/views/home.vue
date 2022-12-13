@@ -176,6 +176,12 @@
 </template>
 
 <style scoped>
+    .task-title {
+        font-size: 14px;
+    }
+    .el-icon-edit-outline {
+        font-size: 16px;
+    }
     .habitStateIng{
         background: #fff !important;
         color: #000 !important;
@@ -384,7 +390,7 @@
     .detail{
         float: left;
         width: 100%;
-        font-size: 14px;
+        font-size: 12px;
         line-height: 22px;
         letter-spacing: 1px;
         text-align: left;
@@ -434,7 +440,7 @@
         font-weight: bold;
         float: left;
         line-height:46px;
-        font-size: 18px;
+        font-size: 16px;
         text-align: left;
     }
     .record-list{
@@ -468,6 +474,7 @@
         position: relative;
     }
     .item-content{
+        font-size: 14px;
         float:left;
         width:80%;
         border-bottom: 1px solid #ddd; 
@@ -613,7 +620,7 @@ export default {
     },
     computed:{
         back(){
-            let data = require("./../assets/d"+ randomNum(1,6) +".jpg")
+            let data = require("./../assets/d"+ randomNum(1,5) +".jpg")
             localStorage.setItem("back", data)
             return data
         },

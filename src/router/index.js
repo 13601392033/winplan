@@ -76,6 +76,11 @@ const routes = [
 
 let navRoutes = [
     {
+        name:"week",
+        title:"week",
+        margin:"68px",
+    },
+    {
         name:"personal",
         title:"我的",
         margin:"68px",
@@ -108,22 +113,23 @@ let navRoutes = [
 ];
 
 
-if(localStorage.getItem("username") != "king"){
-    let newArr = navRoutes.filter((item)=>{
-        return item.name != "week"
-    })
-    localStorage.setItem("routes", JSON.stringify(newArr));
-}else{
-    navRoutes.unshift(
-        {
-            name:"week",
-            title:"week",
-            margin:"68px",
-        }
-    )
-    localStorage.setItem("routes", JSON.stringify(navRoutes));
-}
+// if(localStorage.getItem("username") != "king"){
+//     let newArr = navRoutes.filter((item)=>{
+//         return item.name != "week"
+//     })
+//     localStorage.setItem("routes", JSON.stringify(newArr));
+// }else{
+//     navRoutes.unshift(
+//         {
+//             name:"week",
+//             title:"week",
+//             margin:"68px",
+//         }
+//     )
+//     localStorage.setItem("routes", JSON.stringify(navRoutes));
+// }
 
+localStorage.setItem("routes", JSON.stringify(navRoutes));
 
 const router = createRouter({
     history: createWebHashHistory(),

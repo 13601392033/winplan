@@ -13,10 +13,16 @@ export default {
              direction: "slide-left"
         }
     },
+    created() {
+      document.querySelector(':root').setAttribute('style', '--caring-font: 0px');
+    }
 }
 </script>
 
 <style>
+:root {
+  --caring-font: 0px;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

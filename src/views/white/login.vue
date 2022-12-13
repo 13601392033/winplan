@@ -65,6 +65,7 @@ export default {
     setup(){
     },
     created(){
+        let a = '11';
         console.log(crypto.createHash('md5').update("admin123456").digest("hex"))
     },
     data(){
