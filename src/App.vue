@@ -14,7 +14,9 @@ export default {
         }
     },
     created() {
-      document.querySelector(':root').setAttribute('style', '--caring-font: 0px');
+      // document.querySelector(':root').setAttribute('style', '--caring-font: 0px');
+      localStorage.getItem('isBigFont') === 'true' ? document.querySelector(':root').setAttribute('style', '--caring-font: 4px')
+      : document.querySelector(':root').setAttribute('style', '--caring-font: 0px');
     }
 }
 </script>

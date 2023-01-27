@@ -54,7 +54,8 @@ module.exports = {
         port: '8080', // 设置端口号
         proxy: {
             '/api': {
-              target: 'http://1.117.21.31:9011/', //API服务器的地址
+              //target: 'http://1.117.21.31:9011/', //API服务器的地址
+              target: 'http://localhost:9011/',
               ws: true, //代理websockets
               changeOrigin: true, // 是否跨域，虚拟的站点需要更管origin
               pathRewrite: {

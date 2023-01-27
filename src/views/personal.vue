@@ -143,6 +143,7 @@ export default {
             this.isBigFontHandle();
         },
         isBigFontHandle() {
+            localStorage.setItem('isBigFont', document.querySelector(':root').getAttribute('style')?.includes('0px') ? false : true);
             this.isBigFont = document.querySelector(':root').getAttribute('style')?.includes('0px') ? false : true;
         },
         updatePass(){

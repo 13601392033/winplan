@@ -89,23 +89,23 @@ export default {
             }).then(res=>{
                 
                 if(res.data.data.length >= 1){
-                    let routes = JSON.parse(localStorage.getItem("routes"))
-                    if(res.data.data[0].username != "king"){
-                        console.log(routes)
-                        let newArr = routes.filter((item)=>{
-                            return item.name != "week"
-                        })
-                        localStorage.setItem("routes", JSON.stringify(newArr));
-                    }else{
-                        routes.unshift(
-                            {
-                                name:"week",
-                                title:"week",
-                                margin:"68px",
-                            }
-                        )
-                        localStorage.setItem("routes", JSON.stringify(routes));
-                    }
+                    // let routes = JSON.parse(localStorage.getItem("routes"))
+                    // if(res.data.data[0].username != "king"){
+                    //     console.log(routes)
+                    //     let newArr = routes.filter((item)=>{
+                    //         return item.name != "week"
+                    //     })
+                    //     localStorage.setItem("routes", JSON.stringify(newArr));
+                    // }else{
+                    //     routes.unshift(
+                    //         {
+                    //             name:"week",
+                    //             title:"week",
+                    //             margin:"68px",
+                    //         }
+                    //     )
+                    //     localStorage.setItem("routes", JSON.stringify(routes));
+                    // }
                     localStorage.setItem("token", res.data.token)
                     localStorage.setItem("username", res.data.data[0].username)
                     this.$router.push({name:'home'});

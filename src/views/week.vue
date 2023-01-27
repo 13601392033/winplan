@@ -302,16 +302,16 @@
 import $ from 'jquery'
 import {initWeek, addWeek, updateWeek} from "@/request/week.js"
 import { Toast } from 'vant';
-function throttle(fn,delay,ev){
+function throttle(fn,delay){
     let valid = true
-    return ()=>{
+    return function(ev){
        if(!valid){
            //休息时间 暂不接客
            return false 
        }
        // 工作时间，执行函数并且在间隔期内把状态位设为无效
         valid = false
-        setTimeout(() => {
+        setTimeout(function(){
             fn(ev)
             valid = true;
         }, delay)
@@ -456,8 +456,8 @@ export default {
                     let y_ = e.targetTouches[0].clientY;
                     clearInterval(play);
                     log = 0;
-                    $(this).bind('touchmove',(ev) =>{
-                        throttle((ev)=>{
+                    $(this).bind('touchmove', throttle((ev)=>{
+                        console.log(ev)
                             log = 1;
                             /*获取当前鼠标的坐标*/
                             var x = ev.targetTouches[0].clientX;
@@ -474,26 +474,46 @@ export default {
                             /*之前的鼠标坐标*/
                             x_ = ev.targetTouches[0].clientX;
                             y_ = ev.targetTouches[0].clientY;
-                        },50,ev)()
-                    });
-                    }).on('touchend',()=> {
-                        $(this).unbind('touchmove');
-                        var play = setInterval(function () {
-                            xN *= 0.95;
-                            yN *= 0.95
-                            if (Math.abs(xN) < 1 && Math.abs(yN) < 1) {
-                                clearInterval(play);
-                            }
-                            roY += xN * 0.2;
-                            roX -= yN * 0.1;
-                            if(log != 0){
-                                $('.stage').css({
-                                transform: 'perspective(1500px) rotateX('+roX+'deg) rotateY(' + roY + 'deg)'
-                            });
-                            }
+                        },10));
+
+                    // $(this).bind('touchmove',(ev) =>{
+                    //     throttle((ev)=>{
+                    //         log = 1;
+                    //         /*获取当前鼠标的坐标*/
+                    //         var x = ev.targetTouches[0].clientX;
+                    //         var y = ev.targetTouches[0].clientY;
+                    //         /*两次坐标之间的距离*/
+                    //         xN = x - x_;
+                    //         yN = y - y_;
                             
-                        }, 30);
-                    });
+                    //         roY += xN * 0.2;
+                    //         roX -= yN * 0.1;
+                    //         $('.stage').css({
+                    //             transform: 'perspective(1500px) rotateX('+roX+'deg) rotateY(' + roY + 'deg)'
+                    //         });
+                    //         /*之前的鼠标坐标*/
+                    //         x_ = ev.targetTouches[0].clientX;
+                    //         y_ = ev.targetTouches[0].clientY;
+                    //     },50,ev)()
+                    // });
+                }).on('touchend',()=> {
+                    $(this).unbind('touchmove');
+                    var play = setInterval(function () {
+                        xN *= 0.95;
+                        yN *= 0.95
+                        if (Math.abs(xN) < 1 && Math.abs(yN) < 1) {
+                            clearInterval(play);
+                        }
+                        roY += xN * 0.2;
+                        roX -= yN * 0.1;
+                        if(log != 0){
+                            $('.stage').css({
+                            transform: 'perspective(1500px) rotateX('+roX+'deg) rotateY(' + roY + 'deg)'
+                        });
+                        }
+                        
+                    }, 30);
+                });
             });
         },
         strMapToObj(strMap) {
